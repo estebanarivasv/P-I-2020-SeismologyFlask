@@ -1,1 +1,0 @@
-Pasos a seguir
