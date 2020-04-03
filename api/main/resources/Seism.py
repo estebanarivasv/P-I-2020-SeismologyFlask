@@ -38,7 +38,7 @@ class UnverifiedSeism(Resource):
             data = request.get_json()
             seism.update(data)
             return seism, 201
-        return 404
+        return '', 404
 
     def delete(self, id_num):
         if int(id_num) in SEISMS:
