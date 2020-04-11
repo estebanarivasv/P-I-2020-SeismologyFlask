@@ -1,47 +1,39 @@
 from flask_restful import Resource
-from flask import request
-
-SENSORS = {
-    1: {'ref_number': '0000', 'name': 'Tokyo, Japan', 'status': 'enabled'},
-    2: {'ref_number': '0010', 'name': 'Chicago, USA', 'status': 'disabled'},
-    3: {'ref_number': '0250', 'name': 'Hefei, China', 'status': 'enabled'},
-    4: {'ref_number': '0015', 'name': 'Cape Town, South Africa', 'status': 'disabled'},
-    5: {'ref_number': '0165', 'name': 'Montevideo, Uruguay', 'status': 'enabled'},
-    6: {'ref_number': '0213', 'name': 'Milan, Italy', 'status': 'disabled'}
-}
+from flask import request, jsonify
+from .. import db
+from main.models import SensorModule
 
 
 class Sensor(Resource):
 
     def get(self, id_num):
-        if int(id_num) in SENSORS:
-            return SENSORS[int(id_num)], 200
-        return '', 404
-
-    def put(self, id_num):
-        if int(id_num) in SENSORS:
-            sensor = SENSORS[int(id_num)]
-            data = request.get_json()
-            sensor.update(data)
-            return sensor, 201
-        return '', 404
+        sensor = db.session.query(SensorModule).get_or_404(id_num)
+        return sensor.to_json()
 
     def delete(self, id_num):
-        if int(id_num) in SENSORS:
-            del SENSORS[int(id_num)]
-            return '', 204
-        return '', 404
+        sensor = db.session.query(SensorModule).get_or_404(id_num)
+        db.session.delete(sensor)
+        db.session.commit()
+        return '', 204
+
+    def put(self, id_num):
+        sensor = db.session.query(SensorModule).get_or_404(id_num)
+        data = request.get_json().items()
+        for key, value in data:
+            setattr(sensor, key, value)
+        db.session.add(sensor)
+        db.session.commit()
+        return sensor.to_json(), 201
 
 
 class Sensors(Resource):
 
     def get(self):
-        return SENSORS, 200
+        sensors = db.session.query(SensorModule).all()
+        return jsonify({'sensors': [sensor.to_json() for sensor in sensors]})
 
     def post(self):
-        sensor = request.get_json()
-        print(SENSORS.keys())
-        print(max(SENSORS.keys()))
-        id_num = max(SENSORS.keys()) + 1
-        SENSORS[id_num] = sensor
-        return SENSORS[id_num], 201
+        sensor = SensorModule.from_json(request.get_json())
+        db.session.add(sensor)
+        db.session.commit()
+        return sensor.to_json(), 201
