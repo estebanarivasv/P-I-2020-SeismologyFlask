@@ -4,6 +4,23 @@ from main.models import SeismModule
 from main import db
 
 
+import time
+from random import random, randint, uniform
+
+
+def create_random():
+    value_sensor = {
+        'datetime': time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime()),
+        'depth': randint(5, 250),
+        'magnitude': round(uniform(2.0, 5.5), 1),
+        'latitude': uniform(-180, 180),
+        'longitude': uniform(-90, 90),
+        'verified': bool(random.getrandbits(1))
+
+    }
+    return value_sensor
+
+
 class VerifiedSeism(Resource):
 
     def get(self, id_num):
@@ -45,3 +62,9 @@ class UnverifiedSeisms(Resource):
     def get(self):
         unverified_seisms = db.session.query(SeismModule).all()
         return jsonify({'unverified_seisms': [unverified_seism.to_json() for unverified_seism in unverified_seisms]})
+
+    def post(self):
+        sensor = SeismModule.from_json(create_random())
+        db.session.add(sensor)
+        db.session.commit()
+        return sensor.to_json(), 201
