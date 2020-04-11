@@ -33,7 +33,7 @@ class Sensor(db.Model):
         port = sensor_json.get('port')
         status = sensor_json.get('status')
         active = sensor_json.get('active')
-        user_id = sensor_json.get('user_id')
+        """user_id = sensor_json.get('user_id')"""
         return Sensor(
             """user_id = user_id""",
             id_num=id_num,
@@ -43,4 +43,3 @@ class Sensor(db.Model):
             status=status,
             active=active
         )
-
