@@ -3,7 +3,7 @@ from main import db
 
 class Seism(db.Model):
     id_num = db.Column(db.Integer, primary_key=True)
-    datetime = db.Column(db.Datetime, nullable=False)
+    datetime = db.Column(db.DateTime, nullable=False)
     depth = db.Column(db.Integer, nullable=False)
     magnitude = db.Column(db.Float, nullable=False)
     latitude = db.Column(db.String, nullable=False)

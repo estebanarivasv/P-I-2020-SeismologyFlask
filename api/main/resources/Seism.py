@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request, jsonify
-from .. import db
 from main.models import SeismModule
+from main import db
 
 
 class VerifiedSeism(Resource):

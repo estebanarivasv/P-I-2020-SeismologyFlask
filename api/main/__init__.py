@@ -5,23 +5,23 @@ from dotenv import load_dotenv
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 
-import main.resources as resources
-
 api = Api()
 db = SQLAlchemy()
 
 
-def create_app():
+import main.resources
 
+
+def create_app():
     app = Flask(__name__)
 
     load_dotenv()
 
-    if not os.path.exists(os.getenv('SQLALCHEMY_DATABASE_PATH') + os.getenv('SQLALCHEMY_DATABASE_NAME')):
-        os.mknod(os.getenv('SQLALCHEMY_DATABASE_PATH') + os.getenv('SQLALCHEMY_DATABASE_NAME'))
+    if not os.path.exists(os.getenv('SQLALCHEMY_DB_PATH') + os.getenv('SQLALCHEMY_DB_NAME')):
+        os.mknod(os.getenv('SQLALCHEMY_DB_PATH') + os.getenv('SQLALCHEMY_DB_NAME'))
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_TRACK_URI'] = 'sqlite:////' + os.getenv('SQLALCHEMY_DATABASE_PATH') + os.getenv('SQLALCHEMY_DATABASE_NAME')
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////" + str(os.getenv('SQLALCHEMY_DB_PATH')) + str(os.getenv('SQLALCHEMY_DB_NAME'))
 
     db.init_app(app)
 
