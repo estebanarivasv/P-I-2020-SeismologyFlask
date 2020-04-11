@@ -31,6 +31,8 @@ def create_app():
     api.add_resource(resources.UnverifiedSeismsResource, '/unverified-seisms')
     api.add_resource(resources.VerifiedSeismResource, '/verified-seism/<id_num>')
     api.add_resource(resources.VerifiedSeismsResource, '/verified-seisms')
+    api.add_resource(resources.UserResource, '/user/<id_num>')
+    api.add_resource(resources.UsersResource, '/users')
 
     api.init_app(app)
 
