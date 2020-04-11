@@ -8,7 +8,7 @@ class User(db.Model):
     admin = db.Column(db.Boolean, nullable=False)
 
     def __repr__(self):
-        return '<Professor: %r %r >' % self.email
+        return '<User: %r >' % self.email
 
     def to_json(self):
         user_json = {
