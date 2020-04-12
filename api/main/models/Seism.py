@@ -1,5 +1,5 @@
 from main import db
-
+import datetime
 
 class Seism(db.Model):
     id_num = db.Column(db.Integer, primary_key=True)
@@ -18,7 +18,7 @@ class Seism(db.Model):
         seism_json = {
             """'sensor_id': self.sensor_id"""
             'id_num': self.id_num,
-            'datetime': self.datetime,
+            'datetime': self.datetime.isoformat(),
             'depth': self.depth,
             'magnitude': self.magnitude,
             'latitude': str(self.latitude),
@@ -29,18 +29,18 @@ class Seism(db.Model):
 
     @staticmethod
     def from_json(seism_json):
-        id_num = seism_json.get('id_num'),
-        datetime = seism_json.get('datetime'),
-        depth = seism_json.get('depth'),
-        magnitude = seism_json.get('magnitude'),
-        latitude = seism_json.get('latitude'),
-        longitude = seism_json.get('longitude'),
+        id_num = seism_json.get('id_num')
+        value_datetime = datetime.datetime.fromisoformat(seism_json.get('datetime'))
+        depth = seism_json.get('depth')
+        magnitude = seism_json.get('magnitude')
+        latitude = seism_json.get('latitude')
+        longitude = seism_json.get('longitude')
         verified = seism_json.get('verified')
         """sensor_id = seism_json.get('sensor_id')"""
         return Seism(
             """sensor_id=sensor_id""",
             id_num=id_num,
-            datetime=datetime,
+            datetime=value_datetime,
             depth=depth,
             magnitude=magnitude,
             latitude=latitude,
