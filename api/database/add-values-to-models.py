@@ -23,16 +23,19 @@ def create_random_ip():
 def create_random_email():
     name = input("User name: ")
     surname = input("User surname: ")
-    email = (name+"."+surname).lower() + "@seismologyinstitute.com"
+    email = (name + "." + surname).lower() + "@seismologyinstitute.com"
     return email
 
 
 def create_user_permissions():
     opt = input("Admin? (Y-N): ")
-    while True:
+    i = 0
+    while i == 0:
         if opt == "Y" or opt == "y":
+            i = 1
             return True
         elif opt == "N" or opt == "n":
+            i = 1
             return False
         else:
             print("Try again.")
@@ -41,14 +44,14 @@ def create_user_permissions():
 def add_random_seism_to_db():
     with app.app_context():
         random_seism = SeismModule.Seism(
-            id_num=randint(0, 250),
+            id_num=randint(0, 10000000),
             datetime=datetime(
                 randint(2000, 2020),
                 randint(1, 12),
                 randint(1, 28),
                 randint(00, 23),
-                randint(0, 60),
-                randint(0, 60)
+                randint(0, 59),
+                randint(0, 59)
             ),
             depth=randint(5, 250),
             magnitude=round(uniform(2.0, 5.5), 1),
@@ -56,7 +59,7 @@ def add_random_seism_to_db():
             longitude=uniform(-90, 90),
             verified=bool(getrandbits(1))
         )
-        """sensor_id="""
+        # """sensor_id="""
 
         db.session.add(random_seism)
         db.session.commit()
@@ -65,7 +68,7 @@ def add_random_seism_to_db():
 def add_random_sensor_to_db():
     with app.app_context():
         random_sensor = SensorModule.Sensor(
-            id_num=randint(0, 250),
+            id_num=randint(0, 10000000),
             name=input("Sensor name: "),
             ip=create_random_ip(),
             port=randint(1, 65535),
@@ -79,7 +82,7 @@ def add_random_sensor_to_db():
 def add_random_user_to_db():
     with app.app_context():
         random_user = UserModule.User(
-            id_num=randint(0, 250),
+            id_num=randint(0, 10000000),
             email=create_random_email(),
             password=input("Password: "),
             admin=create_user_permissions()
@@ -88,6 +91,9 @@ def add_random_user_to_db():
         db.session.commit()
 
 
-add_random_seism_to_db()
-add_random_sensor_to_db()
-add_random_user_to_db()
+for i in range(15):
+    add_random_seism_to_db()
+for i in range(15):
+    add_random_sensor_to_db()
+for i in range(15):
+    add_random_user_to_db()
