@@ -21,13 +21,13 @@ class User(db.Model):
 
     @staticmethod
     def from_json(user_json):
-        id_num = user_json.get('id_num')
-        email = user_json.get('email')
-        password = user_json.get('password')
-        admin = user_json.get('admin')
+        new_id_num = user_json.get('id_num')
+        new_email = user_json.get('email')
+        new_password = user_json.get('password')
+        new_admin = user_json.get('admin')
         return User(
-            id_num=id_num,
-            email=email,
-            password=password,
-            admin=admin
+            id_num=new_id_num,
+            email=new_email,
+            password=new_password,
+            admin=new_admin
         )
