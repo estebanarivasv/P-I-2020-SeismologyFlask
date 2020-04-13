@@ -2,7 +2,7 @@ from flask_restful import Resource
 from flask import request, jsonify
 from main import db
 from main.models import SeismModel
-
+from datetime import datetime
 
 
 class VerifiedSeism(Resource):
@@ -30,13 +30,16 @@ class UnverifiedSeism(Resource):
         unverified_seism = db.session.query(SeismModel).get_or_404(id_num)
         db.session.delete(unverified_seism)
         db.session.commit()
-        return '', 204
+        return 'Unverified-seism removed successfully', 204
 
     def put(self, id_num):
         unverified_seism = db.session.query(SeismModel).get_or_404(id_num)
         data = request.get_json().items()
         for key, value in data:
-            setattr(unverified_seism, key, value)
+            if key == 'datetime':
+                setattr(unverified_seism, key, datetime.strptime(value, "%Y-%m-%d %H:%M:%S"))
+            else:
+                setattr(unverified_seism, key, value)
         db.session.add(unverified_seism)
         db.session.commit()
         return unverified_seism.to_json(), 201
