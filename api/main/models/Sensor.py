@@ -27,19 +27,19 @@ class Sensor(db.Model):
 
     @staticmethod
     def from_json(sensor_json):
-        id_num = sensor_json.get('id_num')
-        name = sensor_json.get('name')
-        ip = sensor_json.get('ip')
-        port = sensor_json.get('port')
-        status = sensor_json.get('status')
-        active = sensor_json.get('active')
-        """user_id = sensor_json.get('user_id')"""
+        new_id_num = sensor_json.get('id_num')
+        new_name = sensor_json.get('name')
+        new_ip = sensor_json.get('ip')
+        new_port = sensor_json.get('port')
+        new_status = sensor_json.get('status')
+        new_active = sensor_json.get('active')
+        """new_user_id = sensor_json.get('user_id')"""
+
         return Sensor(
-            """user_id = user_id""",
-            id_num=id_num,
-            name=name,
-            ip=ip,
-            port=port,
-            status=status,
-            active=active
+            id_num=new_id_num,
+            name=new_name,
+            ip=new_ip,
+            port=new_port,
+            status=new_status,
+            active=new_active       # new_user_id = user_id
         )
