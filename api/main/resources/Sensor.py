@@ -14,7 +14,7 @@ class Sensor(Resource):
         sensor = db.session.query(SensorModel).get_or_404(id_num)
         db.session.delete(sensor)
         db.session.commit()
-        return '', 204
+        return 'Sensor removed successfully', 204
 
     def put(self, id_num):
         sensor = db.session.query(SensorModel).get_or_404(id_num)
