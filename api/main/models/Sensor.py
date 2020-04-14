@@ -8,7 +8,8 @@ class Sensor(db.Model):
     port = db.Column(db.Integer, nullable=False)
     status = db.Column(db.Boolean, nullable=False)
     active = db.Column(db.Boolean, nullable=False)
-    """user_id = db.Column(db.Integer, db.ForeignKey, nullable=False)"""
+    user_id = db.Column(db.Integer, db.ForeignKey("id_num"), nullable=False)
+
 
     def __repr__(self):
         return '<Sensor %r >' % self.name
