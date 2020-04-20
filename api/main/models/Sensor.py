@@ -1,6 +1,5 @@
 from main import db
-from main.models import UserModel
-from main.models import SeismModel
+from main.models.User import User
 
 
 class Sensor(db.Model):
@@ -11,14 +10,15 @@ class Sensor(db.Model):
     status = db.Column(db.Boolean, nullable=False)
     active = db.Column(db.Boolean, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id_num"))
-    user = db.relationship("UserModel", backpopulates="sensors", uselist=False, single_parent=True)
-    seisms = db.relationship("SeismModel", backpopulates="sensor", passive_deletes="all", ondelete="RESTRICT")
+    user = db.relationship("User", back_populates="sensors", passive_deletes="all", uselist=False, single_parent=True)
+    seisms = db.relationship("Seism", back_populates="sensor", passive_deletes="all", single_parent=True)
 
     def __repr__(self):
         return '<Sensor %r >' % self.name
 
     def to_json(self):
-        self.user = db.session.query(UserModel).get_or_404(self.user_id)
+        self.user = db.session.query(User).get_or_404(self.user_id)
+        # Verifies if the user id exists in the database chart
         sensor_json = {
             'id_num': self.id_num,
             'name': str(self.name),
