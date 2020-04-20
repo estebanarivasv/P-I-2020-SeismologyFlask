@@ -1,5 +1,6 @@
 from main import db
 import datetime as dt
+from main.models import SensorModel
 
 
 class Seism(db.Model):
@@ -10,21 +11,23 @@ class Seism(db.Model):
     latitude = db.Column(db.String, nullable=False)
     longitude = db.Column(db.String, nullable=False)
     verified = db.Column(db.Boolean, nullable=False)
-    """sensor_id = db.Column(db.Integer, nullable=False)"""
+    sensor_id = db.Column(db.Integer, nullable=False)
+    sensor = db.relationship("SensorModel", back_popilates="seisms", ondelete="RESTRICT", single_parent=True)
 
     def __repr__(self):
         return '<Seism %r %r %r>' % (self.magnitude, self.latitude, self.longitude)
 
     def to_json(self):
+        self.sensor = db.session.query(SensorModel).get_or_404(self.sensor_id)
         seism_json = {
-            """'sensor_id': self.sensor_id"""
             'id_num': self.id_num,
             'datetime': self.datetime.isoformat(),
             'depth': self.depth,
             'magnitude': self.magnitude,
             'latitude': str(self.latitude),
             'longitude': str(self.longitude),
-            'verified': self.verified
+            'verified': self.verified,
+            'sensor_id': self.sensor.to_json()
         }
         return seism_json
 

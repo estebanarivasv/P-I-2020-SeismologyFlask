@@ -1,4 +1,6 @@
 from main import db
+from main.models import UserModel
+from main.models import SeismModel
 
 
 class Sensor(db.Model):
@@ -8,21 +10,23 @@ class Sensor(db.Model):
     port = db.Column(db.Integer, nullable=False)
     status = db.Column(db.Boolean, nullable=False)
     active = db.Column(db.Boolean, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("id_num"), nullable=False)
-
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id_num"))
+    user = db.relationship("UserModel", backpopulates="sensors", uselist=False, single_parent=True)
+    seisms = db.relationship("SeismModel", backpopulates="sensor", passive_deletes="all")
 
     def __repr__(self):
         return '<Sensor %r >' % self.name
 
     def to_json(self):
+        self.user = db.session.query(UserModel).get_or_404(self.user_id)
         sensor_json = {
-            """'user_id': self.user_id"""
             'id_num': self.id_num,
             'name': str(self.name),
             'ip': str(self.ip),
             'port': self.port,
             'status': self.status,
-            'active': self.active
+            'active': self.active,
+            'user_id': self.user.to_json()
         }
         return sensor_json
 
@@ -34,7 +38,7 @@ class Sensor(db.Model):
         new_port = sensor_json.get('port')
         new_status = sensor_json.get('status')
         new_active = sensor_json.get('active')
-        """new_user_id = sensor_json.get('user_id')"""
+        new_user_id = sensor_json.get('user_id')
 
         return Sensor(
             id_num=new_id_num,
@@ -42,5 +46,6 @@ class Sensor(db.Model):
             ip=new_ip,
             port=new_port,
             status=new_status,
-            active=new_active       # new_user_id = user_id
+            active=new_active,
+            user_id=new_user_id
         )
