@@ -12,7 +12,7 @@ class Sensor(db.Model):
     active = db.Column(db.Boolean, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id_num"))
     user = db.relationship("UserModel", backpopulates="sensors", uselist=False, single_parent=True)
-    seisms = db.relationship("SeismModel", backpopulates="sensor", passive_deletes="all")
+    seisms = db.relationship("SeismModel", backpopulates="sensor", passive_deletes="all", ondelete="RESTRICT")
 
     def __repr__(self):
         return '<Sensor %r >' % self.name
