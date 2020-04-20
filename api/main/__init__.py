@@ -25,6 +25,13 @@ def create_app():
 
     db.init_app(app)
 
+    def activate_primary_keys(connection, connection_record):
+        connection.execute('pragma foreign_keys=ON')
+
+    with app.app_context():
+        from sqlalchemy import event
+        event.listen(db.engine, 'connect', activate_primary_keys)
+
     api.add_resource(resources.SensorResource, '/sensor/<id_num>')
     api.add_resource(resources.SensorsResource, '/sensors')
     api.add_resource(resources.UnverifiedSeismResource, '/unverified-seism/<id_num>')
@@ -37,4 +44,3 @@ def create_app():
     api.init_app(app)
 
     return app
-
