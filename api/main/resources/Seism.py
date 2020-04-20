@@ -63,8 +63,11 @@ class UnverifiedSeism(Resource):
 class UnverifiedSeisms(Resource):
 
     def get(self):
+
         filters = request.get_json().items()
         unverified_seisms = db.session.query(SeismModel).filter(SeismModel.verified == False).all()
+
+        # filters by id_num, datetime, magnitude, sensor_id
         for key, value in filters:
             if key is "id_num":
                 unverified_seisms = unverified_seisms.filter(SeismModel.id_num == value)
@@ -75,4 +78,5 @@ class UnverifiedSeisms(Resource):
             elif key is "sensor_id":
                 unverified_seisms = unverified_seisms.filter(SeismModel.sensor_id == value)
             unverified_seisms.all()
+
         return jsonify({'unverified_seisms': [unverified_seism.to_json() for unverified_seism in unverified_seisms]})
