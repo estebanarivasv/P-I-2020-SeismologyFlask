@@ -5,6 +5,8 @@ from main import db
 from main.models import SensorModel
 from main.models.User import User as UserModel
 
+from sqlalchemy import exc
+
 
 class Sensor(Resource):
 

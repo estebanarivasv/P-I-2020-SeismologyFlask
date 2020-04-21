@@ -9,7 +9,7 @@ class Sensor(db.Model):
     port = db.Column(db.Integer, nullable=False)
     status = db.Column(db.Boolean, nullable=False)
     active = db.Column(db.Boolean, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id_num"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id_num"), nullable=True)
     user = db.relationship("User", back_populates="sensors", uselist=False, single_parent=True)
     seisms = db.relationship("Seism", back_populates="sensor", passive_deletes="all", single_parent=True)
 
@@ -17,17 +17,28 @@ class Sensor(db.Model):
         return '<Sensor %r >' % self.name
 
     def to_json(self):
-        self.user = db.session.query(User).get_or_404(self.user_id)
+        self.user = db.session.query(User).get(self.user_id)
         # Verifies if the user id exists in the database chart
-        sensor_json = {
-            'id_num': self.id_num,
-            'name': str(self.name),
-            'ip': str(self.ip),
-            'port': self.port,
-            'status': self.status,
-            'active': self.active,
-            'user': self.user.to_json()
-        }
+        try:
+            sensor_json = {
+                'id_num': self.id_num,
+                'name': str(self.name),
+                'ip': str(self.ip),
+                'port': self.port,
+                'status': self.status,
+                'active': self.active,
+                'user': self.user.to_json()
+            }
+        except AttributeError:
+            sensor_json = {
+                'id_num': self.id_num,
+                'name': str(self.name),
+                'ip': str(self.ip),
+                'port': self.port,
+                'status': self.status,
+                'active': self.active,
+                'user_id': self.user_id
+            }
         return sensor_json
 
     @staticmethod
