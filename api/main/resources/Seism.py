@@ -20,17 +20,19 @@ class VerifiedSeisms(Resource):
 
     def get(self):
         filters = request.get_json().items()
-        verified_seisms = db.session.query(SeismModel).filter(SeismModel.verified == True).all()
-        for key, value in filters:
-            if key is "id_num":
+        verified_seisms = db.session.query(SeismModel).filter(SeismModel.verified == True)
+        print(filters)
+        for (key, value) in filters:
+            if key == "id_num":
                 verified_seisms = verified_seisms.filter(SeismModel.id_num == value)
-            elif key is "datetime":
+            if key == "datetime":
                 verified_seisms = verified_seisms.filter(SeismModel.datetime == value)
-            elif key is "magnitude":
+            if key == "magnitude":
                 verified_seisms = verified_seisms.filter(SeismModel.magnitude == value)
-            elif key is "sensor_id":
+            if key == "sensor_id":
                 verified_seisms = verified_seisms.filter(SeismModel.sensor_id == value)
             verified_seisms.all()
+        print(verified_seisms)
         return jsonify({'verified_seisms': [verified_seism.to_json() for verified_seism in verified_seisms]})
 
 
@@ -74,17 +76,17 @@ class UnverifiedSeisms(Resource):
 
     def get(self):
         filters = request.get_json().items()
-        unverified_seisms = db.session.query(SeismModel).filter(SeismModel.verified == False).all()
+        unverified_seisms = db.session.query(SeismModel).filter(SeismModel.verified == False)
 
         # filters by id_num, datetime, magnitude, sensor_id
         for key, value in filters:
-            if key is "id_num":
+            if key == "id_num":
                 unverified_seisms = unverified_seisms.filter(SeismModel.id_num == value)
-            elif key is "datetime":
+            elif key == "datetime":
                 unverified_seisms = unverified_seisms.filter(SeismModel.datetime == value)
-            elif key is "magnitude":
+            elif key == "magnitude":
                 unverified_seisms = unverified_seisms.filter(SeismModel.magnitude == value)
-            elif key is "sensor_id":
+            elif key == "sensor_id":
                 unverified_seisms = unverified_seisms.filter(SeismModel.sensor_id == value)
             unverified_seisms.all()
 

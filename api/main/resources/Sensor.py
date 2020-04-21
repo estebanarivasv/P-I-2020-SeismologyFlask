@@ -46,23 +46,23 @@ class Sensors(Resource):
 
     def get(self):
         filters = request.get_json().items()
-        sensors = db.session.query(SensorModel).all()
+        sensors = db.session.query(SensorModel)
 
         # filters by id_num, name, ip, port, status, active, user_id
         for key, value in filters:
             if key == "id_num":
                 sensors = sensors.filter(SensorModel.id_num == value)
-            elif key == "name":
+            if key == "name":
                 sensors = sensors.filter(SensorModel.name == value)
-            elif key == "ip":
+            if key == "ip":
                 sensors = sensors.filter(SensorModel.ip == value)
-            elif key == "port":
+            if key == "port":
                 sensors = sensors.filter(SensorModel.port == value)
-            elif key == "status":
+            if key == "status":
                 sensors = sensors.filter(SensorModel.status == value)
-            elif key == "active":
+            if key == "active":
                 sensors = sensors.filter(SensorModel.active == value)
-            elif key == "user_id":
+            if key == "user_id":
                 sensors = sensors.filter(SensorModel.user_id == value)
             sensors.all()
 
