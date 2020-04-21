@@ -70,16 +70,6 @@ class Sensors(Resource):
 
     def post(self):
         sensor = SensorModel.from_json(request.get_json())
-        for key, value in sensor:
-            if key == 'user_id':
-                i = db.session.query(UserModel).get_or_404(value)
-                setattr(sensor, key, value)
-            else:
-                setattr(sensor, key, value)
         db.session.add(sensor)
-        try:
-            db.session.commit()
-        except Exception:
-            db.session.rollback()
-            return '', 409
+        db.session.commit()
         return sensor.to_json(), 201

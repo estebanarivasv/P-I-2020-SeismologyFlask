@@ -10,7 +10,7 @@ class Sensor(db.Model):
     status = db.Column(db.Boolean, nullable=False)
     active = db.Column(db.Boolean, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id_num"))
-    user = db.relationship("User", back_populates="sensors", passive_deletes="all", uselist=False, single_parent=True)
+    user = db.relationship("User", back_populates="sensors", uselist=False, single_parent=True)
     seisms = db.relationship("Seism", back_populates="sensor", passive_deletes="all", single_parent=True)
 
     def __repr__(self):

@@ -13,8 +13,12 @@ class User(Resource):
     def delete(self, id_num):
         user = db.session.query(UserModel).get_or_404(id_num)
         db.session.delete(user)
-        db.session.commit()
-        return 'User removed succesfully', 204
+        try:
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            return '', 409
+        return '', 204
 
     def put(self, id_num):
         user = db.session.query(UserModel).get_or_404(id_num)
