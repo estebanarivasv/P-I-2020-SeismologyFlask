@@ -26,7 +26,7 @@ class Sensor(db.Model):
             'port': self.port,
             'status': self.status,
             'active': self.active,
-            'user_id': self.user.to_json()
+            'user': self.user.to_json()
         }
         return sensor_json
 

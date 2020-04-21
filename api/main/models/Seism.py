@@ -29,7 +29,7 @@ class Seism(db.Model):
             'latitude': str(self.latitude),
             'longitude': str(self.longitude),
             'verified': self.verified,
-            'sensor_id': self.sensor.to_json()
+            'sensor': self.sensor.to_json()
         }
         return seism_json
 
