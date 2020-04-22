@@ -59,7 +59,7 @@ class UnverifiedSeism(Resource):
             if key == 'datetime':
                 setattr(unverified_seism, key, datetime.strptime(value, "%Y-%m-%d %H:%M:%S"))
             elif key == 'sensor_id':
-                i = db.session.query(SensorModel).get_or_404(value)
+                i = db.session.query(SensorModel).get(value)
                 setattr(unverified_seism, key, value)
             else:
                 setattr(unverified_seism, key, value)

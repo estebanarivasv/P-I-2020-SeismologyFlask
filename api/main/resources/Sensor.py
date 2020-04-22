@@ -25,7 +25,7 @@ class Sensor(Resource):
         return '', 204
 
     def put(self, id_num):
-        sensor = db.session.query(SensorModel).get_or_404(id_num)
+        sensor = db.session.query(SensorModel).get(id_num)
         filters = request.get_json().items()
         for key, value in filters:
             if key == 'user_id':
