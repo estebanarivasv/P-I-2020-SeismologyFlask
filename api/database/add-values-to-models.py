@@ -92,9 +92,9 @@ def add_random_user_to_db(id_number):
         db.session.commit()
 
 
-"""for i in range(17):
+for i in range(17):
     add_random_user_to_db(i)
 for i in range(30):
-    add_random_sensor_to_db(i)"""
+    add_random_sensor_to_db(i)
 for i in range(60):
     add_random_seism_to_db()
