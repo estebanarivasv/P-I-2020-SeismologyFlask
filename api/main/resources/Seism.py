@@ -12,7 +12,6 @@ class VerifiedSeism(Resource):
 
     def get(self, id_num):
         verified_seism = db.session.query(SeismModel).get_or_404(id_num)
-        print(verified_seism)
         return verified_seism.to_json()
 
 
@@ -21,7 +20,7 @@ class VerifiedSeisms(Resource):
     def get(self):
         filters = request.get_json().items()
         verified_seisms = db.session.query(SeismModel).filter(SeismModel.verified == True)
-        print(filters)
+
         for (key, value) in filters:
             if key == "id_num":
                 verified_seisms = verified_seisms.filter(SeismModel.id_num == value)
@@ -32,7 +31,6 @@ class VerifiedSeisms(Resource):
             if key == "sensor_id":
                 verified_seisms = verified_seisms.filter(SeismModel.sensor_id == value)
             verified_seisms.all()
-        print(verified_seisms)
         return jsonify({'verified_seisms': [verified_seism.to_json() for verified_seism in verified_seisms]})
 
 
