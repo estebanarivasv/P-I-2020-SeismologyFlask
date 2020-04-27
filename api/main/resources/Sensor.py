@@ -5,8 +5,6 @@ from main import db
 from main.models import SensorModel
 from main.models.User import User as UserModel
 
-from sqlalchemy import exc
-
 
 class Sensor(Resource):
 
@@ -46,29 +44,74 @@ class Sensor(Resource):
 
 class Sensors(Resource):
 
+    # Define filters, sorting, pagination
+
     def get(self):
+
+        page_num = 1
+        elem_per_page = 25
+        raise_error = True
+        max_elem_per_page = 50
+
         filters = request.get_json().items()
         sensors = db.session.query(SensorModel)
 
-        # filters by id_num, name, ip, port, status, active, user_id
         for key, value in filters:
-            if key == "id_num":
-                sensors = sensors.filter(SensorModel.id_num == value)
-            if key == "name":
-                sensors = sensors.filter(SensorModel.name == value)
-            if key == "ip":
-                sensors = sensors.filter(SensorModel.ip == value)
-            if key == "port":
-                sensors = sensors.filter(SensorModel.port == value)
+
+            # Page settings from json
+
+            if key == "page_num":
+                page_num = value
+            if key == "elem_per_page":
+                elem_per_page = value
+
+            # Filters: user_id (null/not-null), active, status (sending / not-sending data), user.email
+
             if key == "status":
                 sensors = sensors.filter(SensorModel.status == value)
             if key == "active":
                 sensors = sensors.filter(SensorModel.active == value)
             if key == "user_id":
                 sensors = sensors.filter(SensorModel.user_id == value)
-            sensors.all()
+            if key == "user.email":
+                sensors = sensors.join(SensorModel.user).filter(UserModel.email == value)
 
-        return jsonify({'sensors': [sensor.to_json() for sensor in sensors]})
+            """if key == "id_num":
+                sensors = sensors.filter(SensorModel.id_num == value)
+            if key == "name":
+                sensors = sensors.filter(SensorModel.name == value)
+            if key == "ip":
+                sensors = sensors.filter(SensorModel.ip == value)
+            if key == "port":
+                sensors = sensors.filter(SensorModel.port == value)"""
+
+            # Sorting: name (ascendant, descendant), user_id (ascendant, descendant), active (ascendant, descendant)
+            #          status (ascendant, descendant), user.email (ascendant, descendant)
+
+            if key == "sort_by":
+                if value == "name[desc]":
+                    sensors = sensors.order_by(SensorModel.name.desc)
+                if value == "name[asc]":
+                    sensors = sensors.order_by(SensorModel.name.asc)
+                if value == "user_id[desc]":
+                    sensors = sensors.order_by(SensorModel.user_id.desc)
+                if value == "user_id[asc]":
+                    sensors = sensors.order_by(SensorModel.user_id.asc)
+                if value == "active[desc]":
+                    sensors = sensors.order_by(SensorModel.active.desc)
+                if value == "active[asc]":
+                    sensors = sensors.order_by(SensorModel.active.asc)
+                if value == "status[desc]":
+                    sensors = sensors.order_by(SensorModel.status.desc)
+                if value == "status[asc]":
+                    sensors = sensors.order_by(SensorModel.status.asc)
+                if value == "user.email[desc]":
+                    sensors = sensors.join(SensorModel.user).order_by(UserModel.email.desc)
+                if value == "user.email[asc]":
+                    sensors = sensors.join(SensorModel.user).order_by(UserModel.email.asc)
+
+        sensors.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
+        return jsonify({'sensors': [sensor.to_json() for sensor in sensors.items]})
 
     def post(self):
         sensor = SensorModel.from_json(request.get_json())
