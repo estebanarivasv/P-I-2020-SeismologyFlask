@@ -41,32 +41,27 @@ class VerifiedSeisms(Resource):
                 elem_per_page = int(value)
 
             # Filters: datetime, magnitude, sensor.name
-
             if key == "datetime":
-                verified_seisms = verified_seisms.filter(SeismModel.datetime == value)
+                verified_seisms = verified_seisms.filter(SeismModel.datetime.like("%"+str(value)+"%"))
             if key == "magnitude":
-                verified_seisms = verified_seisms.filter(SeismModel.magnitude == value)
+                verified_seisms = verified_seisms.filter(SeismModel.magnitude.like("%"+str(value)+"%"))
             if key == "sensor.name":
-                verified_seisms = verified_seisms.join(SeismModel.sensor).filter(SensorModel.name == value)
-
-            """if key == "id_num":
-                verified_seisms = verified_seisms.filter(SeismModel.id_num == value)
-            if key == "sensor_id":
-                verified_seisms = verified_seisms.filter(SeismModel.sensor_id == value)"""
+                verified_seisms = verified_seisms.join(SeismModel.sensor).filter(SensorModel.name.like("%"+str(value)+"%"))
 
             # Sorting: datetime (descendant, ascendant), sensor.name (descendant, ascendant)
-
             if key == "sort_by":
                 if value == "datetime[desc]":
-                    verified_seisms = verified_seisms.order_by(SeismModel.datetime.desc)
+                    verified_seisms = verified_seisms.order_by(SeismModel.datetime.desc())
                 if value == "datetime[asc]":
-                    verified_seisms = verified_seisms.order_by(SeismModel.datetime.asc)
+                    verified_seisms = verified_seisms.order_by(SeismModel.datetime.asc())
                 if value == "sensor.name[desc]":
-                    verified_seisms = verified_seisms.join(SeismModel.sensor).order_by(SensorModel.name.desc)
+                    verified_seisms = verified_seisms.join(SeismModel.sensor).order_by(SensorModel.name.desc())
                 if value == "sensor.name[asc]":
-                    verified_seisms = verified_seisms.join(SeismModel.sensor).order_by(SensorModel.name.asc)
+                    verified_seisms = verified_seisms.join(SeismModel.sensor).order_by(SensorModel.name.asc())
 
-        verified_seisms.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
+        # Paginates the filtered result and returns a Paginate object
+        verified_seisms = verified_seisms.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
+
         return jsonify({'verified_seisms': [verified_seism.to_json() for verified_seism in verified_seisms.items]})
 
 
@@ -131,28 +126,20 @@ class UnverifiedSeisms(Resource):
             if key == "elem_per_page":
                 elem_per_page = int(value)
 
-            # Filters: seism_id
-            if key == "id_num":
-                unverified_seisms = unverified_seisms.filter(SeismModel.id_num == value)
-
-            """elif key == "datetime":
-            unverified_seisms = unverified_seisms.filter(SeismModel.datetime == value)
-            elif key == "magnitude":
-            unverified_seisms = unverified_seisms.filter(SeismModel.magnitude == value)
-            elif key == "sensor_id":
-            unverified_seisms = unverified_seisms.filter(SeismModel.sensor_id == value)"""
+            # Filters: sensor_id
+            if key == "sensor_id":
+                unverified_seisms = unverified_seisms.filter(SeismModel.sensor_id.like("%"+str(value)+"%"))
 
             # Sorting: datetime (descendant, ascendant)
-
             if key == "sort_by":
 
                 # Sort by datetime
                 if value == "datetime[desc]":
-                    unverified_seisms = unverified_seisms.order_by(SeismModel.datetime.desc)
+                    unverified_seisms = unverified_seisms.order_by(SeismModel.datetime.desc())
                 if value == "datetime[asc]":
-                    unverified_seisms = unverified_seisms.order_by(SeismModel.datetime.asc)
+                    unverified_seisms = unverified_seisms.order_by(SeismModel.datetime.asc())
 
-            unverified_seisms.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
+        unverified_seisms = unverified_seisms.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
 
         return jsonify({'unverified_seisms': [unverified_seism.to_json() for unverified_seism in
                                               unverified_seisms.items]})
