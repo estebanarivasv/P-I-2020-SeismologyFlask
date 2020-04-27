@@ -35,7 +35,6 @@ class Seism(db.Model):
 
     @staticmethod
     def from_json(seism_json):
-        new_id_num = seism_json.get('id_num')
         new_datetime = dt.datetime.strptime(seism_json.get('datetime'), "%Y-%m-%dT%H:%M:%S"),
         new_depth = seism_json.get('depth')
         new_magnitude = seism_json.get('magnitude')
@@ -45,7 +44,6 @@ class Seism(db.Model):
         new_sensor_id = seism_json.get('sensor_id')
 
         return Seism(
-            id_num=new_id_num,
             datetime=new_datetime,
             depth=new_depth,
             magnitude=new_magnitude,

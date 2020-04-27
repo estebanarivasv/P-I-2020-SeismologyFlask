@@ -43,7 +43,6 @@ class Sensor(db.Model):
 
     @staticmethod
     def from_json(sensor_json):
-        new_id_num = sensor_json.get('id_num')
         new_name = sensor_json.get('name')
         new_ip = sensor_json.get('ip')
         new_port = sensor_json.get('port')
@@ -52,7 +51,6 @@ class Sensor(db.Model):
         new_user_id = sensor_json.get('user_id')
 
         return Sensor(
-            id_num=new_id_num,
             name=new_name,
             ip=new_ip,
             port=new_port,
