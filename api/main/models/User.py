@@ -33,7 +33,6 @@ class User(db.Model):
         user_json = {
             "id_num": self.id_num,
             "email": self.email,
-            "password": self.password,
             "admin": self.admin
         }
         return user_json
