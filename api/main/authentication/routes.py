@@ -18,9 +18,9 @@ def login():
 
     if passwords_match:
         access_token = create_access_token(identity=user)
-        data = {"id": "'+str(user.id_num)+'",
-                "email": "'+str(user.email)+'",
-                "access_token": "'+access_token+'"
+        data = {"id": user.id_num,
+                "email": user.email,
+                "token": access_token
                 }
         return data, 200
     else:
