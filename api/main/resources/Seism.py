@@ -84,8 +84,8 @@ class VerifiedSeisms(Resource):
             magnitude=round(uniform(2.0, 5.5), 1),
             latitude=uniform(-180, 180),
             longitude=uniform(-90, 90),
-            verified=True,
-            sensor_id=int(input("Sensor id associated with the seism: "))
+            verified=True
+            # sensor_id=int(input("Sensor id associated with the seism: "))
         )
         db.session.add(new_seism)
         db.session.commit()
@@ -197,7 +197,7 @@ class UnverifiedSeisms(Resource):
             latitude=uniform(-180, 180),
             longitude=uniform(-90, 90),
             verified=False,
-            sensor_id=int(input("Sensor id associated with the seism: "))
+            sensor_id=randint(6, 15)
         )
         db.session.add(new_seism)
         db.session.commit()
