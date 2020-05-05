@@ -2,3 +2,4 @@ flask
 python-dotenv
 flask_restful
 flask_sqlalchemy
+flask-jwt-extended
