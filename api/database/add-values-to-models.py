@@ -1,9 +1,7 @@
 import random
 import string
-from datetime import datetime
-from random import randint, uniform, getrandbits
+from random import randint, getrandbits
 
-import main.models.Seism as SeismModule
 import main.models.Sensor as SensorModule
 import main.models.User as UserModule
 
@@ -41,34 +39,9 @@ def create_user_permissions():
             print("Try again.")
 
 
-def add_random_seism_to_db():
-    with app.app_context():
-        random_seism = SeismModule.Seism(
-            id_num=randint(0, 10000000),
-            datetime=datetime(
-                randint(2000, 2020),
-                randint(1, 12),
-                randint(1, 28),
-                randint(00, 23),
-                randint(0, 59),
-                randint(0, 59)
-            ),
-            depth=randint(5, 250),
-            magnitude=round(uniform(2.0, 5.5), 1),
-            latitude=uniform(-180, 180),
-            longitude=uniform(-90, 90),
-            verified=bool(getrandbits(1)),
-            sensor_id=int(input("Sensor id associated with the seism: "))
-        )
-
-        db.session.add(random_seism)
-        db.session.commit()
-
-
 def add_random_sensor_to_db(id_number):
     with app.app_context():
         random_sensor = SensorModule.Sensor(
-            id_num=id_number,
             name=random_generator(),
             ip=create_random_ip(),
             port=randint(1, 65535),
@@ -83,7 +56,6 @@ def add_random_sensor_to_db(id_number):
 def add_random_user_to_db(id_number):
     with app.app_context():
         random_user = UserModule.User(
-            id_num=id_number,
             email=create_random_email(),
             password=input("Password: "),
             admin=create_user_permissions()
@@ -96,5 +68,3 @@ for i in range(17):
     add_random_user_to_db(i)
 for i in range(30):
     add_random_sensor_to_db(i)
-for i in range(60):
-    add_random_seism_to_db()
