@@ -1,5 +1,4 @@
 import os
-
 from flask import Flask
 from dotenv import load_dotenv
 from flask_restful import Api
@@ -11,7 +10,7 @@ db = SQLAlchemy()
 jwt = JWTManager()
 
 import main.resources
-from main.authentication.routes import auth as auth_blueprint
+from main.authentication import auth_blueprint
 
 
 def activate_primary_keys(connection, connection_record):
