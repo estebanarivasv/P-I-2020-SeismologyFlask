@@ -45,7 +45,7 @@ class Users(Resource):
     @admin_logon_required
     def post(self):
         user = UserModel.from_json(request.get_json())
-        email_exists = db.session.query_property(UserModel).filter(UserModel.email == user.email).scalar() is not None
+        email_exists = db.session.query(UserModel).filter(UserModel.email == user.email).scalar() is not None
         if email_exists:
             return 'The entered email address has already been registered', 409
         else:
