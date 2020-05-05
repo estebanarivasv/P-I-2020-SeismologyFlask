@@ -38,7 +38,7 @@ def create_app():
 
     # Defining secret key for encryption and time of expiration of each access token that will be generated
     app.config['JWT_SECRET_KEY'] = str(os.getenv('JWT_SECRET_KEY'))
-    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = str(os.getenv('JWT_ACCESS_TOKEN_EXPIRES'))
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES'))
 
     jwt.init_app(app)
 
