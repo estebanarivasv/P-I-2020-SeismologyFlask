@@ -1,10 +1,12 @@
 from flask_restful import Resource
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt_claims
+from random import randint, uniform, getrandbits
 
 from main import db
 from main.models import SeismModel
 from main.models.Sensor import Sensor as SensorModel
+from main.authentication import admin_logon_required
 
 from datetime import datetime
 
@@ -43,11 +45,12 @@ class VerifiedSeisms(Resource):
 
             # Filters: datetime, magnitude, sensor.name
             if key == "datetime":
-                verified_seisms = verified_seisms.filter(SeismModel.datetime.like("%"+str(value)+"%"))
+                verified_seisms = verified_seisms.filter(SeismModel.datetime.like("%" + str(value) + "%"))
             if key == "magnitude":
-                verified_seisms = verified_seisms.filter(SeismModel.magnitude.like("%"+str(value)+"%"))
+                verified_seisms = verified_seisms.filter(SeismModel.magnitude.like("%" + str(value) + "%"))
             if key == "sensor.name":
-                verified_seisms = verified_seisms.join(SeismModel.sensor).filter(SensorModel.name.like("%"+str(value)+"%"))
+                verified_seisms = verified_seisms.join(SeismModel.sensor).filter(
+                    SensorModel.name.like("%" + str(value) + "%"))
 
             # Sorting: datetime (descendant, ascendant), sensor.name (descendant, ascendant)
             if key == "sort_by":
@@ -63,7 +66,30 @@ class VerifiedSeisms(Resource):
         # Paginates the filtered result and returns a Paginate object
         verified_seisms = verified_seisms.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
 
-        return jsonify({'verified_seisms': [verified_seism.to_json_public() for verified_seism in verified_seisms.items]})
+        return jsonify(
+            {'verified_seisms': [verified_seism.to_json_public() for verified_seism in verified_seisms.items]})
+
+    @admin_logon_required
+    def post(self):
+        new_seism = SeismModel(
+            datetime=datetime(
+                randint(2000, 2020),
+                randint(1, 12),
+                randint(1, 28),
+                randint(00, 23),
+                randint(0, 59),
+                randint(0, 59)
+            ),
+            depth=randint(5, 250),
+            magnitude=round(uniform(2.0, 5.5), 1),
+            latitude=uniform(-180, 180),
+            longitude=uniform(-90, 90),
+            verified=True,
+            sensor_id=int(input("Sensor id associated with the seism: "))
+        )
+        db.session.add(new_seism)
+        db.session.commit()
+        return new_seism.to_json(), 201
 
 
 class UnverifiedSeism(Resource):
@@ -139,7 +165,7 @@ class UnverifiedSeisms(Resource):
 
             # Filters: sensor_id
             if key == "sensor_id":
-                unverified_seisms = unverified_seisms.filter(SeismModel.sensor_id.like("%"+str(value)+"%"))
+                unverified_seisms = unverified_seisms.filter(SeismModel.sensor_id.like("%" + str(value) + "%"))
 
             # Sorting: datetime (descendant, ascendant)
             if key == "sort_by":
@@ -154,3 +180,25 @@ class UnverifiedSeisms(Resource):
 
         return jsonify({'unverified_seisms': [unverified_seism.to_json() for unverified_seism in
                                               unverified_seisms.items]})
+
+    @admin_logon_required
+    def post(self):
+        new_seism = SeismModel(
+            datetime=datetime(
+                randint(2000, 2020),
+                randint(1, 12),
+                randint(1, 28),
+                randint(00, 23),
+                randint(0, 59),
+                randint(0, 59)
+            ),
+            depth=randint(5, 250),
+            magnitude=round(uniform(2.0, 5.5), 1),
+            latitude=uniform(-180, 180),
+            longitude=uniform(-90, 90),
+            verified=False,
+            sensor_id=int(input("Sensor id associated with the seism: "))
+        )
+        db.session.add(new_seism)
+        db.session.commit()
+        return new_seism.to_json(), 201
