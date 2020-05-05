@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from flask import request, jsonify
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt_claims
 
 from main import db
 from main.models import SeismModel
@@ -110,6 +110,10 @@ class UnverifiedSeisms(Resource):
     @jwt_required
     def get(self):
 
+        # We obtain the user's identity and the JWT claims. We filter the seisms for assigned for the logged user
+        jwt_identity = int(get_jwt_identity())
+        claims = get_jwt_claims()
+
         page_num = 1
         elem_per_page = 10
         raise_error = True
@@ -120,6 +124,10 @@ class UnverifiedSeisms(Resource):
 
         # Filters in unverified_seisms
         unverified_seisms = db.session.query(SeismModel).filter(SeismModel.verified == False)
+
+        if not claims['admin']:
+            # Filters the left associated seisms with the seismologist
+            unverified_seisms = db.session.query(SensorModel).filter(SensorModel.user_id == jwt_identity)
 
         for key, value in filters:
 
