@@ -1,5 +1,6 @@
 from flask_restful import Resource
 from flask import request, jsonify
+from flask_jwt_extended import jwt_required
 
 from main import db
 from main.models import SeismModel
@@ -12,7 +13,7 @@ class VerifiedSeism(Resource):
 
     def get(self, id_num):
         verified_seism = db.session.query(SeismModel).get_or_404(id_num)
-        return verified_seism.to_json()
+        return verified_seism.to_json_public()
 
 
 class VerifiedSeisms(Resource):
@@ -62,15 +63,17 @@ class VerifiedSeisms(Resource):
         # Paginates the filtered result and returns a Paginate object
         verified_seisms = verified_seisms.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
 
-        return jsonify({'verified_seisms': [verified_seism.to_json() for verified_seism in verified_seisms.items]})
+        return jsonify({'verified_seisms': [verified_seism.to_json_public() for verified_seism in verified_seisms.items]})
 
 
 class UnverifiedSeism(Resource):
 
+    @jwt_required
     def get(self, id_num):
         unverified_seism = db.session.query(SeismModel).get_or_404(id_num)
         return unverified_seism.to_json()
 
+    @jwt_required
     def delete(self, id_num):
         unverified_seism = db.session.query(SeismModel).get_or_404(id_num)
         db.session.delete(unverified_seism)
@@ -81,6 +84,7 @@ class UnverifiedSeism(Resource):
             return '', 409
         return '', 204
 
+    @jwt_required
     def put(self, id_num):
         unverified_seism = db.session.query(SeismModel).get_or_404(id_num)
         data = request.get_json().items()
@@ -103,8 +107,7 @@ class UnverifiedSeism(Resource):
 
 class UnverifiedSeisms(Resource):
 
-    # Define filters, sorting, pagination
-
+    @jwt_required
     def get(self):
 
         page_num = 1
