@@ -47,24 +47,11 @@ def add_random_sensor_to_db(id_number):
             port=randint(1, 65535),
             status=bool(getrandbits(1)),
             active=bool(getrandbits(1)),
-            user_id=int(input("User id associated with the sensor: "))
+            user_id=randint(6, 15)
         )
         db.session.add(random_sensor)
         db.session.commit()
 
 
-def add_random_user_to_db(id_number):
-    with app.app_context():
-        random_user = UserModule.User(
-            email=create_random_email(),
-            password=input("Password: "),
-            admin=create_user_permissions()
-        )
-        db.session.add(random_user)
-        db.session.commit()
-
-
-for i in range(17):
-    add_random_user_to_db(i)
 for i in range(30):
     add_random_sensor_to_db(i)
