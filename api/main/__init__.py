@@ -11,6 +11,7 @@ db = SQLAlchemy()
 jwt = JWTManager()
 
 import main.resources
+from main.authentication.routes import auth as auth_blueprint
 
 
 def activate_primary_keys(connection, connection_record):
@@ -55,7 +56,7 @@ def create_app():
     api.add_resource(resources.UserResource, '/user/<id_num>')
     api.add_resource(resources.UsersResource, '/users')
 
-    app.register_blueprint(resources.auth)
+    app.register_blueprint(auth_blueprint)
 
     api.init_app(app)
 
