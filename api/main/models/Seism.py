@@ -18,6 +18,21 @@ class Seism(db.Model):
     def __repr__(self):
         return '<Seism %r %r %r>' % (self.magnitude, self.latitude, self.longitude)
 
+    def to_json(self):
+        self.sensor = db.session.query(Sensor).get_or_404(self.sensor_id)
+        # Verifies if the sensor does exist in the database chart
+        seism_json = {
+            'id_num': self.id_num,
+            'datetime': self.datetime.isoformat(),
+            'depth': self.depth,
+            'magnitude': self.magnitude,
+            'latitude': str(self.latitude),
+            'longitude': str(self.longitude),
+            'verified': self.verified,
+            'sensor': self.sensor.to_json()
+        }
+        return seism_json
+
     def to_json_public(self):
         self.sensor = db.session.query(Sensor).get_or_404(self.sensor_id)
         # Verifies if the sensor does exist in the database chart
