@@ -19,7 +19,7 @@ def add_claims_to_access_token(user):
 
 
 # We define this decorator in order to restrict the methods that are only accessed by the administrators
-def admin_logon_required(method):
+def admin_login_required(method):
     @wraps(method)
     def wrapper(*args, **kwargs):
         verify_jwt_in_request()  # We verify if the entered token is valid
