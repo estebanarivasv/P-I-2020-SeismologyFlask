@@ -4,15 +4,26 @@ from dotenv import load_dotenv
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
+from flask_mail import Mail
 
+# Flask API RESTFUL principal inizilization
 api = Api()
+
+# Database principal inizilization
 db = SQLAlchemy()
+
+# Authentication handler principal inizilization
 jwt = JWTManager()
 
-import main.resources
+# Outgoing server sender principal inizilization
+out_server_sender = Mail()
+
+# Importing blueprints and resources
+import main.resources as resources
 from main.authentication import auth_blueprint
 
 
+# Function that, when executed, activates primary keys recognition in the SQLite DB
 def activate_primary_keys(connection, connection_record):
     connection.execute('pragma foreign_keys=ON')
 
@@ -31,7 +42,6 @@ def create_app():
     # Application configuration
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = bool(os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS'))
-
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////" + db_path + db_name
 
     db.init_app(app)
@@ -58,5 +68,12 @@ def create_app():
     app.register_blueprint(auth_blueprint)
 
     api.init_app(app)
+
+    app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+    app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
+    app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS')
+    app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+    app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+    app.config['FLASKY_MAIL_SENDER'] = os.getenv('FLASKY_MAIL_SENDER')
 
     return app
