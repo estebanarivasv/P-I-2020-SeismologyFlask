@@ -10,3 +10,4 @@ pyvenv.cfg
 requests-in-insomnia.json
 **/desktop.ini
 /lib64/
+.vscode/
