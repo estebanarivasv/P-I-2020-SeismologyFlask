@@ -1,5 +1,7 @@
+pylint
 flask
 python-dotenv
 flask_restful
 flask_sqlalchemy
-flask-jwt-extended
+flask_jwt_extended
+flask_mail
