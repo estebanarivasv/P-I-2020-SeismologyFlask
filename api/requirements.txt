@@ -1,4 +1,5 @@
 pylint
+pylint-flask
 flask
 python-dotenv
 flask_restful
