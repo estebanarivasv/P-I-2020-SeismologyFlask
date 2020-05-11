@@ -1,12 +1,12 @@
 from flask_restful import Resource
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt_claims
-from random import randint, uniform, getrandbits
+from random import randint, uniform
 
 from main import db
 from main.models import SeismModel
 from main.models.Sensor import Sensor as SensorModel
-from main.authentication import admin_logon_required
+from main.authentication import admin_login_required
 
 from datetime import datetime
 
@@ -69,7 +69,7 @@ class VerifiedSeisms(Resource):
         return jsonify(
             {'verified_seisms': [verified_seism.to_json_public() for verified_seism in verified_seisms.items]})
 
-    @admin_logon_required
+    @admin_login_required
     def post(self):
         new_seism = SeismModel(
             datetime=datetime(
@@ -181,7 +181,7 @@ class UnverifiedSeisms(Resource):
         return jsonify({'unverified_seisms': [unverified_seism.to_json() for unverified_seism in
                                               unverified_seisms.items]})
 
-    @admin_logon_required
+    @admin_login_required
     def post(self):
         new_seism = SeismModel(
             datetime=datetime(

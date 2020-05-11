@@ -3,17 +3,17 @@ from flask import request, jsonify
 
 from main import db
 from main.models import UserModel
-from main.authentication import admin_logon_required
+from main.authentication import admin_login_required
 
 
 class User(Resource):
 
-    @admin_logon_required
+    @admin_login_required
     def get(self, id_num):
         user = db.session.query(UserModel).get_or_404(id_num)
         return user.to_json()
 
-    @admin_logon_required
+    @admin_login_required
     def delete(self, id_num):
         user = db.session.query(UserModel).get_or_404(id_num)
         db.session.delete(user)
@@ -24,7 +24,7 @@ class User(Resource):
             return '', 409
         return '', 204
 
-    @admin_logon_required
+    @admin_login_required
     def put(self, id_num):
         user = db.session.query(UserModel).get_or_404(id_num)
         data = request.get_json().items()
@@ -37,12 +37,12 @@ class User(Resource):
 
 class Users(Resource):
 
-    @admin_logon_required
+    @admin_login_required
     def get(self):
         users = db.session.query(UserModel).all()
         return jsonify({'users': [user.to_json() for user in users]})
 
-    @admin_logon_required
+    @admin_login_required
     def post(self):
         user = UserModel.from_json(request.get_json())
         email_exists = db.session.query(UserModel).filter(UserModel.email == user.email).scalar() is not None
