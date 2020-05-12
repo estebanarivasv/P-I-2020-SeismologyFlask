@@ -21,6 +21,7 @@ out_server_sender = Mail()
 # Importing blueprints and resources
 import main.resources as resources
 from main.authentication import auth_blueprint
+from main.mail import stopped_sensors_blueprint
 
 
 # Function that, when executed, activates primary keys recognition in the SQLite DB
@@ -52,6 +53,15 @@ def create_app():
 
     jwt.init_app(app)
 
+    app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+    app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
+    app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS')
+    app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+    app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+    app.config['FLASKY_MAIL_SENDER'] = os.getenv('FLASKY_MAIL_SENDER')
+
+    out_server_sender.init_app(app)
+
     with app.app_context():
         from sqlalchemy import event
         event.listen(db.engine, 'connect', activate_primary_keys)
@@ -66,14 +76,8 @@ def create_app():
     api.add_resource(resources.UsersResource, '/users')
 
     app.register_blueprint(auth_blueprint)
+    app.register_blueprint(stopped_sensors_blueprint)
 
     api.init_app(app)
-
-    app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
-    app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
-    app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS')
-    app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
-    app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
-    app.config['FLASKY_MAIL_SENDER'] = os.getenv('FLASKY_MAIL_SENDER')
 
     return app
