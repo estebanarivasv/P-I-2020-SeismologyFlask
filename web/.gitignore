@@ -8,6 +8,6 @@ pyvenv.cfg
 **__pycache__/
 .idea/
 requests-in-insomnia.json
-**/desktop.ini
+templates-sketches/**/desktop.ini
 /lib64/
 .vscode/
