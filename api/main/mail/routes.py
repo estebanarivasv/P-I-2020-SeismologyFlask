@@ -8,17 +8,25 @@ sensors = Blueprint("sensors", __name__, url_prefix="/sensors")
 
 
 # Sends an email with the sensors that are not working anymore to the software administrator
-@sensors.route('/status', methods=['POST'])
+@sensors.route('/status', methods=['GET'])
 def post():
     stopped_sensors = db.session.query(SensorModel).filter(SensorModel.status == False)
-    administrators = db.session.query(UserModel).filter(UserModel.admin == True)
+    admins_mail = db.session.query(UserModel.email).filter(UserModel.admin == True)
     subject = "Sensors not working at the moment"
     template_directory = "mail/sensors_status"
-    for admin in administrators:
-        sent = send_mail(admin.email, subject, template_directory, sensors=stopped_sensors)
+
+    # Turning emails into an array
+    recipients = [email for email, in admins_mail]
+
+    for to in recipients:
+        sent = send_mail(to, subject, template_directory, sensors=stopped_sensors)
+        if not sent:
+            break
+    try:
         if sent:
-            return 'The email has been sent.'
+            return 'The email/emails has been sent.', 200
         else:
-            db.session.rollback()
             return str(sent), 502
-    return stopped_sensors.to_json(), 201
+    
+    except Exception as error:
+        return str(error), 409
