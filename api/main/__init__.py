@@ -6,16 +6,16 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 
-# Flask API RESTFUL principal inizilization
+# Flask API RESTFUL principal initialization
 api = Api()
 
-# Database principal inizilization
+# Database principal initialization
 db = SQLAlchemy()
 
-# Authentication handler principal inizilization
+# Authentication handler principal initialization
 jwt = JWTManager()
 
-# Outgoing server sender principal inizilization
+# Outgoing server sender principal initialization
 out_server_sender = Mail()
 
 # Importing blueprints and resources
@@ -31,8 +31,7 @@ def activate_primary_keys(connection, connection_record):
 
 # Function that creates an instance of the Flask application, summing other complements
 def create_app():
-
-    # Flask app inizilization
+    # Flask app initialization
     app = Flask(__name__)
 
     # Loading environment variables
@@ -41,7 +40,7 @@ def create_app():
     db_path = str(os.getenv('SQLALCHEMY_DB_PATH'))
     db_name = str(os.getenv('SQLALCHEMY_DB_NAME'))
 
-    # Creating database path
+    # Creating database
     if not os.path.exists(db_path + db_name):
         os.mknod(db_path + db_name)
 
@@ -49,17 +48,17 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = bool(os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS'))
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////" + db_path + db_name
 
-    # Database inizilization in Flask app
+    # Database initialization in Flask app
     db.init_app(app)
 
     # Defining secret key for encryption and time of expiration of each access token that will be generated
     app.config['JWT_SECRET_KEY'] = str(os.getenv('JWT_SECRET_KEY'))
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES'))
 
-    # JWT management inizilization in Flask app
+    # JWT management initialization in Flask app
     jwt.init_app(app)
 
-    # Defining general configuration for SMPT server
+    # Defining general configuration for SMTP server
     app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
     app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
     app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS')
@@ -67,7 +66,7 @@ def create_app():
     app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
     app.config['FLASKY_MAIL_SENDER'] = os.getenv('FLASKY_MAIL_SENDER')
 
-    # Flask mail handler inizilization in Flask app
+    # Flask mail handler initialization in Flask app
     out_server_sender.init_app(app)
 
     # When the database is "connected in Flask app, the primary keys will activate"
@@ -89,7 +88,7 @@ def create_app():
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(stopped_sensors_blueprint)
 
-    # Final app inizilization
+    # Final app initialization
     api.init_app(app)
 
     return app
