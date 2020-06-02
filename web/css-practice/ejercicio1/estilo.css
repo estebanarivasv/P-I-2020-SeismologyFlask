@@ -1,0 +1,164 @@
+a:nth-of-type(1){
+    font-weight: bold;
+    text-decoration: none;
+    margin: 5px;
+    padding: 5px 5px 5px 5px;
+    border: 2px solid black;
+    border-radius: 15px;
+    background-color: lightblue;
+}
+a:nth-of-type(2) {
+    font-weight: bold;
+    text-decoration: none;
+    color: red;
+}
+a:nth-of-type(3) {
+    font-weight: bold;
+    text-decoration: none;
+    margin: 5px;
+    padding: 5px 5px 5px 5px;
+    color: white;
+    background-color: black;
+}
+a:nth-of-type(4) {
+    font-weight: bold;
+    text-decoration: none;
+    margin: 5px;
+    padding: 5px 5px 5px 5px;
+    border: 1px solid black;
+    border-top-width: 3px;
+    border-bottom-width: 5px;
+    background-color: rgb(179, 245, 179);
+}
+
+.tabla1 th{
+    text-decoration: none;
+    width: auto;
+    height: auto;
+    background-color: rgb(255, 188, 188);
+    border: 1px solid black;
+    padding: 6px;
+}
+
+.tabla1 td:nth-of-type(1){
+    text-decoration: none;
+    width: auto;
+    height: auto;
+    background-color: lightblue;
+    border: 1px solid black;
+    padding: 6px;
+}
+
+.tabla1 td:nth-of-type(2){
+    text-decoration: none;
+    width: auto;
+    height: auto;
+    background-color: lightgreen;
+    border: 1px solid black;
+    padding: 6px;
+}
+
+.tabla1 td:nth-of-type(3){
+    text-decoration: none;
+    width: auto;
+    height: auto;
+    background-color: lightgray;
+    border: 1px solid black;
+    padding: 6px;
+}
+
+.tabla2{
+    border-collapse: collapse;
+}
+
+.tabla2 tr{
+    border-collapse: collapse;
+    border: 2px solid white;
+}
+
+.tabla2 th{
+    border-bottom: 1px solid white;
+    background-color: gray;
+    color:white;
+    padding: 1px;
+}
+
+.tabla2 tr:nth-of-type(2) td{
+    border-bottom: 1px solid white;
+    background-color: lightblue;
+    padding: 4px;
+}
+
+.tabla2 tr:nth-of-type(3) td{
+    border-bottom: 1px solid white;
+    background-color: lightgray;
+    padding: 4px;
+}
+
+.tabla2 tr:nth-of-type(4) td{
+    border-bottom: 1px solid white;
+    background-color: lightblue;
+    padding: 4px;
+}
+
+.tabla2 tr:nth-of-type(5) td{
+    border-bottom: 1px solid white;
+    background-color: lightgray;
+    padding: 4px;
+}
+
+.tabla2 tr:nth-of-type(6) td{
+    border-bottom: 1px solid white;
+    background-color: lightblue;
+    padding: 4px;
+}
+
+.tabla3{
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+.tabla3 tr{
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+.tabla3 th{
+    background-color: lightgray;
+    padding: 7px;
+}
+
+.tabla3 td{
+    padding: 7px;
+}
+
+
+
+.tabla4{
+    border-collapse: collapse;
+}
+
+.tabla4 tr{
+    border-collapse: collapse;
+    border-top: 1px solid black;
+}
+
+.tabla4 th{
+    background-color: lightgray;
+    padding: 7px;
+}
+
+.tabla4 td{
+    padding: 7px;
+}
+
+
+.tabla5{
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+.tabla5 td{
+    border-collapse: collapse;
+    border: 1px solid black;
+}
