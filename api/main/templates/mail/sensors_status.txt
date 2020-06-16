@@ -1,7 +1,12 @@
 Greetings.
 
-The following sensors are not currently working:
-    id_num          name            ip              port
+The following active sensors are not currently working:
+
 {% for sensor in sensors %}
- ID: {{sensor.id_num}}         {{sensor.name}}            {{sensor.ip}}              {{sensor.port}}
+------------------------------------
+ID: {{sensor.id_num}}         
+Name: {{sensor.name}}           
+IP address: {{sensor.ip}}
+Port: {{sensor.port}}
+------------------------------------
 {% endfor %}
