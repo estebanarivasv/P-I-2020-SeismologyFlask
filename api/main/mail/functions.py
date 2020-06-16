@@ -10,10 +10,10 @@ def send_mail(to, subject, template_directory, **kwargs):
     try:
         # Plain text body template configuration. **kwargs are used by Jinja to display different templates
         msg.body = render_template(template_directory + '.txt', **kwargs)
-
+        
         # HTML body template configuration.
-        # msg.html = render_template(template_directory + '.html', **kwargs)
-
+        msg.html = render_template(template_directory + '.html', **kwargs)
+        
         mail_sender.send(msg)
         
     except SMTPException:
