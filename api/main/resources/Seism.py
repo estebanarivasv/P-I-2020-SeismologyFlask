@@ -17,6 +17,25 @@ class VerifiedSeism(Resource):
         verified_seism = db.session.query(SeismModel).get_or_404(id_num)
         return verified_seism.to_json_public()
 
+    @admin_login_required
+    def put(self, id_num):
+        verified_seism = db.session.query(SeismModel).get_or_404(id_num)
+        data = request.get_json().items()
+        for key, value in data:
+            if key == 'datetime':
+                setattr(verified_seism, key, datetime.strptime(value, "%Y-%m-%d %H:%M:%S"))
+            elif key == 'sensor_id':
+                setattr(verified_seism, key, value)
+            else:
+                setattr(verified_seism, key, value)
+        db.session.add(verified_seism)
+        try:
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            return '', 409
+        return verified_seism.to_json(), 201
+
 
 class VerifiedSeisms(Resource):
 
@@ -85,7 +104,7 @@ class VerifiedSeisms(Resource):
             latitude=uniform(-180, 180),
             longitude=uniform(-90, 90),
             verified=True,
-            sensor_id=randint(1, 30)
+            sensor_id=2
         )
         db.session.add(new_seism)
         db.session.commit()
@@ -118,7 +137,6 @@ class UnverifiedSeism(Resource):
             if key == 'datetime':
                 setattr(unverified_seism, key, datetime.strptime(value, "%Y-%m-%d %H:%M:%S"))
             elif key == 'sensor_id':
-                i = db.session.query(SensorModel).get(value)
                 setattr(unverified_seism, key, value)
             else:
                 setattr(unverified_seism, key, value)
@@ -137,7 +155,7 @@ class UnverifiedSeisms(Resource):
     def get(self):
 
         # We obtain the user's identity and the JWT claims. We filter the seisms for assigned for the logged user
-        jwt_identity = int(get_jwt_identity())
+        user_id = int(get_jwt_identity())
         claims = get_jwt_claims()
 
         page_num = 1
@@ -151,9 +169,10 @@ class UnverifiedSeisms(Resource):
         # Filters in unverified_seisms
         unverified_seisms = db.session.query(SeismModel).filter(SeismModel.verified == False)
 
+        print("claims: ", claims, "\n\n\nuser_id: ", user_id)
         if not claims['admin']:
             # Filters the left associated seisms with the seismologist
-            unverified_seisms = db.session.query(SensorModel).filter(SensorModel.user_id == jwt_identity)
+            unverified_seisms = unverified_seisms.filter(SensorModel.user_id == user_id)
 
         for key, value in filters:
 
@@ -197,7 +216,7 @@ class UnverifiedSeisms(Resource):
             latitude=uniform(-180, 180),
             longitude=uniform(-90, 90),
             verified=False,
-            sensor_id=randint(1, 30)
+            sensor_id=2
         )
         db.session.add(new_seism)
         db.session.commit()

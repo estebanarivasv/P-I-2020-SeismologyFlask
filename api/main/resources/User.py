@@ -22,7 +22,7 @@ class User(Resource):
         except Exception:
             db.session.rollback()
             return '', 409
-        return '', 204
+        return 'User deleted', 204
 
     @admin_login_required
     def put(self, id_num):

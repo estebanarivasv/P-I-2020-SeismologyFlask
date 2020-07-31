@@ -64,9 +64,9 @@ class Sensors(Resource):
             # Page settings from json
 
             if key == "page_num":
-                page_num = value
+                page_num = int(value)
             if key == "elem_per_page":
-                elem_per_page = value
+                elem_per_page = int(value)
 
             # Filters: user_id (null/not-null), active, status (sending / not-sending data), user.email
 
@@ -75,9 +75,9 @@ class Sensors(Resource):
             if key == "active":
                 sensors = sensors.filter(SensorModel.active == value)
             if key == "user_id":
-                sensors = sensors.filter(SensorModel.user_id.like("%"+str(value)+"%"))
+                sensors = sensors.filter(SensorModel.user_id.like(value))
             if key == "user.email":
-                sensors = sensors.join(SensorModel.user).filter(UserModel.email.like("%"+value+"%"))
+                sensors = sensors.join(SensorModel.user).filter(UserModel.email.like("%" + value + "%"))
 
             # Sorting: name (ascendant, descendant), user_id (ascendant, descendant), active (ascendant, descendant)
             #          status (ascendant, descendant), user.email (ascendant, descendant)
