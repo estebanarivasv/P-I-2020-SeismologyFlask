@@ -2,3 +2,7 @@ body {
     padding-top: 65px;
     padding-bottom: 150px;
 }
+
+bi bi-house {
+    color: rgba(0, 0, 0, 0.75);
+}
