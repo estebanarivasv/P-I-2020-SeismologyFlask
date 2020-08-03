@@ -1,8 +1,10 @@
 .lheading {
     text-decoration: black !important; 
     font-weight: bold !important;
+    width: max-content;
 }
 
 .lsubheading {
     margin-left: 10px;
+    width: max-content;
 }
