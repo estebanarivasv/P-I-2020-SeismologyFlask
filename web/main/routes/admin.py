@@ -10,7 +10,8 @@ def logout():
 
 @admin.route('/home')
 def index():
-    return render_template('/derivied/admin/home.html')
+    return render_template('derivied/admin/home.html')
+
 
 
 @admin.route('/verified-seisms')
