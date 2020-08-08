@@ -1,0 +1,101 @@
+{% extends 'principal/admin.html' %} {% block head %} {{ super() }}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid my-3 px-5">
+    <div class="row">
+        <div class="col-lg-auto col-sm-auto col-md-auto">
+            <nav aria-label="breadcrumb mr-n5">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Sensors</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        1
+                        {# id_num #}
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="container-fluid">
+                <!-- TITLE -->
+                <h3 class="py-2">Sensor</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-sm-12 col-lg-8">
+            <div class="container py-2 justify-content-center">
+
+                <h5 class="py-3">Complete the following form</h5>
+                <form>
+                    <div class="form-row">
+                        <div class="col-lg-6 col-sm-12 py-2">
+                            <label class="" for="sensorName">Name</label>
+                            <input type="text" class="form-control" id="sensorName" value="{# sensor.name #}aaa">
+                        </div>
+                        <div class="col-lg-3 col-sm-12 py-2">
+                            <label class="" for="sensorIP">IP</label>
+                            <input type="text" class="form-control" id="sensorIP" value="{# sensor.ip #}aaaa">
+                        </div>
+                        <div class="col-lg-3 col-sm-12 py-2">
+                            <label class="" for="sensorPort">Port</label>
+                            <input type="text" class="form-control" id="sensorPort" value="{# sensor.port #}aaaa">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-6 col-sm-12 py-2">
+                            <label class="" for="status">Status</label>
+                            <div class="container">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="status" name="notWorking" class="custom-control-input">
+                                    <label class="custom-control-label" for="status">Working</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="status" name="working" class="custom-control-input" checked>
+                                    <label class="custom-control-label" for="status">Not working</label>
+                                </div>
+                            </div>
+                            <div class="form-row py-3">
+                                <label class="" for="associatedSeismologist">Associated seismologist</label>
+                                <select class="custom-select" id="associatedSeismologist">
+                                    <option selected>{# user.email #}aaaaaaaa</option>
+                                    <option value="1">{# tremendo for va acá papu #}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 py-2">
+                            <label class="" for="active">Active</label>
+                            <div class="container">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="active" name="true" class="custom-control-input" checked>
+                                    <label class="custom-control-label" for="active">True</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="active" name="false" class="custom-control-input">
+                                    <label class="custom-control-label" for="active">False</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-inline justify-content-center">
+
+                        <button type="submit" class="btn btn-success">
+                            Save</button>
+                        <a name="" id="" class="btn btn-danger mx-5 my-5" href="#" role="button">
+                            Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}
