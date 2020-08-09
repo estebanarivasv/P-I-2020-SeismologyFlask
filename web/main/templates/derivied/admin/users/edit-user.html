@@ -1,0 +1,86 @@
+{% extends 'principal/admin.html' %} {% block head %} {{ super() }}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid my-3 px-5">
+    <div class="row">
+        <div class="col-lg-auto col-sm-auto col-md-auto">
+            <nav aria-label="breadcrumb mr-n5">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Users</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        1
+                        {# id_num #}
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10 col-sm-12">
+            <!-- TITLE -->
+            <h3 class="py-2">Editing user</h3>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-sm-12 col-lg-8">
+            <div class="container py-2 justify-content-center">
+
+                <h5 class="py-3">Complete the following form</h5>
+                <form>
+                    <div class="form-row">
+                        <div class="col-12 py-2">
+                            <label class="" for="userEmail">Email</label>
+                            <input type="email" class="form-control" id="userEmail" value="pepito@gmail.com{# email #}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-6 py-2">
+                            <label class="" for="pass">Password</label>
+                            <input type="password" class="form-control" id="pass" value="pass{# pass #}">
+                        </div>
+                        <div class="col-6 py-2">
+                            <label class="" for="confirmPass">Confirm password</label>
+                            <input type="password" class="form-control" id="confirmPass" value="pass{# pass #}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <legend class="col-form-label">Admin</legend>
+                        <div class="container-fluid">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="admin" id="gridRadios1"
+                                    value="true" checked>
+                                <label class="form-check-label" for="gridRadios1">
+                                    True
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="admin" id="gridRadios2"
+                                    value="false">
+                                <label class="form-check-label" for="gridRadios2">
+                                    False
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row form-inline justify-content-center">
+
+                        <button type="submit" class="btn btn-success">
+                            Save</button>
+                        <a name="" id="" class="btn btn-danger mx-5 my-5" href="#" role="button">
+                            Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}
