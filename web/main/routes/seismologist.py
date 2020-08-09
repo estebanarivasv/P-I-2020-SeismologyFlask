@@ -3,12 +3,12 @@ from flask import Blueprint, render_template
 seismologist = Blueprint('seismologist', __name__, url_prefix='/user')
 
 
-@seismologist.route('/logout')
+@seismologist.route('/logout/')
 def logout():
     pass
 
 
-@seismologist.route('/unverified-seisms')
+@seismologist.route('/unverified-seisms/')
 def main_useisms():
     return render_template('/derivied/seismologist/unverified-seism/main.html')
 

@@ -3,18 +3,18 @@ from flask import Blueprint, render_template
 admin = Blueprint('admin', __name__, url_prefix='/administrator')
 
 
-@admin.route('/logout')
+@admin.route('/logout/')
 def logout():
     pass
 
 
-@admin.route('/home')
+@admin.route('/home/')
 def index():
     return render_template('derivied/admin/home.html')
 
 
 
-@admin.route('/verified-seisms')
+@admin.route('/verified-seisms/')
 def main_vseism():
     return render_template('/derivied/admin/verified-seisms/main.html')
 
@@ -24,7 +24,7 @@ def view_vseism(id):
     return render_template('/derivied/admin/verified-seisms/view-vseism.html')
 
 
-@admin.route('/sensors')
+@admin.route('/sensors/')
 def main_sensors():
     return render_template('/derivied/admin/sensors/main.html')
 

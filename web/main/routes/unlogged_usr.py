@@ -4,7 +4,7 @@ from main.routes.login import login
 unlogged_usr = Blueprint('unlogged_user', __name__, url_prefix='/')
 
 
-@unlogged_usr.route('/verified-seisms')
+@unlogged_usr.route('/verified-seisms/')
 def index():
     return render_template('/derivied/unlogged-usr/verified-seisms/main.html')
 
@@ -14,6 +14,6 @@ def view(id):
     return render_template('/derivied/unlogged-usr/verified-seisms/view-vseism.html')
 
 
-@unlogged_usr.route('/login')
-def login():
+@unlogged_usr.route('/login/')
+def sign_in():
     return redirect(url_for('login.index'))
