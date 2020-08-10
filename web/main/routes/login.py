@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 
-login = Blueprint('login', __name__, url_prefix='/login')
+login = Blueprint('login', __name__, url_prefix='/')
 
 
 @login.route('/login')
