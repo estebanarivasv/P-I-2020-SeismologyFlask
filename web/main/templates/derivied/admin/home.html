@@ -1,4 +1,12 @@
-{% extends 'principal/admin.html' %} {% block content %}
+{% extends 'principal/admin.html' %} 
+
+{% block content %} {{ super() }}
+
+<title>Administrator · Seismology Institute</title>
+
+{% endblock %}
+
+{% block content %}
 
 <div class="container py-5 mx-n10">
   <h2 class="text-center py-3">Where to?</h2>
