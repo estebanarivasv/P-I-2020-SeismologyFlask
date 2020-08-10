@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 
-seismologist = Blueprint('seismologist', __name__, url_prefix='/user')
+seismologist = Blueprint('seismologist', __name__, url_prefix='/seismologist')
 
 
 @seismologist.route('/logout/')
@@ -14,12 +14,12 @@ def main_useisms():
 
 
 @seismologist.route('/unverified-seisms/view/<int:id>')
-def view_useism():
+def view_useism(id):
     return render_template('/derivied/seismologist/unverified-seism/view-useism.html')
 
 
 @seismologist.route('/unverified-seisms/edit/<int:id>')
-def edit_useism():
+def edit_useism(id):
     return render_template('/derivied/seismologist/unverified-seism/edit-useism.html')
 
 
@@ -29,5 +29,6 @@ def main_vseisms():
 
 
 @seismologist.route('/verified-seisms/view/<int:id>')
-def view_vseism():
+def view_vseism(id):
     return render_template('/derivied/seismologist/verified-seisms/view-vseism.html')
+     
