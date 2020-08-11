@@ -6,12 +6,12 @@ unlogged_usr = Blueprint('unlogged_user', __name__, url_prefix='/')
 
 @unlogged_usr.route('/verified-seisms/')
 def index():
-    return render_template('/derivied/unlogged-usr/verified-seisms/main.html')
+    return render_template('/derived/unlogged-usr/verified-seisms/main.html')
 
 
 @unlogged_usr.route('/verified-seisms/view/<int:id>')
 def view(id):
-    return render_template('/derivied/unlogged-usr/verified-seisms/view-vseism.html')
+    return render_template('/derived/unlogged-usr/verified-seisms/view-vseism.html')
 
 
 @unlogged_usr.route('/login/')

@@ -5,4 +5,4 @@ login = Blueprint('login', __name__, url_prefix='/')
 
 @login.route('/login')
 def index():
-    return render_template('/derivied/unlogged-usr/log-in.html')
+    return render_template('/derived/unlogged-usr/log-in.html')

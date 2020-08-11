@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- CSS -->
-  <link rel="stylesheet" href="../../static/css/body.css">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/body.css')}}">
   <link href="/open-iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet" />
   <script src="https://unpkg.com/feather-icons"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -24,7 +24,7 @@
 
     <!-- Logo -->
     <div class="container-fluid justify-content-center">
-      <a class="navbar-brand" href=" "><img src="../../static/svg/logo.svg " class="" width="125" height="125" /></a>
+      <a class="navbar-brand" href=" "><img src="{{url_for('static', filename='svg/logo.svg')}}" class="" width="125" height="125" /></a>
     </div>
 
     <!-- Link buttons & Logged admin mail -->
@@ -41,12 +41,12 @@
         <ul class="navbar-nav mr-auto">
 
           <!-- To verified seisms -->
-          <li class="nav-item">
+          <li class="nav-item mr-3">
             <a class="nav-link" href="#">Verified seisms</a>
           </li>
 
           <!-- To unverified seisms -->
-          <li class="nav-item">
+          <li class="nav-item mr-3">
             <a class="nav-link" href="#">Unverified seisms</a>
           </li>
         </ul>

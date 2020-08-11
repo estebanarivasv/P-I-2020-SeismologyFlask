@@ -10,25 +10,25 @@ def logout():
 
 @seismologist.route('/unverified-seisms/')
 def main_useisms():
-    return render_template('/derivied/seismologist/unverified-seism/main.html')
+    return render_template('/derived/seismologist/unverified-seism/main.html')
 
 
 @seismologist.route('/unverified-seisms/view/<int:id>')
 def view_useism(id):
-    return render_template('/derivied/seismologist/unverified-seism/view-useism.html')
+    return render_template('/derived/seismologist/unverified-seism/view-useism.html')
 
 
 @seismologist.route('/unverified-seisms/edit/<int:id>')
 def edit_useism(id):
-    return render_template('/derivied/seismologist/unverified-seism/edit-useism.html')
+    return render_template('/derived/seismologist/unverified-seism/edit-useism.html')
 
 
 @seismologist.route('/verified-seisms/')
 def main_vseisms():
-    return render_template('/derivied/seismologist/verified-seisms/main.html')
+    return render_template('/derived/seismologist/verified-seisms/main.html')
 
 
 @seismologist.route('/verified-seisms/view/<int:id>')
 def view_vseism(id):
-    return render_template('/derivied/seismologist/verified-seisms/view-vseism.html')
+    return render_template('/derived/seismologist/verified-seisms/view-vseism.html')
      
