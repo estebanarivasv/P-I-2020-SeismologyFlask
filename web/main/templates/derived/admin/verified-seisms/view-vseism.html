@@ -1,0 +1,85 @@
+{% extends 'principal/admin.html' %} {% block head %} {{ super() }}
+
+<title>Verified Seism no. {{ v_seism.id_num }} · Seismology Institute</title>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container-fluid my-3 px-5">
+    <div class="row">
+        <div class="col-lg-auto col-sm-auto col-md-auto">
+            <nav aria-label="breadcrumb mr-n5">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Verified seisms</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{ v_seism.id_num }}
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10 col-sm-12">
+            <!-- TITLE -->
+            <h3 class="py-2">Verified seism</h3>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+</div>
+
+<div class="container my-3 px-5">
+    <div class="row">
+        <div class="col-sm-12 col-lg-6">
+            <div class="container py-2">
+                <h5 class="pb-3">Seism's Table</h5>
+                <table class="table table-hover py-3">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Date and time</th>
+                            <td class="text-center">{{ v_seism.datetime }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Depth</th>
+                            <td class="text-center">{{ v_seism.depth }} mts</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Magnitude</th>
+                            <td class="text-center">{{ v_seism.magnitude }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Associated sensor</th>
+                            <td class="text-center">{{ v_seism.sensor.name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Longitude</th>
+                            <td class="text-center">{{ v_seism.longitude }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Latitude</th>
+                            <td class="text-center">{{ v_seism.latitude }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="col-sm-12 col-lg-6">
+            <div class="container py-2">
+                <h5 class="pb-3">Satelital view</h5>
+                <!-- EMBEDED MAP -->
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" scrolling="no" marginheight="0" marginwidth="0"
+                        allowfullscreen
+                        src="https://maps.google.com/maps?width=100%25&amp;height=100%25&amp;hl=en&amp;q={{ v_seism.latitude }},{{ v_seism.longitude }}&hl=es&z=14&amp;t=k&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}
