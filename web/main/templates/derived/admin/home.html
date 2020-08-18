@@ -1,6 +1,6 @@
 {% extends 'principal/admin.html' %} 
 
-{% block content %} {{ super() }}
+{% block head %} {{ super() }}
 
 <title>Administrator · Seismology Institute</title>
 
@@ -19,7 +19,7 @@
             style="width: 100%; height: 100%; object-fit: cover;"
           />
           <div class="card-body">
-            <a href="#" class="btn btn-primary">Verified seisms</a>
+            <a href="{{url_for('admin.main_vseism')}}" class="btn btn-primary">Verified seisms</a>
           </div>
         </div>
         <div class="card text-center">
@@ -29,7 +29,7 @@
             style="width: 100%; height: 100%; object-fit: cover;"
           />
           <div class="card-body">
-            <a href="#" class="btn btn-primary">Sensors</a>
+            <a href="{{url_for('admin.main_sensors')}}" class="btn btn-primary">Sensors</a>
           </div>
         </div>
         <div class="card text-center">
@@ -39,7 +39,7 @@
             style="width: 100%; height: 100%; object-fit: cover;"
           />
           <div class="card-body">
-            <a href="#" class="btn btn-primary">Users</a>
+            <a href="{{url_for('admin.main_users')}}" class="btn btn-primary">Users</a>
           </div>
         </div>
       </div>

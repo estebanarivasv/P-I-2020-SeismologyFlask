@@ -42,12 +42,12 @@
 
           <!-- To verified seisms -->
           <li class="nav-item mr-3">
-            <a class="nav-link" href="#">Verified seisms</a>
+            <a class="nav-link" href="{{url_for('seismologist.main_vseisms')}}">Verified seisms</a>
           </li>
 
           <!-- To unverified seisms -->
           <li class="nav-item mr-3">
-            <a class="nav-link" href="#">Unverified seisms</a>
+            <a class="nav-link" href="{{url_for('seismologist.main_useisms')}}">Unverified seisms</a>
           </li>
         </ul>
         <!-- User's profile -->
@@ -85,7 +85,7 @@
             <div class="col-sm-6 col-md-6">
               <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link lheading pr-5" href="#">Verified seisms</a>
+                  <a class="nav-link lheading pr-5" href="{{url_for('seismologist.main_vseisms')}}">Verified seisms</a>
                 </li>
               </ul>
             </div>
@@ -93,7 +93,7 @@
             <div class="col-sm-6 col-md-6">
               <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link lheading pr-5" href="#">Unverified seisms</a>
+                  <a class="nav-link lheading pr-5" href="{{url_for('seismologist.main_useisms')}}">Unverified seisms</a>
                 </li>
               </ul>
             </div>

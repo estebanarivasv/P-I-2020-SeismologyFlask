@@ -6,4 +6,4 @@ main = Blueprint('main', __name__, url_prefix='/')
 
 @main.route('/')
 def index():
-    return redirect(url_for('unlogged_user.index'))
+    return redirect(url_for('unlogged_usr.index'))

@@ -13,6 +13,7 @@
   <script src="https://unpkg.com/feather-icons"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+
   {% endblock %}
 </head>
 
@@ -25,7 +26,8 @@
 
     <!-- Logo -->
     <div class="container-fluid justify-content-center">
-      <a class="navbar-brand" href=" "><img src="{{url_for('static', filename='svg/logo.svg')}}" class="" width="125" height="125" /></a>
+      <a class="navbar-brand" href=" "><img src="{{url_for('static', filename='svg/logo.svg')}}" class="" width="125"
+          height="125" /></a>
     </div>
 
     <!-- Link buttons & Logged admin mail -->
@@ -43,19 +45,19 @@
 
           <!-- To verified seisms -->
           <li class="nav-item">
-            <a class="nav-link mr-3" href="#">Verified seisms</a>
+            <a class="nav-link mr-3" href="{{url_for('unlogged_usr.index')}}">Verified seisms</a>
           </li>
         </ul>
         <!-- User's profile -->
-      <form class="form-inline">
-        <div class="form-group">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link lheading px-5" href="#">Sign in</a>
-            </li>
-          </ul>
-        </div>
-      </form>
+        <form class="form-inline">
+          <div class="form-group">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link lheading px-5" href="{{url_for('unlogged_usr.sign_in')}}">Sign in</a>
+              </li>
+            </ul>
+          </div>
+        </form>
       </div>
     </div>
   </header>
@@ -64,34 +66,34 @@
 
   {% block content %}
   {% endblock %}
-  
+
   {% block footer %}
   <footer>
     <div class="container-fluid">
       <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #ffca85;">
         <div class="container-fluid justify-content-center">
-          <div class="row">  
+          <div class="row">
             <!-- To verified seisms -->
             <div class="col-sm-6 col-md-6">
               <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link lheading pr-5" href="#">Verified seisms</a>
+                  <a class="nav-link lheading pr-5" href="{{url_for('unlogged_usr.index')}}">Verified seisms</a>
                 </li>
               </ul>
             </div>
-            
+
             <!-- To Unverified seisms -->
             <div class="col-sm-6 col-md-6">
               <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link lheading pr-5" href="#">Sign in</a>
+                  <a class="nav-link lheading pr-5" href="{{url_for('unlogged_usr.sign_in')}}">Sign in</a>
                 </li>
               </ul>
             </div>
           </div>
         </div>
       </nav>
-    </div>    
+    </div>
   </footer>
 
   <!-- Optional JavaScript -->
@@ -105,7 +107,7 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js "
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM "
     crossorigin="anonymous "></script>
-  
+
   {% endblock %}
 </body>
 
