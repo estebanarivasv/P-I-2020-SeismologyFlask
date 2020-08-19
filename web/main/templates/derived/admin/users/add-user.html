@@ -1,10 +1,14 @@
-{% extends 'principal/admin.html' %} {% block head %} {{ super() }}
+{% extends 'principal/admin.html' %}
+
+{% block head %} {{ super() }}
 
 <title>New user · Seismology Institute</title>
 
 {% endblock %}
 
 {% block content %}
+
+{% from "form_macros.html" import show_field, show_submit, show_radio %}
 
 <div class="container-fluid my-3 px-5">
     <div class="row">
@@ -36,47 +40,27 @@
             <div class="container py-2 justify-content-center">
 
                 <h5 class="py-3">Complete the following form</h5>
-                <form>
+                <form method="POST" action="{{ url_for('admin.add_user') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                     <div class="form-row">
                         <div class="col-12 py-2">
-                            <label class="" for="userEmail">Email</label>
-                            <input type="email" class="form-control" id="userEmail">
+                            {{ show_field(form.email, class="form-control") }}
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-6 py-2">
-                            <label class="" for="pass">Password</label>
-                            <input type="password" class="form-control" id="pass">
+                            {{ show_field(form.password, class="form-control") }}
                         </div>
                         <div class="col-6 py-2">
-                            <label class="" for="confirmPass">Confirm password</label>
-                            <input type="password" class="form-control" id="confirmPass">
+                            {{ show_field(form.confirm, class="form-control") }}
                         </div>
                     </div>
                     <div class="form-row">
-                        <legend class="col-form-label">Admin</legend>
-                        <div class="container-fluid">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="admin" id="gridRadios1"
-                                    value="true">
-                                <label class="form-check-label" for="gridRadios1">
-                                    True
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="admin" id="gridRadios2"
-                                    value="false">
-                                <label class="form-check-label" for="gridRadios2">
-                                    False
-                                </label>
-                            </div>
-                        </div>
+                        {{ show_radio(form.admin) }}
                     </div>
 
                     <div class="form-row form-inline justify-content-center">
-
-                        <button type="submit" class="btn btn-success">
-                            Save</button>
+                        {{ show_submit(form.submit, class="btn btn-success") }}
                         <a name="" id="" class="btn btn-danger mx-5 my-5" href="#" role="button">
                             Cancel</a>
                     </div>

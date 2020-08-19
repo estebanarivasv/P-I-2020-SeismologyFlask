@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, current_app, redirect, url_for
+from main.forms.users import Users as UsersForm
 import requests, json
 
 admin = Blueprint('admin', __name__, url_prefix='/administrator')
@@ -52,7 +53,10 @@ def add_sensor():
 
 @admin.route('/users/')
 def main_users():
-    return render_template('/derived/admin/users/main.html')
+    url = current_app.config["API_URL"] + "/users"
+    data = requests.get(url=url, headers={'content-type': 'application/json'}, json={})
+    users = json.loads(data.text)["users"]
+    return render_template('/derived/admin/users/main.html', users=users)
 
 
 @admin.route('/users/edit/<int:id>')
@@ -60,6 +64,25 @@ def edit_user(id):
     return render_template('/derived/admin/users/edit-user.html')
 
 
-@admin.route('/users/add/')
+@admin.route('/users/add/', methods=["POST","GET"])
 def add_user():
-    return render_template('/derived/admin/users/add-user.html')
+    form = UsersForm()
+    if form.validate_on_submit():
+
+        if form.admin.data == "false":
+            form.admin.data = False
+        else:
+            form.admin.data = True
+        
+        print(form.admin.data)
+
+        user = {
+            "email" : form.email.data,
+            "password": form.password.data,
+            "admin": form.admin.data
+        }
+        user_json = json.dumps(user)
+        url = current_app.config["API_URL"] + "/users"
+        data = requests.post(url=url, headers={'content-type': 'application/json'}, data=user_json)
+        return redirect(url_for('admin.main_users'))
+    return render_template('/derived/admin/users/add-user.html', form=form)
