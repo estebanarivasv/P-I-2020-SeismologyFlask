@@ -10,12 +10,14 @@ def index():
     url = current_app.config["API_URL"] + "/verified-seisms"
     data = requests.get(url=url, headers={'content-type': 'application/json'}, json={})
     verified_seisms = json.loads(data.text)["verified_seisms"]
-    return render_template('/derived/admin/verified-seisms/main.html', verified_seisms=verified_seisms)
-
+    return render_template('/derived/unlogged-usr/verified-seisms/main.html', verified_seisms=verified_seisms)
 
 @unlogged_usr.route('/verified-seisms/view/<int:id>')
 def view_vseism(id):
-    return render_template('/derived/unlogged-usr/verified-seisms/view-vseism.html')
+    url = current_app.config["API_URL"] + "/verified-seism/" + str(id)
+    data = requests.get(url=url, headers={'content-type': 'application/json'})
+    v_seism = data.json()
+    return render_template('/derived/unlogged-usr/verified-seisms/view-vseism.html', v_seism=v_seism)
 
 
 @unlogged_usr.route('/login/')
