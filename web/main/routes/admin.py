@@ -33,12 +33,19 @@ def view_vseism(id):
 
 @admin.route('/sensors/')
 def main_sensors():
-    return render_template('/derived/admin/sensors/main.html')
+    url = current_app.config["API_URL"] + "/sensors"
+    data = requests.get(url=url, headers={'content-type': 'application/json'}, json={})
+    sensors = json.loads(data.text)["sensors"]
+    print(json.dumps(sensors, indent=4, sort_keys=True))
+    return render_template('/derived/admin/sensors/main.html', sensors=sensors)
 
 
 @admin.route('/sensors/view/<int:id>')
 def view_sensor(id):
-    return render_template('/derived/admin/sensors/view-sensor.html')
+    url = current_app.config["API_URL"] + "/sensor/" + str(id)
+    data = requests.get(url=url, headers={'content-type': 'application/json'})
+    sensor = data.json()
+    return render_template('/derived/admin/sensors/view-sensor.html', sensor=sensor)
 
 
 @admin.route('/sensors/edit/<int:id>')

@@ -11,12 +11,9 @@
         <div class="col-lg-auto col-sm-auto col-md-auto">
             <nav aria-label="breadcrumb mr-n5">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Sensors</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        1
-                        {# id_num #}
-                    </li>
+                    <li class="breadcrumb-item"><a href="{{url_for('admin.index')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('admin.main_sensors')}}">Sensors</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ sensor.id_num }}</li>
                 </ol>
             </nav>
         </div>
@@ -37,34 +34,22 @@
                 <table class="table table-hover py-3 mb-5">
                     <thead>
                         <tr>
-                            <th scope="col">
-                                Name
-                            </th>
-                            <th scope="col">
-                                Status
-                            </th>
-                            <th scope="col">
-                                IP
-                            </th>
-                            <th scope="col">
-                                Port
-                            </th>
-                            <th scope="col">
-                                Active
-                            </th>
-                            <th scope="col">
-                                Associated seismologist
-                            </th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">IP</th>
+                            <th scope="col">Port</th>
+                            <th scope="col">Active</th>
+                            <th scope="col">Associated seismologist</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{# name #}</td>
-                            <td>{# status #}</td>
-                            <td>{# ip #}</td>
-                            <td>{# port #}</td>
-                            <td>{# active #}</td>
-                            <td>{# associated_seismologist #}</td>
+                            <td>{{ sensor.name }}</td>
+                            <td>{{ sensor.status }}</td>
+                            <td>{{ sensor.ip }}</td>
+                            <td>{{ sensor.port }}</td>
+                            <td>{{ sensor.active }}</td>
+                            <td>{{ sensor.user.email }}</td>
                         </tr>
                     </tbody>
                 </table>

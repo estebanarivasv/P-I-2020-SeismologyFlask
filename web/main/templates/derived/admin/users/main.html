@@ -1,6 +1,6 @@
 {% extends 'principal/admin.html' %}
 
-{% import 'macros.html' as macro %}
+{% from '/macros/admin/general.html' import listUsers %}
 
 {% block head %}
 
@@ -30,10 +30,8 @@
         <div class="col-lg-auto col-sm-auto col-md-auto">
             <nav aria-label="breadcrumb mr-n5">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        Users
-                    </li>
+                    <li class="breadcrumb-item"><a href="{{url_for('admin.index')}}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Users</li>
                 </ol>
             </nav>
         </div>
@@ -62,7 +60,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{ macro.adminListsUsers(users) }}
+                    {{ listUsers(users) }}
                 </tbody>
             </table>
 

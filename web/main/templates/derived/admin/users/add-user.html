@@ -1,5 +1,7 @@
 {% extends 'principal/admin.html' %}
 
+{% from '/macros/admin/form.html' import show_field, show_submit, show_radio %}
+
 {% block head %} {{ super() }}
 
 <title>New user · Seismology Institute</title>
@@ -8,19 +10,15 @@
 
 {% block content %}
 
-{% from "form_macros.html" import show_field, show_submit, show_radio %}
 
 <div class="container-fluid my-3 px-5">
     <div class="row">
         <div class="col-lg-auto col-sm-auto col-md-auto">
             <nav aria-label="breadcrumb mr-n5">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Users</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        1
-                        {# id_num #}
-                    </li>
+                    <li class="breadcrumb-item"><a href="{{url_for('admin.index')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('admin.main_users')}}">Users</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">New user</li>
                 </ol>
             </nav>
         </div>
