@@ -1,6 +1,6 @@
 {% extends 'principal/seismologist.html' %}
 
-{% import 'macros.html' as macro %}
+{% from '/macros/seismologist/general.html' import listUSeisms %}
 
 {% block head %}
 
@@ -19,7 +19,7 @@
         <div class="col-lg-auto col-sm-auto col-md-auto">
             <nav aria-label="breadcrumb mr-n5">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('seismologist.main_useisms')}}">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">
                         Unverified seisms
                     </li>
@@ -95,7 +95,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{ macro.seismologistListsUSeisms(unverified_seisms) }}
+                        {{ listUSeisms(unverified_seisms) }}
                     </tbody>
 
                 </table>

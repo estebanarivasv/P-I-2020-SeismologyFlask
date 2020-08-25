@@ -1,3 +1,7 @@
+body {
+    font-family: 'Montserrat', sans-serif !important;
+}
+
 .lheading {
     text-decoration: black !important; 
     font-weight: bold !important;

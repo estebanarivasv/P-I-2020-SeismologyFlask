@@ -28,15 +28,21 @@ def view_useism(id):
 
 @seismologist.route('/unverified-seisms/edit/<int:id>')
 def edit_useism(id):
-    return render_template('/derived/seismologist/unverified-seism/edit-useism.html')
+    return render_template('/derived/seismologist/unverified-seisms/edit-useism.html')
 
 
 @seismologist.route('/verified-seisms/')
 def main_vseisms():
-    return render_template('/derived/seismologist/verified-seisms/main.html')
+    url = current_app.config["API_URL"] + "/verified-seisms"
+    data = requests.get(url=url, headers={'content-type': 'application/json'}, json={})
+    verified_seisms = json.loads(data.text)["verified_seisms"]
+    return render_template('/derived/seismologist/verified-seisms/main.html', verified_seisms=verified_seisms)
 
 
 @seismologist.route('/verified-seisms/view/<int:id>')
 def view_vseism(id):
-    return render_template('/derived/seismologist/verified-seisms/view-vseism.html')
-     
+    url = current_app.config["API_URL"] + "/verified-seism/" + str(id)
+    data = requests.get(url=url, headers={'content-type': 'application/json'})
+    v_seism = data.json()
+    return render_template('/derived/seismologist/verified-seisms/view-vseism.html', v_seism=v_seism)
+    

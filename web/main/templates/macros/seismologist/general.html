@@ -1,4 +1,4 @@
-{% macro seismologistListsVSeisms(v_seisms) %}
+{% macro listVSeisms(v_seisms) %}
 
 {% for i in v_seisms %}
 <tr>
@@ -8,7 +8,7 @@
     <td class="text-center">{{ i.magnitude }}</td>
     <td class="text-center">{{ i.sensor.name }}</td>
     <td class="text-center">
-        <a class="btn btn-outline-dark" href="{{url_for('admin.view_vseism', id=i.id_num)}}" role="button">
+        <a class="btn btn-outline-dark" href="{{url_for('seismologist.view_vseism', id=i.id_num)}}" role="button">
             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye" fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
@@ -24,7 +24,7 @@
 
 {% endmacro %}
 
-{% macro seismologistListsUSeisms(u_seisms) %}
+{% macro listUSeisms(u_seisms) %}
 
 {% for i in u_seisms %}
 <tr>
@@ -83,4 +83,7 @@
     </iframe>
 </div>
 
+
+
 {% endmacro %}
+
