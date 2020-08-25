@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, current_app, redirect, url_for
-from main.forms.users import Users as UsersForm
+from main.forms.users import Users as UsersForm, UsersEdit
 import requests, json
 
 admin = Blueprint('admin', __name__, url_prefix='/administrator')
@@ -66,10 +66,42 @@ def main_users():
     return render_template('/derived/admin/users/main.html', users=users)
 
 
-@admin.route('/users/edit/<int:id>')
+@admin.route('/users/edit/<int:id>', methods=["POST","GET"])
 def edit_user(id):
-    return render_template('/derived/admin/users/edit-user.html')
+    form = UsersEdit()
+    url = current_app.config["API_URL"] + "/user/" + str(id)
+    if not form.is_submitted():
+        data = requests.get(url=url, headers={'content-type': 'application/json'})
+        if data.status_code == 404:
+            return redirect(url_for('admin.main_users'))
+        user = data.json()
+        print(user)
 
+        form.email.data = user["email"]
+        if user["admin"] == False:
+            form.admin.data = "false"
+        else:
+            form.admin.data = "true"
+    
+    if form.validate_on_submit():
+        if form.admin.data == "false":
+            form.admin.data = False
+        else:
+            form.admin.data = True
+        user = {
+            "email" : form.email.data,
+            "admin": form.admin.data
+        }
+        user_json = json.dumps(user)
+        data = requests.put(url=url, headers={'content-type': 'application/json'}, data=user_json)
+        return redirect(url_for('admin.main_users'))
+    return render_template('/derived/admin/users/edit-user.html', id=id, form=form)
+
+@admin.route('/users/del/<int:id>')
+def delete_user(id):
+    url = current_app.config["API_URL"] + "/user/" + str(id)
+    data = requests.delete(url=url, headers={'content-type': 'application/json'})
+    return redirect(url_for('admin.main_users'))
 
 @admin.route('/users/add/', methods=["POST","GET"])
 def add_user():

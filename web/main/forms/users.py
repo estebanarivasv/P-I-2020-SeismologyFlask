@@ -32,4 +32,22 @@ class Users(FlaskForm):
     
     submit = SubmitField("Send")
 
+
+class UsersEdit(FlaskForm):
+    email = EmailField('E-mail',
+    [
+        validators.Required(message="An email is required"),
+        validators.Email(message="The format is not valid")
+    ])
+
+    admin_list = [
+        ('true','True'),
+        ('false','False'),
+    ]
+
+    admin = RadioField('Admin', choices=admin_list, default='false')
+    
+    submit = SubmitField("Send")
+
+
     
