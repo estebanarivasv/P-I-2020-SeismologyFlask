@@ -101,8 +101,8 @@ class VerifiedSeisms(Resource):
             ),
             depth=randint(5, 250),
             magnitude=round(uniform(2.0, 5.5), 1),
-            latitude=uniform(-180, 180),
-            longitude=uniform(-90, 90),
+            latitude=uniform(-90, 90),
+            longitude=uniform(-180, 180),
             verified=True,
             sensor_id=2
         )
@@ -221,8 +221,8 @@ class UnverifiedSeisms(Resource):
             ),
             depth=randint(5, 250),
             magnitude=round(uniform(2.0, 5.5), 1),
-            latitude=uniform(-180, 180),
-            longitude=uniform(-90, 90),
+            latitude=uniform(-90, 90),
+            longitude=uniform(-180, 180),
             verified=False,
             sensor_id=2
         )

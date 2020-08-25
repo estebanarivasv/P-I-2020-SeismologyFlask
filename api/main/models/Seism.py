@@ -38,7 +38,7 @@ class Seism(db.Model):
         # Verifies if the sensor does exist in the database chart
         seism_json = {
             'id_num': self.id_num,
-            'datetime': self.datetime.isoformat(),
+            'datetime': self.datetime.isoformat(' '),
             'depth': self.depth,
             'magnitude': self.magnitude,
             'latitude': str(self.latitude),
