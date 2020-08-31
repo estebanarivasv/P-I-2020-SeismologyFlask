@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, current_app
+from flask import Blueprint, render_template, current_app, redirect, url_for
 import requests, json
 
 seismologist = Blueprint('seismologist', __name__, url_prefix='/seismologist')
@@ -14,7 +14,6 @@ def main_useisms():
     url = current_app.config["API_URL"] + "/unverified-seisms"
     data = requests.get(url=url, headers={'content-type': 'application/json'}, json={})
     unverified_seisms = json.loads(data.text)["unverified_seisms"]
-    print("devol\n\n", unverified_seisms)
     return render_template('/derived/seismologist/unverified-seisms/main.html', unverified_seisms=unverified_seisms)
 
 
@@ -31,6 +30,22 @@ def edit_useism(id):
     return render_template('/derived/seismologist/unverified-seisms/edit-useism.html')
 
 
+@seismologist.route('/unverified-seisms/delete/<int:id>')
+def delete_useism(id):
+    url = current_app.config["API_URL"] + "/unverified-seism/" + str(id)
+    requests.delete(url=url, headers={'content-type': 'application/json'})
+    return redirect(url_for('seismologist.main_useisms'))
+
+@seismologist.route('/unverified-seisms/validate/<int:id>')
+def verify_useism(id):
+    url = current_app.config["API_URL"] + "/unverified-seism/" + str(id)
+    verification = {
+        "verified": True
+    }
+    requests.put(url=url, headers={'content-type': 'application/json'}, json=verification)
+    return redirect(url_for('seismologist.main_useisms'))
+
+
 @seismologist.route('/verified-seisms/')
 def main_vseisms():
     url = current_app.config["API_URL"] + "/verified-seisms"
@@ -45,4 +60,3 @@ def view_vseism(id):
     data = requests.get(url=url, headers={'content-type': 'application/json'})
     v_seism = data.json()
     return render_template('/derived/seismologist/verified-seisms/view-vseism.html', v_seism=v_seism)
-    
