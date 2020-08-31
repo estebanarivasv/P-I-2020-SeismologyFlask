@@ -7,25 +7,25 @@ from flask_bootstrap import Bootstrap
 
 
 def create_app():
-    app = Flask(__name__)
-    csrf = CSRFProtect(app)
-    bootstrap = Bootstrap(app)
+    webpage = Flask(__name__)
+    csrf = CSRFProtect(webpage)
+    bootstrap = Bootstrap(webpage)
     
     load_dotenv()
-    app.config['API_URL'] = os.getenv('API_URL')
+    webpage.config['API_URL'] = os.getenv('API_URL')
     # Gets the backend url and links it to the app's api url
     
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+    webpage.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
     # Blueprints import
     from main.routes import admin, login, main, seismologist, unlogged_usr
-    app.register_blueprint(admin)
-    app.register_blueprint(login)
-    app.register_blueprint(main)
-    app.register_blueprint(seismologist)
-    app.register_blueprint(unlogged_usr)
+    webpage.register_blueprint(admin)
+    webpage.register_blueprint(login)
+    webpage.register_blueprint(main)
+    webpage.register_blueprint(seismologist)
+    webpage.register_blueprint(unlogged_usr)
     
-    csrf.init_app
-    bootstrap.init_app
+    csrf.init_app(webpage)
+    bootstrap.init_app(webpage)
 
-    return app
+    return webpage
