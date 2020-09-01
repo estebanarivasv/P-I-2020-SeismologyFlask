@@ -30,6 +30,6 @@ class NewSensor(FlaskForm):
     )
     user_id = SelectField(
         label="Associated seismologist",
-        choices=[],
-        validators=[validators.required(message="This field is required")])
+        validators=[validators.required(message="This field is required")],
+        coerce=int)
     submit_button = SubmitField(label="Save")

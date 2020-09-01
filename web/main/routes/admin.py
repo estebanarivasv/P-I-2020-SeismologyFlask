@@ -102,9 +102,9 @@ def edit_sensor(id):
     users_url = current_app.config["API_URL"] + "/users"
     u_data = requests.get(url=users_url, headers={'content-type': 'application/json'}, json={})
     user_json = json.loads(u_data.text)
-    email_list = [(None, "Select one seismologist email")]
+    email_list = [(0, "Select one seismologist email")]
     for user in user_json["users"]:
-        email_list.append((user["id_num"], user["email"]))
+        email_list.append((int(user["id_num"]), user["email"]))
     form.user_id.choices = email_list
 
     if not form.is_submitted():
@@ -132,18 +132,20 @@ def edit_sensor(id):
             if sensor["user_id"] in sensor:
                 for id, email in email_list:
                     if id == int(sensor["user_id"]):
-                        form.user_id.data = id
+                        form.user_id.data = int(id)
+                        print(form.user_id.data)
         except KeyError:
             pass
 
         try:
             user_a = sensor["user"]
+            print(user_a)
             for id, email in email_list:
                 if id == int(user_a["id_num"]):
-                    form.user_id.data = id
+                    form.user_id.data = int(id)
+                    print(form.user_id.data)
         except KeyError:
             pass
-        
 
     if form.validate_on_submit():
 
@@ -159,7 +161,7 @@ def edit_sensor(id):
         u_id = form.user_id.data
 
         sensor = {
-            "name" : form.name.data,
+            "name": form.name.data,
             "ip": form.ip.data,
             "port": form.port.data,
             "status": form.status.data,
@@ -236,7 +238,7 @@ def edit_user(id):
         else:
             form.admin.data = True
         user = {
-            "email" : form.email.data,
+            "email": form.email.data,
             "admin": form.admin.data
         }
         user_json = json.dumps(user)
