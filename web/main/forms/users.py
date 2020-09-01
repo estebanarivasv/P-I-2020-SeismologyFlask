@@ -3,70 +3,41 @@ from wtforms import RadioField, PasswordField, SubmitField
 from wtforms import validators
 from wtforms.fields.html5 import EmailField
 
+class NewUser(FlaskForm):
 
-class User(FlaskForm):
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    """admin
-    email
-    password
-    confirm """
-    """
-    class User(FlaskForm):
-        email = EmailField('E-mail',
-        [
-            validators.Required(message="An email is required"),
-            validators.Email(message="The format is not valid")
+    email = EmailField(
+        label="Email",
+        validators=[
+            validators.DataRequired(message="This field is required"),
+            validators.Email(message="Wrong email format")])
+    password = PasswordField(
+        label="Password",
+        validators=[
+            validators.DataRequired(message="This field is required"),
+            validators.EqualTo("re_password", message="The passwords must match")])
+    re_password = PasswordField(
+        label="Repeat password",
+        validators=[
+            validators.DataRequired(message="This field is required")
         ])
-
-        password = PasswordField('Password', [
-            validators.Required(message="The password is mandatory"),
-            validators.EqualTo('confirm', message="Passwords don't match")
-        ])
-
-        confirm = PasswordField("Repeat password")
-
-        admin_list = [
-            ('true','True'),
-            ('false','False'),
-        ]
-
-        admin = RadioField('Admin', choices=admin_list, default='false')
-        
-        submit = SubmitField("Send")
+    admin_choices = [('true','True'), ('false','False')]
+    admin = RadioField(
+        label="Administrator",
+        validators=[validators.DataRequired(message="This field is required")],
+        choices=admin_choices)
+    submit_button = SubmitField(label="Save")
 
 
-    class UsersEdit(FlaskForm):
-        email = EmailField('E-mail',
-        [
-            validators.Required(message="An email is required"),
-            validators.Email(message="The format is not valid")
-        ])
+class UserToEdit(FlaskForm):
 
-        admin_list = [
-            ('true','True'),
-            ('false','False'),
-        ]
-
-        admin = RadioField('Admin', choices=admin_list, default='false')
-        
-        submit = SubmitField("Send")
-
-
-        """
+    email = EmailField(
+        label="Email",
+        validators=[
+            validators.required(message="This field is required"),
+            validators.Email(message="Wrong email format")])
+    admin_choices = [('true','True'), ('false','False')]
+    admin = RadioField(
+        label="Administrator",
+        validators=[validators.required(message="This field is required")],
+        choices=admin_choices)
+    submit_button = SubmitField(label="Save")
