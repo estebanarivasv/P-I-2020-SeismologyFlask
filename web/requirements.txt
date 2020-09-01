@@ -4,4 +4,3 @@ flask-restful
 requests
 flask_wtf
 email_validator
-flask-bootstrap
