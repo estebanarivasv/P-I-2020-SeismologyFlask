@@ -1,0 +1,86 @@
+{% macro showStringField(field) %}
+	<div class="form-group row py-1">
+		<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>	
+		<div class="col-sm-10">
+			{{ field(class="form-control")|safe }}
+			{{ showErrors(field.errors) }}
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro showIntegerField(field) %}
+	<div class="form-group row py-1">
+		<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>	
+		<div class="col-sm-10">
+			{{ field(class="form-control")|safe }}
+			{{ showErrors(field.errors) }}
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro showSelectField(field) %}
+	<div class="form-group row py-1">
+		<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>	
+		<div class="col-sm-10">
+			{{ field(class="custom-select")|safe }}
+			{{ showErrors(field.errors) }}
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro showEmailField(field) %}
+	<div class="form-group row py-1">
+		<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>	
+		<div class="col-sm-10">
+			{{ field(class="form-control")|safe }}
+			{{ showErrors(field.errors) }}
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro showPasswordField(field) %}			{#  <input type="password"> #}
+	<div class="form-group row py-1">	
+		<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>	
+		<div class="col-sm-10">
+			{{ field(class="form-control")|safe }}
+			{{ showErrors(field.errors) }}
+		</div>
+	</div>
+	
+{% endmacro %}
+
+{% macro showRadioField(field) %}
+<fieldset class="form-group py-1">
+	<div class="row">
+		<legend class="col-form-label col-sm-2 pt-0">{{ field.label }}{% if field.flags.required %}*{% endif %}</legend>
+      	<div class="col-sm-10">
+			{% for subfield in field %}
+				<div class="form-check">
+					{{ subfield(class="form-check-input")|safe }}
+					{{ subfield.label(class="form-check-label")|safe }}
+				</div>
+			{% endfor %}
+			{{ showErrors(field.errors) }}
+		</div>
+	</div>
+</fieldset>
+{% endmacro %}
+
+{% macro showButtons(field, cancel_url) %}			{#  <input type="submit"> #}
+	<div class="form-inline justify-content-center mb-5">
+		{{ field(class="btn btn-primary mx-3")|safe }}
+		<a name="" id="" class="btn btn-danger mx-3" href="{{url_for(cancel_url)}}" role="button">Cancel</a>
+	</div>
+	
+{% endmacro %}
+
+
+{% macro showErrors(errors) %}
+	{% if errors %}
+		<div class="container pt-2 px-2 pb-n1 text-danger">
+			{% for error in errors %}
+			<h6>{{ error }}</h6><br>
+			{% endfor %}
+		</div>
+	{% endif %}
+{% endmacro %}

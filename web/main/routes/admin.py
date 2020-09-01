@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, current_app, redirect, url_for
-from main.forms.users import Users as UsersForm, UsersEdit
+from main.forms import NewUserForm, UserToEditForm, NewSensorForm
 import requests, json
 
 admin = Blueprint('admin', __name__, url_prefix='/administrator')
@@ -40,7 +40,6 @@ def main_sensors():
     url = current_app.config["API_URL"] + "/sensors"
     data = requests.get(url=url, headers={'content-type': 'application/json'}, json={})
     sensors = json.loads(data.text)["sensors"]
-    print(json.dumps(sensors, indent=4, sort_keys=True))
     return render_template('/derived/admin/sensors/main.html', sensors=sensors)
 
 @admin.route('/sensors/view/<int:id>')
@@ -50,13 +49,130 @@ def view_sensor(id):
     sensor = data.json()
     return render_template('/derived/admin/sensors/view-sensor.html', sensor=sensor)
 
-@admin.route('/sensors/add/')
+@admin.route('/sensors/add/', methods=["POST","GET"])
 def add_sensor():
-    return render_template('/derived/admin/sensors/add-sensor.html')
+    url = current_app.config["API_URL"] + "/sensors"
 
-@admin.route('/sensors/edit/<int:id>')
+    users_url = current_app.config["API_URL"] + "/users"
+    u_data = requests.get(url=users_url, headers={'content-type': 'application/json'}, json={})
+    user_json = json.loads(u_data.text)
+    email_list = [(None, "Select one seismologist email")]
+    for user in user_json["users"]:
+        email_list.append((user["id_num"], user["email"]))
+
+    print(email_list)
+    form = NewSensorForm()
+
+    form.user_id.choices = email_list
+
+    if form.validate_on_submit():
+        
+        if form.status.data == "false":
+            form.status.data = False
+        else:
+            form.status.data = True
+        
+        if form.active.data == "false":
+            form.active.data = False
+        else:
+            form.active.data = True
+
+        u_id = form.user_id.data
+
+        sensor = {
+            "name": form.name.data,
+            "ip": form.ip.data,
+            "port": form.port.data,
+            "status": form.status.data,
+            "active": form.active.data,
+            "user_id": u_id
+        }
+        sensor_json = json.dumps(sensor)
+        requests.post(url=url, headers={'content-type': 'application/json'}, data=sensor_json)
+        return redirect(url_for('admin.main_sensors'))
+        
+    return render_template('/derived/admin/sensors/add-sensor.html', form=form)
+
+@admin.route('/sensors/edit/<int:id>', methods=["POST","GET"])
 def edit_sensor(id):
-    return render_template('/derived/admin/sensors/edit-sensor.html')
+
+    url = current_app.config["API_URL"] + "/sensor/" + str(id)
+    form = NewSensorForm()
+
+    users_url = current_app.config["API_URL"] + "/users"
+    u_data = requests.get(url=users_url, headers={'content-type': 'application/json'}, json={})
+    user_json = json.loads(u_data.text)
+    email_list = [(None, "Select one seismologist email")]
+    for user in user_json["users"]:
+        email_list.append((user["id_num"], user["email"]))
+    form.user_id.choices = email_list
+
+    if not form.is_submitted():
+        # If the form is not sent, makes a request
+        data = requests.get(url=url, headers={'content-type': 'application/json'})
+        if data.status_code == 404:
+            return redirect(url_for('admin.main_sensors'))
+        
+        # Saving the json to a Python dict in order to show it for editing
+        sensor = data.json()
+
+        form.name.data = sensor["name"]
+        form.ip.data = sensor["ip"]
+        form.port.data = sensor["port"]
+        if sensor["status"] is False:
+            form.status.data = "false"
+        else:
+            form.status.data = "true"
+        if sensor["active"] is False:
+            form.active.data = "false"
+        else:
+            form.active.data = "true"
+
+        try:
+            if sensor["user_id"] in sensor:
+                for id, email in email_list:
+                    if id == int(sensor["user_id"]):
+                        form.user_id.data = id
+        except KeyError:
+            pass
+
+        try:
+            user_a = sensor["user"]
+            for id, email in email_list:
+                if id == int(user_a["id_num"]):
+                    form.user_id.data = id
+        except KeyError:
+            pass
+        
+
+    if form.validate_on_submit():
+
+        if form.status.data == "false":
+            form.status.data = False
+        else:
+            form.status.data = True
+        if form.active.data == "false":
+            form.active.data = False
+        else:
+            form.active.data = True
+
+        u_id = form.user_id.data
+
+        sensor = {
+            "name" : form.name.data,
+            "ip": form.ip.data,
+            "port": form.port.data,
+            "status": form.status.data,
+            "active": form.active.data,
+            "user_id": u_id
+        }
+        sensor_json = json.dumps(sensor)
+
+        data = requests.put(url=url, headers={'content-type': 'application/json'}, data=sensor_json)
+        return redirect(url_for('admin.main_sensors'))
+
+    return render_template('/derived/admin/sensors/edit-sensor.html', id=id, form=form)
+
 
 @admin.route('/sensors/delete/<int:id>')
 def delete_sensor(id):
@@ -75,43 +191,44 @@ def main_users():
 
 @admin.route('/users/add/', methods=["POST","GET"])
 def add_user():
-    form = UsersForm()
+    url = current_app.config["API_URL"] + "/users"
+    form = NewUserForm()
     if form.validate_on_submit():
-
         if form.admin.data == "false":
             form.admin.data = False
         else:
             form.admin.data = True
-        
-        print(form.admin.data)
-
         user = {
             "email" : form.email.data,
             "password": form.password.data,
             "admin": form.admin.data
         }
         user_json = json.dumps(user)
-        url = current_app.config["API_URL"] + "/users"
         requests.post(url=url, headers={'content-type': 'application/json'}, data=user_json)
         return redirect(url_for('admin.main_users'))
+        
     return render_template('/derived/admin/users/add-user.html', form=form)
 
 @admin.route('/users/edit/<int:id>', methods=["POST","GET"])
 def edit_user(id):
-    form = UsersEdit()
+    form = UserToEditForm()
     url = current_app.config["API_URL"] + "/user/" + str(id)
     if not form.is_submitted():
+        # If the form is not sent, makes a request
         data = requests.get(url=url, headers={'content-type': 'application/json'})
         if data.status_code == 404:
             return redirect(url_for('admin.main_users'))
+        
+        # Saving the json to a Python dict in order to show it for editing
         user = data.json()
-        print(user)
 
-        form.email.data = user["email"]
         if user["admin"] == False:
             form.admin.data = "false"
         else:
             form.admin.data = "true"
+
+        form.email.data = user["email"]
+        form.admin.data = user["admin"]
     
     if form.validate_on_submit():
         if form.admin.data == "false":
@@ -123,8 +240,10 @@ def edit_user(id):
             "admin": form.admin.data
         }
         user_json = json.dumps(user)
+
         data = requests.put(url=url, headers={'content-type': 'application/json'}, data=user_json)
         return redirect(url_for('admin.main_users'))
+
     return render_template('/derived/admin/users/edit-user.html', id=id, form=form)
 
 @admin.route('/users/delete/<int:id>')

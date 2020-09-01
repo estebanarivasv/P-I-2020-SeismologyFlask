@@ -46,7 +46,11 @@
         <td class="text-center">{{ i.name }}</td>
         <td class="text-center">{{ i.status }}</td>
         <td class="text-center">{{ i.active }}</td>
-        <td class="text-center">{{ i.user.email }}</td>
+        {% if i.user_id == None: %}
+            <td class="text-center">Not assigned</td>
+        {% else: %}
+            <td class="text-center">{{ i.user.email }}</td>
+        {% endif %}
         <td class="text-center">
             <a class="btn btn-outline-dark" href="{{url_for('admin.view_sensor', id=i.id_num)}}" role="button">
                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye"
@@ -93,7 +97,11 @@
     <td class="text-center">{{ i.datetime }}</td>
     <td class="text-center">{{ i.depth }}</td>
     <td class="text-center">{{ i.magnitude }}</td>
-    <td class="text-center">{{ i.sensor.name }}</td>
+    {% if i.sensor_id == None: %}
+        <td class="text-center">Not assigned</td>
+    {% else: %}
+        <td class="text-center">{{ i.sensor.name }}</td>
+    {% endif %}
     <td class="text-center">
         <a class="btn btn-outline-dark" href="{{url_for('admin.view_vseism', id=i.id_num)}}" role="button">
             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye" fill="currentColor"

@@ -1,47 +1,31 @@
-{% macro show_error(field) %}
-	{% if field.errors %}
-	  <div class="alert alert-danger" role="alert">
-	  {% for error in field.errors %}
-	   	{{ error }}<br>
-	  {% endfor %}
-	  </div>
-	{% endif %}
+{% from '/macros/global-forms.html' import showEmailField, showPasswordField, showRadioField, showButtons, showStringField, showIntegerField, showSelectField %}
+
+
+{% macro generateNewUserForm(form) %}
+	{{ form.csrf_token }}
+	{{ showEmailField(form.email) }}
+	{{ showPasswordField(form.password) }}
+	{{ showPasswordField(form.re_password) }}
+	{{ showRadioField(form.admin) }}
+	{{ showButtons(form.submit_button, 'admin.main_users') }}
+{% endmacro %}
+
+{% macro generateEditUserForm(form, id_num) %}
+	{{ form.csrf_token }}
+	{{ showEmailField(form.email) }}
+	{{ showRadioField(form.admin) }}
+	{{ showButtons(form.submit_button, 'admin.main_users') }}
 {% endmacro %}
 
 
 
-<!-- Macro que se encarga de mostrar los campos del formulario -->
-{% macro show_field(field) %}
-	{{ field.label }} <!-- Mostrar etiqueta -->
-	{{ field(**kwargs)|safe }} <!-- Mostrar campo -->
-	<div class="container">
-		{{ show_error(field) }}
-	</div>
-	
-{% endmacro %}
-
-
-
-{% macro show_radio(field) %}
-	<div class="pr-3">
-		{{ field.label }} <!-- Mostrar etiqueta -->
-	</div>
-	{% for subfield in field %} <!--Recorrer cada una de las opciones -->
-	  		<div class="px-2">
-				{{ subfield }}  <!-- Mostrar opción -->
-			</div>
-			<div class="px-2">
-				{{ subfield.label }} <!-- Mostrar etiqueta -->
-			</div>
-			
-	  		
-	{% endfor %}
-
-	{{show_error(field)}}  <!-- Llamar a macro que muestra el error -->
-{% endmacro %}
-
-
-<!-- Macro que se encarga de mostrar los campos tipo submit formulario -->
-{% macro show_submit(field) %}
-	{{ field(**kwargs)|safe }} <!-- Mostrar campo -->
+{% macro generateNewSensorForm(form) %}
+	{{ form.csrf_token }}
+	{{ showStringField(form.name) }}
+	{{ showStringField(form.ip) }}
+	{{ showIntegerField(form.port) }}
+	{{ showRadioField(form.status) }}
+	{{ showRadioField(form.active) }}
+	{{ showSelectField(form.user_id) }}
+	{{ showButtons(form.submit_button, 'admin.main_sensors') }}
 {% endmacro %}

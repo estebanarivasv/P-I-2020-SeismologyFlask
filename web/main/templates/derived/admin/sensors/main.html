@@ -35,7 +35,7 @@
                     Filters
                 </button>
 
-                <!-- WORKING FILTER -->
+                <!-- FILTERS -->
                 <div class="col-12">
                     <div class="collapse multi-collapse pt-3" id="status">
                         <div class="card">
@@ -51,7 +51,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- WORKING FILTER -->
                 <div class="col-12">
                     <div class="collapse multi-collapse pt-3" id="active">
                         <div class="card">
@@ -67,7 +66,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- WORKING FILTER -->
                 <div class="col-12">
                     <div class="collapse multi-collapse pt-3" id="associated">
                         <div class="card">
@@ -98,31 +96,30 @@
                 <h3>Sensors</h3>
 
                 <div class="container-fluid">
+                    <!-- TABLE SORTING -->
+                    <div class="row form-inline pt-2 pb-2 pr-5">
+                        <label class="form-text my-1 mr-2" for="sorting">Sort by:</label>
+                        <select class="form-control" id="sorting">
+                            <option selected>None</option>
+                            <option>Name (A-Z)</option>
+                            <option>Name (Z-A)</option>
+                            <option>Status (working - not working)</option>
+                            <option>Status (not working - working)</option>
+                            <option>Active (true - false)</option>
+                            <option>Active (false - true)</option>
+                            <option>Associated seismologist (A-Z)</option>
+                            <option>Associated seismologist (Z-A)</option>
+                        </select>
+                    </div>
+
                     <div class="row">
-
-                        <!-- TABLE SORTING -->
-                        <div class="form-inline pt-2 pb-2 pr-5">
-                            <label class="form-text my-1 mr-2" for="sorting">Sort by:</label>
-                            <select class="form-control" id="sorting">
-                                <option selected>None</option>
-                                <option>Name (A-Z)</option>
-                                <option>Name (Z-A)</option>
-                                <option>Status (working - not working)</option>
-                                <option>Status (not working - working)</option>
-                                <option>Active (true - false)</option>
-                                <option>Active (false - true)</option>
-                                <option>Associated seismologist (A-Z)</option>
-                                <option>Associated seismologist (Z-A)</option>
-                            </select>
-                        </div>
-
                         <div class="form-inline py-2 pr-3">                            
                             <a class="btn btn-success" href="{{url_for('admin.add_sensor')}}" role="button">New sensor</a>
                         </div>
 
                         <div class="form-inline pt-2 pr-3 pb-2">
-                            <button type="button" class="btn btn-primary">
-                                Notify admins of not-working and active sensors
+                            <button type="button" class="btn btn-primary px-n5">
+                                Not-working & active sensors to admins
                             </button>
                         </div>
                     </div>
