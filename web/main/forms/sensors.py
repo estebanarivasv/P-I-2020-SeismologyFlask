@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import validators, RadioField, StringField, SubmitField, SelectField, IntegerField
 from wtforms.fields.html5 import EmailField
 
+
 class NewSensor(FlaskForm):
 
     name = StringField(
@@ -16,13 +17,13 @@ class NewSensor(FlaskForm):
         label="Port",
         validators=[validators.required(message="This field is required")]
     )
-    status_choices = [('true','Working'), ('false','Not-working')]
+    status_choices = [('true', 'Working'), ('false', 'Not-working')]
     status = RadioField(
         label="Status",
         choices=status_choices,
         validators=[validators.required(message="This field is required")]
     )
-    active_choices = [('true','True'), ('false','False')]
+    active_choices = [('true', 'True'), ('false', 'False')]
     active = RadioField(
         label="Active",
         choices=active_choices,
