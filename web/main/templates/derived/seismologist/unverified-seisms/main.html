@@ -1,6 +1,7 @@
 {% extends 'principal/seismologist.html' %}
 
 {% from '/macros/seismologist/general.html' import listUSeisms %}
+{% from '/macros/seismologist/form.html' import organizeUSeism %}
 
 {% block head %}
 
@@ -20,69 +21,38 @@
             <nav aria-label="breadcrumb mr-n5">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{url_for('seismologist.main_useisms')}}">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        Unverified seisms
-                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Unverified seisms</li>
                 </ol>
             </nav>
         </div>
     </div>
 
-    <!-- FILTERS BUTTON -->
-    <div class="row">
-        <div class="col-md-12 col-lg-3">
-            <div class="container-fluid py-2">
-                <button class="btn btn-primary " type="button" data-toggle="collapse" data-target=".multi-collapse"
-                    aria-expanded="false" aria-controls="associated">
-                    Filters
-                </button>
 
-                <!-- WORKING FILTER -->
-                <div class="col-12">
-                    <div class="collapse multi-collapse pt-3" id="associated">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Associated sensor</h5>
-                                <div class="form-group">
-                                    <select class="form-control" id="formselect3">
-                                        <option>{# tremendo for va acá #}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- CLEAR FILTERS BUTTON -->
-                <div class="collapse multi-collapse pt-3" id="multiCollapseExample2">
-                    <button type="button" class="btn btn-danger" disabled>
-                        Clear all filters
-                    </button>
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-2">
         </div>
 
         <div class="col-md-12 col-lg-8">
             <div class="container py-2">
-
                 <!-- TITLE -->
                 <h3>Unverified seisms</h3>
+                <div class="row py-3">
+                    <div class="container-fluid py-2">
+                        <!-- FILTERS COLLAPSIBLE BUTTON -->
+                        <button class="btn btn-primary" type="button" data-toggle="collapse"
+                            data-target=".multi-collapse" aria-expanded="false" aria-controls="associated">
+                            Filters and sorting
+                        </button>
 
-                <div class="container-fluid">
-                    <div class="row">
-
-                        <!-- TABLE SORTING -->
-                        <div class="form-inline py-2 pr-3">
-                            <label class="my-1 mr-3" for="sorting">Sort by:</label>
-                            <select class="form-control" id="sorting">
-                                <option selected>None</option>
-                                <option>Older to newer</option>
-                                <option>Newer to older</option>
-                            </select>
+                        <div class="collapse multi-collapse pt-3" id="associated">
+                            <form method="GET" action="{{ url_for('seismologist.main_useisms') }}">
+                                {{ organizeUSeism(form) }}
+                            </form>
                         </div>
                     </div>
+                </div>
 
-
-                    <!-- TABLE -->
+                <!-- DINAMIC TABLE -->
                 <table class="table table-responsive-md table-hover">
                     <thead>
                         <tr>
@@ -100,28 +70,28 @@
 
                 </table>
 
-                    <!-- PAGINATION -->
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+                <!-- TABLE PAGINATION -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
-        <div class="col-md-12 col-lg-1">
+        
+        <div class="col-md-12 col-lg-2">
         </div>
     </div>
 </div>

@@ -56,7 +56,7 @@ def add_sensor():
     users_url = current_app.config["API_URL"] + "/users"
     u_data = requests.get(url=users_url, headers={'content-type': 'application/json'}, json={})
     user_json = json.loads(u_data.text)
-    email_list = [(None, "Select one seismologist email")]
+    email_list = [(0, "Select one seismologist email")]
     for user in user_json["users"]:
         email_list.append((user["id_num"], user["email"]))
 
@@ -179,9 +179,14 @@ def edit_sensor(id):
 @admin.route('/sensors/delete/<int:id>')
 def delete_sensor(id):
     url = current_app.config["API_URL"] + "/sensor/" + str(id)
-    requests.delete(url=url, headers={'content-type': 'application/json'})
-    return redirect(url_for('admin.main_sensors'))
+    r = requests.delete(url=url, headers={'content-type': 'application/json'})
 
+    if r.status_code == 403:
+        # send flash you cant delete sensor
+        print("send flash you cant delete sensor")
+        return redirect(url_for('admin.main_sensors'))
+    else:
+        return redirect(url_for('admin.main_sensors'))
 
 # Users
 @admin.route('/users/')

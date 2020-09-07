@@ -1,40 +1,46 @@
-<!-- Macro que se encarga de mostrar los errores de validación -->
-{% macro show_error(field) %}
-	{% if field.errors %} <!--Si existen errores -->
-	  <div class="alert alert-danger" role="alert">
-	  {% for error in field.errors %} <!--Recorrer errrores-->
-	   	{{ error }}<br><!--Mostrar error -->
-	  {% endfor %}
-	  </div>
-	{% endif %}
+{% from '/macros/global-forms.html' import showIntegerField, showFloatField, showStaticData, showButtons, showFSelectField, showFButtons, showFStringField %}
+
+
+{% macro editUSeismMap(form, seism) %}
+{{ form.csrf_token }}
+{{ showStaticData("Date and time", seism.datetime) }}
+{{ showIntegerField(form.depth) }}
+{{ showFloatField(form.magnitude) }}
+{{ showStaticData("Latitude", seism.latitude) }}
+{{ showStaticData("Longitude", seism.longitude) }}
+{{ showStaticData("Verified", seism.verified) }}
+{{ showStaticData("Associated sensor", seism.sensor.name) }}
+{{ showButtons(form.submit_button, "seismologist.main_useisms") }}
 {% endmacro %}
 
-<!-- Macro que se encarga de mostrar los campos del formulario -->
-{% macro show_field(field) %}
-	{{ field.label }} <!-- Mostrar etiqueta -->
-	{{ field(**kwargs)|safe }} <!-- Mostrar campo -->
-	{{show_error(field)}}  <!-- Llamar a macro que muestra el error -->
-{% endmacro %}
 
-{% macro show_radio(field) %}
-	<div class="pr-3">
-		{{ field.label }} <!-- Mostrar etiqueta -->
+{% macro organizeUSeism(form) %}
+<div class="row">
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-body">
+				<div class="container">
+					<h6 class="card-title ml-n2">Filters</h5>
+					<div class="container pl-3">
+						{{ showFStringField(form.sensor_id) }}
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	{% for subfield in field %} <!--Recorrer cada una de las opciones -->
-	  		<div class="px-2">
-				{{ subfield }}  <!-- Mostrar opción -->
-			  </div>
-			  <div class="px-2">
-				{{ subfield.label }} <!-- Mostrar etiqueta -->
-			  </div>
-			
-	  		
-	{% endfor %}
-	{{show_error(field)}}  <!-- Llamar a macro que muestra el error -->
-{% endmacro %}
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-body">
+				<div class="container">
+					<h6 class="card-title ml-n2">Sorting</h5>
+						<div class="container pl-3">
+							{{ showFSelectField(form.sort_by) }}
+						</div>
+				</div>
 
-
-<!-- Macro que se encarga de mostrar los campos tipo submit formulario -->
-{% macro show_submit(field) %}
-	{{ field(**kwargs)|safe }} <!-- Mostrar campo -->
+			</div>
+		</div>
+	</div>
+</div>
+{{ showFButtons(form.submit_button, "seismologist.main_useisms") }}
 {% endmacro %}
