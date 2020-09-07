@@ -67,7 +67,7 @@ class VerifiedSeisms(Resource):
                 verified_seisms = verified_seisms.filter(SeismModel.datetime.like("%" + str(value) + "%"))
             if key == "magnitude":
                 verified_seisms = verified_seisms.filter(SeismModel.magnitude.like("%" + str(value) + "%"))
-            if key == "sensor.name":
+            if key == "sensor_name":
                 verified_seisms = verified_seisms.join(SeismModel.sensor).filter(
                     SensorModel.name.like("%" + str(value) + "%"))
 

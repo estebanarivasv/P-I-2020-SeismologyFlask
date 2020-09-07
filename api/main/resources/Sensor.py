@@ -1,8 +1,9 @@
 from flask_restful import Resource
 from flask import request, jsonify
+import json
 
 from main import db
-from main.models import SensorModel
+from main.models import SensorModel, SeismModel
 from main.models.User import User as UserModel
 from main.authentication import admin_login_required
 
@@ -17,13 +18,19 @@ class Sensor(Resource):
     #@admin_login_required
     def delete(self, id_num):
         sensor = db.session.query(SensorModel).get_or_404(id_num)
-        db.session.delete(sensor)
-        try:
-            db.session.commit()
-        except Exception:
-            db.session.rollback()
-            return '', 409
-        return '', 204
+
+        # Bring all seisms and test if the sensor is associated with of them
+        assoc_seisms_num = db.session.query(SeismModel).join(SeismModel.sensor).filter(SensorModel.id_num == id_num).count()
+        if assoc_seisms_num == 0:
+            db.session.delete(sensor)
+            try:
+                db.session.commit()
+            except Exception:
+                db.session.rollback()
+                return '', 409
+            return '', 204
+        else:
+            return 'The sensor has seims associated', 403
 
     #@admin_login_required
     def put(self, id_num):
