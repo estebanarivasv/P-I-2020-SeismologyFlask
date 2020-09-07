@@ -1,6 +1,8 @@
-flask
-python-dotenv
-flask-restful
-requests
-flask_wtf
 email_validator
+flask
+flask-login
+flask-restful
+flask_wtf
+PyJWT
+python-dotenv
+requests
