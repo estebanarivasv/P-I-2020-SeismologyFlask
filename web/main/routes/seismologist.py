@@ -6,9 +6,9 @@ import requests, json
 seismologist = Blueprint('seismologist', __name__, url_prefix='/seismologist')
 
 
-@seismologist.route('/logout/')
-def logout():
-    pass
+@seismologist.route('/')
+def index():
+    return redirect(url_for('seismologist.main_useisms'))
 
 
 @seismologist.route('/unverified-seisms/')

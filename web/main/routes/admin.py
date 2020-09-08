@@ -1,24 +1,22 @@
-from flask import Blueprint, render_template, current_app, redirect, url_for
-from main.forms import NewUserForm, UserToEditForm, NewSensorForm
+from flask import Blueprint, render_template, current_app, redirect, url_for, request
+from flask_login import login_required
 import requests, json
+
+from main.forms import NewUserForm, UserToEditForm, NewSensorForm
 
 admin = Blueprint('admin', __name__, url_prefix='/administrator')
 
 
-# Logging out from system
-@admin.route('/logout/')
-def logout():
-    pass
-
-
 # Main page
 @admin.route('/home/')
+@login_required
 def index():
     return render_template('derived/admin/home.html')
 
 
 # Verified seisms
 @admin.route('/verified-seisms/')
+@login_required
 def main_vseism():
     url = current_app.config["API_URL"] + "/verified-seisms"
     data = requests.get(url=url, headers={'content-type': 'application/json'}, json={})
@@ -27,6 +25,7 @@ def main_vseism():
 
 
 @admin.route('/verified-seisms/view/<int:id>')
+@login_required
 def view_vseism(id):
     url = current_app.config["API_URL"] + "/verified-seism/" + str(id)
     data = requests.get(url=url, headers={'content-type': 'application/json'})
@@ -36,25 +35,35 @@ def view_vseism(id):
 
 # Sensors
 @admin.route('/sensors/')
+@login_required
 def main_sensors():
+    auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/sensors"
-    data = requests.get(url=url, headers={'content-type': 'application/json'}, json={})
+    data = requests.get(url=url, headers={'content-type': 'application/json', 'authorization': 'Bearer ' + auth_token}, json={})
     sensors = json.loads(data.text)["sensors"]
     return render_template('/derived/admin/sensors/main.html', sensors=sensors)
 
 @admin.route('/sensors/view/<int:id>')
+@login_required
 def view_sensor(id):
+    auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/sensor/" + str(id)
-    data = requests.get(url=url, headers={'content-type': 'application/json'})
+    data = requests.get(url=url, headers={'content-type': 'application/json',
+                 'authorization': 'Bearer ' + auth_token})
     sensor = data.json()
     return render_template('/derived/admin/sensors/view-sensor.html', sensor=sensor)
 
-@admin.route('/sensors/add/', methods=["POST","GET"])
+@admin.route('/sensors/add/', methods=["POST", "GET"])
+@login_required
 def add_sensor():
+    auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/sensors"
-
     users_url = current_app.config["API_URL"] + "/users"
-    u_data = requests.get(url=users_url, headers={'content-type': 'application/json'}, json={})
+    u_data = requests.get(
+        url=users_url,
+        headers={'content-type': 'application/json',
+                 'authorization': 'Bearer ' + auth_token},
+        json={})
     user_json = json.loads(u_data.text)
     email_list = [(0, "Select one seismologist email")]
     for user in user_json["users"]:
@@ -88,19 +97,22 @@ def add_sensor():
             "user_id": u_id
         }
         sensor_json = json.dumps(sensor)
-        requests.post(url=url, headers={'content-type': 'application/json'}, data=sensor_json)
+        requests.post(url=url, headers={'content-type': 'application/json',
+                 'authorization': 'Bearer ' + auth_token}, data=sensor_json)
         return redirect(url_for('admin.main_sensors'))
         
     return render_template('/derived/admin/sensors/add-sensor.html', form=form)
 
-@admin.route('/sensors/edit/<int:id>', methods=["POST","GET"])
+@admin.route('/sensors/edit/<int:id>', methods=["POST", "GET"])
+@login_required
 def edit_sensor(id):
-
+    auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/sensor/" + str(id)
     form = NewSensorForm()
 
     users_url = current_app.config["API_URL"] + "/users"
-    u_data = requests.get(url=users_url, headers={'content-type': 'application/json'}, json={})
+    u_data = requests.get(url=users_url, headers={'content-type': 'application/json',
+                 'authorization': 'Bearer ' + auth_token}, json={})
     user_json = json.loads(u_data.text)
     email_list = [(0, "Select one seismologist email")]
     for user in user_json["users"]:
@@ -108,8 +120,10 @@ def edit_sensor(id):
     form.user_id.choices = email_list
 
     if not form.is_submitted():
+        auth_token = request.cookies['access_token']
         # If the form is not sent, makes a request
-        data = requests.get(url=url, headers={'content-type': 'application/json'})
+        data = requests.get(url=url, headers={'content-type': 'application/json',
+                 'authorization': 'Bearer ' + auth_token})
         if data.status_code == 404:
             return redirect(url_for('admin.main_sensors'))
         
@@ -170,16 +184,20 @@ def edit_sensor(id):
         }
         sensor_json = json.dumps(sensor)
 
-        data = requests.put(url=url, headers={'content-type': 'application/json'}, data=sensor_json)
+        data = requests.put(url=url, headers={'content-type': 'application/json',
+                 'authorization': 'Bearer ' + auth_token}, data=sensor_json)
         return redirect(url_for('admin.main_sensors'))
 
     return render_template('/derived/admin/sensors/edit-sensor.html', id=id, form=form)
 
 
 @admin.route('/sensors/delete/<int:id>')
+@login_required
 def delete_sensor(id):
+    auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/sensor/" + str(id)
-    r = requests.delete(url=url, headers={'content-type': 'application/json'})
+    r = requests.delete(url=url, headers={'content-type': 'application/json',
+                 'authorization': 'Bearer ' + auth_token})
 
     if r.status_code == 403:
         # send flash you cant delete sensor
@@ -190,14 +208,19 @@ def delete_sensor(id):
 
 # Users
 @admin.route('/users/')
+@login_required
 def main_users():
+    auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/users"
-    data = requests.get(url=url, headers={'content-type': 'application/json'}, json={})
+    data = requests.get(url=url, headers={'content-type': 'application/json',
+                 'authorization': 'Bearer ' + auth_token}, json={})
     users = json.loads(data.text)["users"]
     return render_template('/derived/admin/users/main.html', users=users)
 
-@admin.route('/users/add/', methods=["POST","GET"])
+@admin.route('/users/add/', methods=["POST", "GET"])
+@login_required
 def add_user():
+    auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/users"
     form = NewUserForm()
     if form.validate_on_submit():
@@ -211,18 +234,22 @@ def add_user():
             "admin": form.admin.data
         }
         user_json = json.dumps(user)
-        requests.post(url=url, headers={'content-type': 'application/json'}, data=user_json)
+        requests.post(url=url, headers={'content-type': 'application/json',
+                 'authorization': 'Bearer ' + auth_token}, data=user_json)
         return redirect(url_for('admin.main_users'))
         
     return render_template('/derived/admin/users/add-user.html', form=form)
 
-@admin.route('/users/edit/<int:id>', methods=["POST","GET"])
+@admin.route('/users/edit/<int:id>', methods=["POST", "GET"])
+@login_required
 def edit_user(id):
+    auth_token = request.cookies['access_token']
     form = UserToEditForm()
     url = current_app.config["API_URL"] + "/user/" + str(id)
     if not form.is_submitted():
         # If the form is not sent, makes a request
-        data = requests.get(url=url, headers={'content-type': 'application/json'})
+        data = requests.get(url=url, headers={'content-type': 'application/json',
+                 'authorization': 'Bearer ' + auth_token})
         if data.status_code == 404:
             return redirect(url_for('admin.main_users'))
         
@@ -248,13 +275,17 @@ def edit_user(id):
         }
         user_json = json.dumps(user)
 
-        data = requests.put(url=url, headers={'content-type': 'application/json'}, data=user_json)
+        data = requests.put(url=url, headers={'content-type': 'application/json',
+                 'authorization': 'Bearer ' + auth_token}, data=user_json)
         return redirect(url_for('admin.main_users'))
 
     return render_template('/derived/admin/users/edit-user.html', id=id, form=form)
 
 @admin.route('/users/delete/<int:id>')
+@login_required
 def delete_user(id):
+    auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/user/" + str(id)
-    requests.delete(url=url, headers={'content-type': 'application/json'})
+    requests.delete(url=url, headers={'content-type': 'application/json',
+                 'authorization': 'Bearer ' + auth_token})
     return redirect(url_for('admin.main_users'))

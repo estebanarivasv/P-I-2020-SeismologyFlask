@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, current_app    
 import requests, json
-from main.routes.login import login
 
 unlogged_usr = Blueprint('unlogged_usr', __name__, url_prefix='/')
 
@@ -19,7 +18,3 @@ def view_vseism(id):
     v_seism = data.json()
     return render_template('/derived/unlogged-usr/verified-seisms/view-vseism.html', v_seism=v_seism)
 
-
-@unlogged_usr.route('/login/')
-def sign_in():
-    return redirect(url_for('login.index'))

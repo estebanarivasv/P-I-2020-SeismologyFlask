@@ -1,74 +1,74 @@
 {% macro showStringField(field) %}
-	<div class="form-group row py-1">
-		<div class="col-sm-2">{{ field.label }}{% if field.flags.required %}*{% endif %}</div>	
-		<div class="col-sm-10">
-			{{ field(class="form-control")|safe }}
-			{{ showErrors(field.errors) }}
-		</div>
+<div class="form-group row py-1">
+	<div class="col-sm-2">{{ field.label }}{% if field.flags.required %}*{% endif %}</div>
+	<div class="col-sm-10">
+		{{ field(class="form-control")|safe }}
+		{{ showErrors(field.errors) }}
 	</div>
+</div>
 {% endmacro %}
 
 {% macro showIntegerField(field) %}
-	<div class="form-group row py-1">
-		<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>	
-		<div class="col-sm-10">
-			{{ field(class="form-control")|safe }}
-			{{ showErrors(field.errors) }}
-		</div>
+<div class="form-group row py-1">
+	<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>
+	<div class="col-sm-10">
+		{{ field(class="form-control")|safe }}
+		{{ showErrors(field.errors) }}
 	</div>
+</div>
 {% endmacro %}
 
 {% macro showFloatField(field) %}
-	<div class="form-group row py-1">
-		<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>	
-		<div class="col-sm-10">
-			{{ field(class="form-control")|safe }}
-			{{ showErrors(field.errors) }}
-		</div>
+<div class="form-group row py-1">
+	<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>
+	<div class="col-sm-10">
+		{{ field(class="form-control")|safe }}
+		{{ showErrors(field.errors) }}
 	</div>
+</div>
 {% endmacro %}
 
 {% macro showSelectField(field) %}
-	<div class="form-group row py-1">
-		<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>	
-		<div class="col-sm-10">
-			{{ field(class="custom-select")|safe }}
-			{{ showErrors(field.errors) }}
-		</div>
+<div class="form-group row py-1">
+	<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>
+	<div class="col-sm-10">
+		{{ field(class="custom-select")|safe }}
+		{{ showErrors(field.errors) }}
 	</div>
+</div>
 {% endmacro %}
 
 {% macro showEmailField(field) %}
-	<div class="form-group row py-1">
-		<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>	
-		<div class="col-sm-10">
-			{{ field(class="form-control")|safe }}
-			{{ showErrors(field.errors) }}
-		</div>
+<div class="form-group row py-1">
+	<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>
+	<div class="col-sm-10">
+		{{ field(class="form-control")|safe }}
+		{{ showErrors(field.errors) }}
 	</div>
+</div>
 {% endmacro %}
 
-{% macro showPasswordField(field) %}			{#  <input type="password"> #}
-	<div class="form-group row py-1">	
-		<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>	
-		<div class="col-sm-10">
-			{{ field(class="form-control")|safe }}
-			{{ showErrors(field.errors) }}
-		</div>
+{% macro showPasswordField(field) %} {#  <input type="password"> #}
+<div class="form-group row py-1">
+	<div class="col-sm-2">{{ field.label }} {% if field.flags.required %}*{% endif %}</div>
+	<div class="col-sm-10">
+		{{ field(class="form-control")|safe }}
+		{{ showErrors(field.errors) }}
 	</div>
-	
+</div>
+
 {% endmacro %}
 
 {% macro showRadioField(field) %}
 <fieldset class="form-group py-1">
 	<div class="row">
 		<legend class="col-form-label col-sm-2 pt-0">{{ field.label }}{% if field.flags.required %}*{% endif %}</legend>
-      	<div class="col-sm-10">
+		<div class="col-sm-10">
 			{% for subfield in field %}
-				<div class="form-check">
-					{{ subfield(class="form-check-input")|safe }}
-					{{ subfield.label(class="form-check-label")|safe }}
-				</div>
+			<div class="form-check">
+				{{ subfield(class="form-check-input")|safe }}
+				{{ subfield.label(class="form-check-label")|safe }}
+			</div>
 			{% endfor %}
 			{{ showErrors(field.errors) }}
 		</div>
@@ -76,51 +76,76 @@
 </fieldset>
 {% endmacro %}
 
-{% macro showButtons(field, cancel_url) %}			{#  <input type="submit"> #}
-	<div class="form-inline justify-content-center mb-5">
-		{{ field(class="btn btn-primary mx-3")|safe }}
-		<a name="" id="" class="btn btn-danger mx-3" href="{{url_for(cancel_url)}}" role="button">Cancel</a>
-	</div>
+{% macro showButtons(field, cancel_url) %} {#  <input type="submit"> #}
+<div class="form-inline justify-content-center mb-5">
+	{{ field(class="btn btn-primary mx-3")|safe }}
+	<a name="" id="" class="btn btn-danger mx-3" href="{{url_for(cancel_url)}}" role="button">Cancel</a>
+</div>
 {% endmacro %}
 
 
 {% macro showErrors(errors) %}
-	{% if errors %}
-		<div class="container pt-2 px-2 pb-n1 text-danger">
-			{% for error in errors %}
-			<h6>{{ error }}</h6><br>
-			{% endfor %}
-		</div>
-	{% endif %}
+{% if errors %}
+<div class="container pt-2 px-2 pb-n1 text-danger">
+	{% for error in errors %}
+	<h6>{{ error }}</h6><br>
+	{% endfor %}
+</div>
+{% endif %}
 {% endmacro %}
 
 
 {% macro showStaticData(label, value) %}
-	<div class="form-group row py-1">
-		<div class="col-sm-2"><label for="staticData">{{ label }}</label></div>
-		<div class="col-sm-10"><input type="text" readonly class="form-control" id="staticData" value="{{ value }}"></div>
-	</div>
+<div class="form-group row py-1">
+	<div class="col-sm-2"><label for="staticData">{{ label }}</label></div>
+	<div class="col-sm-10"><input type="text" readonly class="form-control" id="staticData" value="{{ value }}"></div>
+</div>
 {% endmacro %}
 
 
 {% macro showFButtons(field, cancel_url) %}
-	<div class="form-inline justify-content-center mb-5">
-		{{ field(class="btn btn-primary mx-3")|safe }}
-		<a name="" id="" class="btn btn-danger mx-3" href="{{url_for(cancel_url)}}" role="button">Remove parameters</a>
-	</div>
+<div class="form-inline justify-content-center mb-5">
+	{{ field(class="btn btn-primary mx-3")|safe }}
+	<a name="" id="" class="btn btn-danger mx-3" href="{{url_for(cancel_url)}}" role="button">Remove parameters</a>
+</div>
 {% endmacro %}
 
 {% macro showFSelectField(field) %}
-	<div class="form-group row py-1">
-		<label for="fselfield">{{ field.label }}</label>
-		{{ field(class="custom-select", id="fselfield")|safe }}
-	</div>
+<div class="form-group row py-1">
+	<label for="fselfield">{{ field.label }}</label>
+	{{ field(class="custom-select", id="fselfield")|safe }}
+</div>
 {% endmacro %}
 
 {% macro showFStringField(field) %}
-	<div class="form-group row py-1">
-		<label for="fstrfield">{{ field.label }}</label>
-		{{ field(class="form-control", id="fstrfield")|safe }}
-		{{ showErrors(field.errors) }}
-	</div>
+<div class="form-group row py-1">
+	<label for="fstrfield">{{ field.label }}</label>
+	{{ field(class="form-control", id="fstrfield")|safe }}
+	{{ showErrors(field.errors) }}
+</div>
+{% endmacro %}
+
+
+{% macro showLoginForm(form) %}
+{{ form.csrf_token }}
+<img class="py-2" src="../../../static/svg/only-vector.svg" alt="" width="" height="">
+<h1 class="h3 my-4 font-weight-normal" style="color: rgba(0, 0, 0, 0.75)">Please sign in</h1>
+
+<!-- EMAIL FIELD -->
+<label for="inputEmail" class="sr-only">{{ form.email.label }}</label>
+{{ form.email(type="email", id="inputEmail", class="form-control my-2", placeholder="Email"|safe) }}
+{{ showErrors(form.email.errors) }}
+
+<!-- PASSWORD FIELD -->
+<label for="inputPassword" class="sr-only">{{ form.password.label }}</label>
+{{ form.password(type="password", id="inputPassword", class="form-control my-2 py", placeholder="Password"|safe) }}
+{{ showErrors(form.password.errors) }}
+
+<div class="container w-75">
+	{{ form.submit_button(
+		class="btn btn-lg btn-light btn-block",
+		type="submit",
+		style="background-color: #ffca85; border-color: rgba(0, 0, 0, 0.25;)"|safe) }}
+</div>
+
 {% endmacro %}
