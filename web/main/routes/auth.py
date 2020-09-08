@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, current_app, request, make_response, flash
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
+from functools import wraps
 import requests
 import json
 
@@ -49,7 +50,17 @@ def login():
 
 @auth.route('/logout')
 def logout():
+    print("Entro")
     req = make_response(redirect(url_for('unlogged_usr.index')))  # Redirection request
     req.set_cookie('access_token', '', httponly=True)  # Empty cookie and set expiration date in past
     logout_user()
     return req
+
+def admin_required(fn):
+    @wraps(fn)
+    def wrapper(*args, **kws):
+        if not current_user.admin:
+            flash('You are not authorized to enter to this site.', 'warning')
+            return redirect(url_for('seismologist.index'))
+        return fn(*args, **kws)
+    return wrapper

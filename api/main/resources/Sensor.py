@@ -18,19 +18,13 @@ class Sensor(Resource):
     @admin_login_required
     def delete(self, id_num):
         sensor = db.session.query(SensorModel).get_or_404(id_num)
-
-        # Bring all seisms and test if the sensor is associated with of them
-        assoc_seisms_num = db.session.query(SeismModel).join(SeismModel.sensor).filter(SensorModel.id_num == id_num).count()
-        if assoc_seisms_num == 0:
-            db.session.delete(sensor)
-            try:
-                db.session.commit()
-            except Exception:
-                db.session.rollback()
-                return '', 409
-            return '', 204
-        else:
-            return 'The sensor has seims associated', 403
+        db.session.delete(sensor)
+        try:
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            return 'The sensor has seims associated', 409
+        return '', 204
 
     @admin_login_required
     def put(self, id_num):
@@ -57,7 +51,6 @@ class Sensors(Resource):
 
     @admin_login_required
     def get(self):
-
         page_num = 1
         elem_per_page = 25
         raise_error = True

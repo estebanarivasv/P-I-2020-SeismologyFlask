@@ -1,4 +1,4 @@
-{% extends 'principal/admin.html' %} 
+{% extends 'principal/main.html' %} 
 
 {% block head %} {{ super() }}
 
@@ -19,7 +19,7 @@
             style="width: 100%; height: 100%; object-fit: cover;"
           />
           <div class="card-body">
-            <a href="{{url_for('admin.main_vseism')}}" class="btn btn-primary">Verified seisms</a>
+            <a href="{{url_for('unlogged_usr.index')}}" class="btn btn-primary">Verified seisms</a>
           </div>
         </div>
         <div class="card text-center">

@@ -1,8 +1,10 @@
-from flask import Blueprint, render_template, current_app, redirect, url_for, request
+from flask import Blueprint, render_template, current_app, redirect, url_for, request, flash
 from flask_login import login_required
 import requests, json
 
 from main.forms import NewUserForm, UserToEditForm, NewSensorForm
+from main.routes import admin_required
+from main.utilities.api_requests import makeRequest
 
 admin = Blueprint('admin', __name__, url_prefix='/administrator')
 
@@ -10,41 +12,24 @@ admin = Blueprint('admin', __name__, url_prefix='/administrator')
 # Main page
 @admin.route('/home/')
 @login_required
+@admin_required
 def index():
     return render_template('derived/admin/home.html')
-
-
-# Verified seisms
-@admin.route('/verified-seisms/')
-@login_required
-def main_vseism():
-    url = current_app.config["API_URL"] + "/verified-seisms"
-    data = requests.get(url=url, headers={'content-type': 'application/json'}, json={})
-    verified_seisms = json.loads(data.text)["verified_seisms"]
-    return render_template('/derived/admin/verified-seisms/main.html', verified_seisms=verified_seisms)
-
-
-@admin.route('/verified-seisms/view/<int:id>')
-@login_required
-def view_vseism(id):
-    url = current_app.config["API_URL"] + "/verified-seism/" + str(id)
-    data = requests.get(url=url, headers={'content-type': 'application/json'})
-    v_seism = data.json()
-    return render_template('/derived/admin/verified-seisms/view-vseism.html', v_seism=v_seism)
 
 
 # Sensors
 @admin.route('/sensors/')
 @login_required
+@admin_required
 def main_sensors():
-    auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/sensors"
-    data = requests.get(url=url, headers={'content-type': 'application/json', 'authorization': 'Bearer ' + auth_token}, json={})
-    sensors = json.loads(data.text)["sensors"]
+    query = makeRequest("GET", url, authenticated_user=True, data="{}")
+    sensors = json.loads(query.text)["sensors"]
     return render_template('/derived/admin/sensors/main.html', sensors=sensors)
 
 @admin.route('/sensors/view/<int:id>')
 @login_required
+@admin_required
 def view_sensor(id):
     auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/sensor/" + str(id)
@@ -55,6 +40,7 @@ def view_sensor(id):
 
 @admin.route('/sensors/add/', methods=["POST", "GET"])
 @login_required
+@admin_required
 def add_sensor():
     auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/sensors"
@@ -105,6 +91,7 @@ def add_sensor():
 
 @admin.route('/sensors/edit/<int:id>', methods=["POST", "GET"])
 @login_required
+@admin_required
 def edit_sensor(id):
     auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/sensor/" + str(id)
@@ -193,14 +180,16 @@ def edit_sensor(id):
 
 @admin.route('/sensors/delete/<int:id>')
 @login_required
+@admin_required
 def delete_sensor(id):
     auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/sensor/" + str(id)
     r = requests.delete(url=url, headers={'content-type': 'application/json',
                  'authorization': 'Bearer ' + auth_token})
 
-    if r.status_code == 403:
+    if r.status_code == 409:
         # send flash you cant delete sensor
+        flash(r.text, "danger")
         print("send flash you cant delete sensor")
         return redirect(url_for('admin.main_sensors'))
     else:
@@ -209,6 +198,7 @@ def delete_sensor(id):
 # Users
 @admin.route('/users/')
 @login_required
+@admin_required
 def main_users():
     auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/users"
@@ -219,6 +209,7 @@ def main_users():
 
 @admin.route('/users/add/', methods=["POST", "GET"])
 @login_required
+@admin_required
 def add_user():
     auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/users"
@@ -242,6 +233,7 @@ def add_user():
 
 @admin.route('/users/edit/<int:id>', methods=["POST", "GET"])
 @login_required
+@admin_required
 def edit_user(id):
     auth_token = request.cookies['access_token']
     form = UserToEditForm()
@@ -283,6 +275,7 @@ def edit_user(id):
 
 @admin.route('/users/delete/<int:id>')
 @login_required
+@admin_required
 def delete_user(id):
     auth_token = request.cookies['access_token']
     url = current_app.config["API_URL"] + "/user/" + str(id)
