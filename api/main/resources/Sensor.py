@@ -10,12 +10,12 @@ from main.authentication import admin_login_required
 
 class Sensor(Resource):
 
-    #@admin_login_required
+    @admin_login_required
     def get(self, id_num):
         sensor = db.session.query(SensorModel).get_or_404(id_num)
         return sensor.to_json()
 
-    #@admin_login_required
+    @admin_login_required
     def delete(self, id_num):
         sensor = db.session.query(SensorModel).get_or_404(id_num)
 
@@ -32,7 +32,7 @@ class Sensor(Resource):
         else:
             return 'The sensor has seims associated', 403
 
-    #@admin_login_required
+    @admin_login_required
     def put(self, id_num):
         sensor = db.session.query(SensorModel).get(id_num)
         filters = request.get_json().items()
@@ -55,7 +55,7 @@ class Sensor(Resource):
 
 class Sensors(Resource):
 
-    #@admin_login_required
+    @admin_login_required
     def get(self):
 
         page_num = 1
@@ -114,7 +114,7 @@ class Sensors(Resource):
         sensors = sensors.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
         return jsonify({'sensors': [sensor.to_json() for sensor in sensors.items]})
 
-    #@admin_login_required
+    @admin_login_required
     def post(self):
         sensor = SensorModel.from_json(request.get_json())
         db.session.add(sensor)

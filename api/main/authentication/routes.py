@@ -13,6 +13,7 @@ auth = Blueprint('auth', __name__, url_prefix='/auth')
 def login():
     entered_email = str(request.get_json().get('email'))
     entered_password = str(request.get_json().get('password'))
+    print(request.get_json())
     user = db.session.query(UserModel).filter(UserModel.email == entered_email).first_or_404()
 
     passwords_match = user.validate_password(entered_password)
@@ -20,10 +21,12 @@ def login():
 
     if passwords_match:
         access_token = create_access_token(identity=user)
-        data = {"id": user.id_num,
-                "email": user.email,
-                "token": access_token
-                }
+        data = {
+            "id_num": user.id_num,
+            "email": user.email,
+            "admin": user.admin,
+            "token": access_token
+            }
         return data, 200
     else:
         return 'You have entered wrong credentials.', 401
