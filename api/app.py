@@ -1,8 +1,10 @@
 from main import create_app
 from main import db
 from main.models import UserModel
+from main.utilities import call_sensors
 
 import os
+import threading
 
 
 def create_admins_in_db():
@@ -32,4 +34,5 @@ app.app_context().push()
 if __name__ == '__main__':
     db.create_all()
     create_admins_in_db()
+    threading.Thread(target=call_sensors, args=(app,)).start()
     app.run(debug=True, port=os.getenv('PORT'))
