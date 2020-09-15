@@ -21,12 +21,10 @@ def login():
             "email": login_form.email.data,
             "password": login_form.password.data
         }
-        print(F"\n\nJSON DUMPS: {json.dumps(data)}\n\n")
         r = requests.post(url=url, headers={'content-type': 'application/json'}, data=json.dumps(data))
 
         if r.status_code == 200:
             user_json = json.loads(r.text)
-            print(F"\n\nJSON LOADS: {json.loads(r.text)}\n\n")
             logged_user = LoggedUser(
                 id=user_json['id_num'],
                 email=user_json['email'],
@@ -35,23 +33,22 @@ def login():
             login_user(logged_user)  # Logs in the user
             print(user_json['admin'])
             if user_json['admin'] == True:
-                req = make_response(redirect(url_for('admin.index')))  # Redirection request
+                req = make_response(redirect(url_for('user.admin_index')))  # Redirection request
                 req.set_cookie('access_token', user_json['token'], httponly=True)
                 return req
-            elif user_json['admin'] == False:
-                req = make_response(redirect(url_for('seismologist.index')))  # Redirection request
+            if user_json['admin'] == False:
+                req = make_response(redirect(url_for('user.seismologist_index')))  # Redirection request
                 req.set_cookie('access_token', user_json['token'], httponly=True)
                 return req
         else:
             flash("Unknown credentials. Please try again.", 'danger')
             
-    return render_template('/derived/unlogged-usr/log-in.html', login_form=login_form)
+    return render_template('/derived/log-in.html', login_form=login_form)
 
 
 @auth.route('/logout')
 def logout():
-    print("Entro")
-    req = make_response(redirect(url_for('unlogged_usr.index')))  # Redirection request
+    req = make_response(redirect(url_for('main.index')))  # Redirection request
     req.set_cookie('access_token', '', httponly=True)  # Empty cookie and set expiration date in past
     logout_user()
     return req
@@ -61,6 +58,6 @@ def admin_required(fn):
     def wrapper(*args, **kws):
         if not current_user.admin:
             flash('You are not authorized to enter to this site.', 'warning')
-            return redirect(url_for('seismologist.index'))
+            return redirect(url_for('user.seismologist_index'))
         return fn(*args, **kws)
     return wrapper
