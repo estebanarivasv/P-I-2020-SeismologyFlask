@@ -1,7 +1,7 @@
 {% extends 'principal/main.html' %}
 
-{% from '/macros/seismologist/general.html' import listUSeisms %}
-{% from '/macros/seismologist/form.html' import organizeUSeism %}
+{% from '/macros/utilities.html' import listUSeisms %}
+{% from '/macros/forms.html' import organizeUSeism %}
 
 {% block head %}
 
@@ -20,7 +20,7 @@
         <div class="col-lg-auto col-sm-auto col-md-auto">
             <nav aria-label="breadcrumb mr-n5">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{url_for('seismologist.main_useisms')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('user.seismologist_index')}}">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Unverified seisms</li>
                 </ol>
             </nav>
@@ -45,7 +45,7 @@
                         </button>
 
                         <div class="collapse multi-collapse pt-3" id="associated">
-                            <form method="GET" action="{{ url_for('seismologist.main_useisms') }}">
+                            <form method="GET" action="{{ url_for('user.main_useisms') }}">
                                 {{ organizeUSeism(form) }}
                             </form>
                         </div>

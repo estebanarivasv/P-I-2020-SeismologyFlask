@@ -20,11 +20,12 @@ class NewUser(FlaskForm):
         validators=[
             validators.DataRequired(message="This field is required")
         ])
-    admin_choices = [('true','True'), ('false','False')]
+    admin_choices = [(1, 'True'), (0, 'False')]
     admin = RadioField(
         label="Administrator",
         validators=[validators.DataRequired(message="This field is required")],
-        choices=admin_choices)
+        choices=admin_choices,
+        coerce=int)
     submit_button = SubmitField(label="Save")
 
 
@@ -33,11 +34,12 @@ class UserToEdit(FlaskForm):
     email = EmailField(
         label="Email",
         validators=[
-            validators.required(message="This field is required"),
+            validators.DataRequired(message="This field is required"),
             validators.Email(message="Wrong email format")])
-    admin_choices = [('true','True'), ('false','False')]
+    admin_choices = [(1, 'True'), (0, 'False')]
     admin = RadioField(
         label="Administrator",
-        validators=[validators.required(message="This field is required")],
-        choices=admin_choices)
+        validators=[validators.InputRequired(message="This field is required")],
+        choices=admin_choices,
+        coerce=int)
     submit_button = SubmitField(label="Save")

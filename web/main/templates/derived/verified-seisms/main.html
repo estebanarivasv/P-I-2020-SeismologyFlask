@@ -1,36 +1,40 @@
-{% extends 'principal/main.html' %}
+{% extends 'principal/main.html' %} 
 
-{% from '/macros/unlogged-usr/general.html' import listVSeisms %}
-
+{% from '/macros/utilities.html' import listVSeisms %}
 
 {% block head %} 
 
 {{ super() }}
 
 <title>Verified Seisms · Seismology Institute</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-    integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
-    crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"
-    integrity="sha512-rmZcZsyhe0/MAjquhTgiUcb4d9knaFc7b5xAfju483gbEXTkeJRUMIPk6s3ySZMYUHEcjKbjLjyddGWMrNEvZg=="
-    crossorigin="anonymous"></script>
-<script type="text/javascript"
-    src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
-<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
 
 {% endblock %}
 
+
+
 {% block content %}
 
-
 <div class="container-fluid my-3 px-5">
+    {% if current_user.is_authenticated %}
+        {% if current_user.admin %}
+            <!-- BREADCRUM -->
+            <div class="row">
+                <div class="col-lg-auto col-sm-auto col-md-auto">
+                    <nav aria-label="breadcrumb mr-n5">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url_for('user.admin_index')}}">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Verified seisms</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+    
 
-    <!-- FILTERS BUTTON -->
     <div class="row">
         <div class="col-md-12 col-lg-3">
+            <!-- FILTERS BUTTON -->
             <div class="container-fluid py-2">
                 <button class="btn btn-primary " type="button" data-toggle="collapse" data-target=".multi-collapse"
                     aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">
@@ -139,10 +143,8 @@
         <div class="col-md-12 col-lg-8">
             <div class="container py-2">
 
-
                 <!-- TITLE -->
                 <h3>Verified seisms</h3>
-
 
                 <!-- TABLE SORTING -->
                 <div class="form-inline py-3">

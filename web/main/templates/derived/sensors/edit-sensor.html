@@ -1,8 +1,10 @@
 {% extends 'principal/main.html' %}
 
-{% from '/macros/admin/form.html' import generateNewSensorForm %}
+{% from '/macros/forms.html' import generateNewSensorForm %}
 
-{% block head %} {{ super() }}
+{% block head %} 
+
+{{ super() }}
 
 <title>Sensor no.{{ id }} · Seismology Institute</title>
 
@@ -15,11 +17,9 @@
         <div class="col-lg-auto col-sm-auto col-md-auto">
             <nav aria-label="breadcrumb mr-n5">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{url_for('admin.index')}}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{url_for('admin.main_sensors')}}">Sensors</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        {{ id }}
-                    </li>
+                    <li class="breadcrumb-item"><a href="{{url_for('user.admin_index')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('user.main_sensors')}}">Sensors</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ id }}</li>
                 </ol>
             </nav>
         </div>
@@ -39,7 +39,7 @@
             <div class="container py-2 justify-content-center">
 
                 <h5 class="py-3">Complete the following form</h5>
-                <form method="POST" action="{{ url_for('admin.edit_sensor', id=id) }}">
+                <form method="POST" action="{{ url_for('user.edit_sensor', id=id) }}">
                     {{ generateNewSensorForm(form) }}
                 </form>
             </div>

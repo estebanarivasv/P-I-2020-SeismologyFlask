@@ -6,11 +6,11 @@ class Seism(FlaskForm):
         
     depth = IntegerField(
         label="Depth",
-        validators=[validators.required(message="This field should be an integer")]
+        validators=[validators.DataRequired(message="This field should be an integer")]
     )
     magnitude = FloatField(
         label="Magnitude",
-        validators=[validators.required(message="This field should be a decimal value")]
+        validators=[validators.DataRequired(message="This field should be a decimal value")]
     )
     submit_button = SubmitField(label="Save")
 

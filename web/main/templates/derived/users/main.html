@@ -1,6 +1,6 @@
 {% extends 'principal/main.html' %}
 
-{% from '/macros/admin/general.html' import listUsers %}
+{% from '/macros/utilities.html' import listUsers %}
 
 {% block head %}
 
@@ -31,7 +31,7 @@
         <div class="col-lg-auto col-sm-auto col-md-auto">
             <nav aria-label="breadcrumb mr-n5">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{url_for('admin.index')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('user.admin_index')}}">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Users</li>
                 </ol>
             </nav>
@@ -48,7 +48,7 @@
             <h3>Users</h3>
             <!-- BUTTONS -->
             <div class="form-inline py-2 pr-3">
-                <a class="btn btn-success" href="{{url_for('admin.add_user')}}" role="button">New user</a>
+                <a class="btn btn-success" href="{{url_for('user.add_user')}}" role="button">New user</a>
             </div>
 
             <table class="table table-responsive-md table-hover mt-3">

@@ -1,6 +1,6 @@
 {% extends 'principal/main.html' %} 
 
-{% from '/macros/seismologist/form.html' import editUSeismMap %}
+{% from '/macros/forms.html' import editUSeismMap %}
 
 {% block head %} {{ super() }}
 
@@ -16,8 +16,8 @@
         <div class="col-lg-auto col-sm-auto col-md-auto">
             <nav aria-label="breadcrumb mr-n5">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{url_for('seismologist.main_useisms')}}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{url_for('seismologist.main_useisms')}}">Unverified seisms</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('user.seismologist_index')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('user.main_useisms')}}">Unverified seisms</a></li>
                     <li class="breadcrumb-item active" aria-current="page">
                         {{ u_seism.id_num }}
                     </li>
@@ -40,7 +40,7 @@
             <div class="container py-2 justify-content-center">
 
                 <h5 class="py-3">Complete the following form</h5>
-                <form method="POST" action="{{ url_for('seismologist.edit_useism', id=id) }}">
+                <form method="POST" action="{{ url_for('user.edit_useism', id=id) }}">
                     {{ editUSeismMap(form, u_seism) }}
                 </form>
             </div>

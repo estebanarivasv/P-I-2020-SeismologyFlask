@@ -1,10 +1,11 @@
 {% extends 'principal/main.html' %} 
 
-{% from '/macros/seismologist/general.html' import showVSeismMap %}
+{% from '/macros/utilities.html' import showVSeismMap %}
+
 
 {% block head %} {{ super() }}
 
-<title>Verified Seism no.{{ v_seism.id_num }} · Seismology Institute</title>
+<title>Verified Seism no. {{ v_seism.id_num }} · Seismology Institute</title>
 {% endblock %}
 
 {% block content %}
@@ -12,18 +13,49 @@
 
 <div class="container-fluid my-3 px-5">
     <div class="row">
-        <div class="col-lg-auto col-sm-auto col-md-auto">
-            <nav aria-label="breadcrumb mr-n5">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{url_for('seismologist.main_useisms')}}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{url_for('seismologist.main_vseisms')}}">Verified seisms</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        {{ v_seism.id_num }}
-                    </li>
-                </ol>
-            </nav>
-        </div>
+        {% if current_user.is_authenticated %}
+            {% if current_user.admin %}
+                <!-- BREADCRUM -->
+                <div class="row">
+                    <div class="col-lg-auto col-sm-auto col-md-auto">
+                        <nav aria-label="breadcrumb mr-n5">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{url_for('user.admin_index')}}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Verified seisms</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+
+            {% else %}
+                <div class="row">
+                    <div class="col-lg-auto col-sm-auto col-md-auto">
+                        <nav aria-label="breadcrumb mr-n5">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{url_for('user.main_vseisms')}}">Verified seisms</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">{{ v_seism.id_num }}</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            {% endif %}
+
+        {% else %}
+            <div class="row">
+                <div class="col-lg-auto col-sm-auto col-md-auto">
+                    <nav aria-label="breadcrumb mr-n5">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url_for('user.main_vseisms')}}">Verified seisms</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ v_seism.id_num }}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        {% endif %}
     </div>
+</div>
+
+<div class="container my-3 px-5">
     <div class="row">
         <div class="col-lg-1"></div>
         <div class="col-lg-10 col-sm-12">
@@ -32,9 +64,6 @@
         </div>
         <div class="col-lg-1"></div>
     </div>
-</div>
-
-<div class="container my-3 px-5">
     <div class="row">
         <div class="col-sm-12 col-lg-6">
             <div class="container py-2">

@@ -1,0 +1,74 @@
+{% import '/principal/global-forms.html' as m %}	
+
+{% macro generateNewUserForm(form) %}
+	{{ form.csrf_token }}
+	{{ m.showEmailField(form.email) }}
+	{{ m.showPasswordField(form.password) }}
+	{{ m.showPasswordField(form.re_password) }}
+	{{ m.showRadioField(form.admin) }}
+	{{ m.showButtons(form.submit_button, 'user.main_users') }}
+{% endmacro %}
+
+{% macro generateEditUserForm(form, id_num) %}
+	{{ form.csrf_token }}
+	{{ m.showEmailField(form.email) }}
+	{{ m.showRadioField(form.admin) }}
+	{{ m.showButtons(form.submit_button, 'user.main_users') }}
+{% endmacro %}
+
+
+
+{% macro generateNewSensorForm(form) %}
+	{{ form.csrf_token }}
+	{{ m.showStringField(form.name) }}
+	{{ m.showStringField(form.ip) }}
+	{{ m.showIntegerField(form.port) }}
+	{{ m.showRadioField(form.status) }}
+	{{ m.showRadioField(form.active) }}
+	{{ m.showSelectField(form.user_id) }}
+	{{ m.showButtons(form.submit_button, 'user.main_sensors') }}
+{% endmacro %}
+
+
+{% macro editUSeismMap(form, seism) %}
+	{{ form.csrf_token }}
+	{{ m.showStaticData("Date and time", seism.datetime) }}
+	{{ m.showIntegerField(form.depth) }}
+	{{ m.showFloatField(form.magnitude) }}
+	{{ m.showStaticData("Latitude", seism.latitude) }}
+	{{ m.showStaticData("Longitude", seism.longitude) }}
+	{{ m.showStaticData("Verified", seism.verified) }}
+	{{ m.showStaticData("Associated sensor", seism.sensor.name) }}
+	{{ m.showButtons(form.submit_button, "user.main_useisms") }}
+{% endmacro %}
+
+
+{% macro organizeUSeism(form) %}
+<div class="row">
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-body">
+				<div class="container">
+					<h6 class="card-title ml-n2">Filters</h5>
+					<div class="container pl-3">
+						{{ m.showFStringField(form.sensor_id) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-body">
+				<div class="container">
+					<h6 class="card-title ml-n2">Sorting</h5>
+					<div class="container pl-3">
+						{{ m.showFSelectField(form.sort_by) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{ m.showFButtons(form.submit_button, "user.main_useisms") }}
+{% endmacro %}

@@ -1,4 +1,4 @@
-from main import login_manager
+from main.extensions import login_manager
 from flask import request
 from flask_login import UserMixin, LoginManager
 from jwt import decode, exceptions
