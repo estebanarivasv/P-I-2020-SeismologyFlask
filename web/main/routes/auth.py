@@ -31,7 +31,6 @@ def login():
                 admin=user_json['admin']
             )
             login_user(logged_user)  # Logs in the user
-            print(user_json['admin'])
             if user_json['admin'] == True:
                 req = make_response(redirect(url_for('user.admin_index')))  # Redirection request
                 req.set_cookie('access_token', user_json['token'], httponly=True)

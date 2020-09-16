@@ -1,32 +1,50 @@
 from flask_wtf import FlaskForm
-from wtforms import validators, SelectField, IntegerField, FloatField, SubmitField, StringField
+import wtforms as wtf
 
 
 class Seism(FlaskForm):
         
-    depth = IntegerField(
+    depth = wtf.IntegerField(
         label="Depth",
-        validators=[validators.DataRequired(message="This field should be an integer")]
+        validators=[wtf.validators.DataRequired(message="This field should be an integer")]
     )
-    magnitude = FloatField(
+    magnitude = wtf.FloatField(
         label="Magnitude",
-        validators=[validators.DataRequired(message="This field should be a decimal value")]
+        validators=[wtf.validators.DataRequired(message="This field should be a decimal value")]
     )
-    submit_button = SubmitField(label="Save")
+    submit_button = wtf.SubmitField(label="Save")
 
 
-class USeismOrganization(FlaskForm):
-    sensor_id = StringField(label="Sensor identification number")
-    sort_by = SelectField(
+class USeismsSearchForm(FlaskForm):
+    sensor_id = wtf.StringField(label="Sensor id")
+    sort_by = wtf.RadioField(
         label="Sort by",
-        choices=[("", "---"), ("datetime[asc]", "Older to newer"), ("datetime[desc]", "Newer to older")],
         coerce=str)
-    submit_button = SubmitField(label="Apply")
+    submit_button = wtf.SubmitField(label="Apply")
 
 
-class SeismSorting(FlaskForm):
-    pass
-
-
-class SeismPagination(FlaskForm):
-    pass
+class VSeismFilter(FlaskForm):
+    from_datetime = wtf.DateTimeField(
+        label="From date",
+        validators=[wtf.validators.optional()],
+        format='%Y-%m-%d %H:%M:%S'
+        )
+    to_datetime = wtf.DateTimeField(
+        label="To date",
+        validators=[wtf.validators.optional()],
+        format='%Y-%m-%d %H:%M:%S'
+        )
+    datetime = wtf.DateTimeField(
+        label="Datetime",
+        validators=[wtf.validators.optional()],
+        format='%Y-%m-%d %H:%M:%S'
+        )
+    magnitude = wtf.FloatField(
+        label="Magnitude",
+        validators=[wtf.validators.optional()]
+        )
+    sensor_name = wtf.SelectField(
+        label="Associated seismologist",
+        validators=[wtf.validators.optional()],
+        coerce=int)
+    submit_button = wtf.SubmitField(label="Apply filters")

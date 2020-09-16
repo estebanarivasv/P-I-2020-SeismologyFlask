@@ -1,7 +1,7 @@
 {% extends 'principal/main.html' %}
 
 {% from '/macros/utilities.html' import listUSeisms %}
-{% from '/macros/forms.html' import organizeUSeism %}
+{% from '/macros/forms.html' import USeismsSearchForm %}
 
 {% block head %}
 
@@ -39,15 +39,15 @@
                 <div class="row py-3">
                     <div class="container-fluid py-2">
                         <!-- FILTERS COLLAPSIBLE BUTTON -->
-                        <button class="btn btn-primary" type="button" data-toggle="collapse"
+                        <button class="btn btn btn-dark" type="button" data-toggle="collapse"
                             data-target=".multi-collapse" aria-expanded="false" aria-controls="associated">
-                            Filters and sorting
+                            Table layout
                         </button>
 
                         <div class="collapse multi-collapse pt-3" id="associated">
-                            <form method="GET" action="{{ url_for('user.main_useisms') }}">
-                                {{ organizeUSeism(form) }}
-                            </form>
+                            <div class="container-fluid py-2">
+                                {{ USeismsSearchForm(dynamic_form) }}
+                            </div>
                         </div>
                     </div>
                 </div>

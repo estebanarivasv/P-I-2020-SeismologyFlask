@@ -4,7 +4,7 @@ import requests, json
 
 from main.utilities.api_querying import makeRequest
 
-from main.forms import NewUserForm, UserToEditForm, NewSensorForm, SeismForm, USeismOrganization
+import main.forms as f
 from main.routes.auth import admin_required
 
 
@@ -22,7 +22,6 @@ def admin_index():
 @login_required
 def seismologist_index():
     return render_template(url_for('user.main_useisms'))
-
 
 """
 -----------------------------------------------------------------------------
@@ -44,7 +43,7 @@ def main_users():
 @admin_required
 def add_user():
     url = current_app.config["API_URL"] + "/users"
-    form = NewUserForm()
+    form = f.NewUserForm()
     if form.validate_on_submit():
         if form.admin.data == "false":
             form.admin.data = False
@@ -65,7 +64,7 @@ def add_user():
 @login_required
 @admin_required
 def edit_user(id):
-    form = UserToEditForm()
+    form = f.UserToEditForm()
     url = current_app.config["API_URL"] + "/user/" + str(id)
     query = makeRequest("GET", url, authenticated_user=True)
     if not form.is_submitted():
@@ -120,7 +119,8 @@ def delete_user(id):
 def main_sensors():
     url = current_app.config["API_URL"] + "/sensors"
     query = makeRequest("GET", url, authenticated_user=True)
-    sensors = json.loads(query.text)["sensors"]
+    sensors = json.loads(query.text)[0]["sensors"]
+    _pag_items = json.loads(query.text)[1]
     return render_template('/derived/sensors/main.html', sensors=sensors)
 
 @user.route('/sensors/add/', methods=["POST", "GET"])
@@ -129,7 +129,7 @@ def main_sensors():
 def add_sensor():
     url = current_app.config["API_URL"] + "/sensors"
     users_url = current_app.config["API_URL"] + "/users"
-    form = NewSensorForm()
+    form = f.NewSensorForm()
     
     u_data = makeRequest("GET", users_url, authenticated_user=True)
     user_json = json.loads(u_data.text)
@@ -174,7 +174,7 @@ def add_sensor():
 def edit_sensor(id):
     url = current_app.config["API_URL"] + "/sensor/" + str(id)
     users_url = current_app.config["API_URL"] + "/users"
-    form = NewSensorForm()
+    form = f.NewSensorForm()
 
     u_data = makeRequest("GET", users_url, authenticated_user=True)
     user_json = json.loads(u_data.text)
@@ -281,13 +281,6 @@ def send_emails():
     if query.status_code == 200:
         flash("Email sent to administrators", "success")
     return redirect(url_for('user.main_sensors'))
-    
-
-
-
-
-
-
 
 """
 -----------------------------------------------------------------------------
@@ -317,17 +310,42 @@ def view_vseism(id):
 @user.route('/unverified-seisms/')
 @login_required
 def main_useisms():
-    form = USeismOrganization()
     url = current_app.config["API_URL"] + "/unverified-seisms"
-    query = makeRequest("GET", url, authenticated_user=True)
+    dynamic_form = f.USeismsSearchForm(request.args)
+
+    print(request.args)
+
+    dynamic_form.sort_by.choices = [
+        ("", "None"),
+        ("datetime[asc]", "Older to newer"),
+        ("datetime[desc]", "Newer to older")
+    ]
+
+    data = {}
+
+    if 'sensor_id' in request.args:
+        if dynamic_form.sensor_id.data != "": 
+            data["sensor_id"] = dynamic_form.sensor_id.data
+
+    if 'sort_by' in request.args:
+        data["sort_by"] = dynamic_form.sort_by.data
+
+    data = json.dumps(data)
+
+    query = makeRequest("GET", url, authenticated_user=True, data=data)
+
+    print("\n\n\n\n","total_pages:", json.loads(query.text)["total_pages"])
     unverified_seisms = json.loads(query.text)["unverified_seisms"]
-    return render_template('/derived/unverified-seisms/main.html', unverified_seisms=unverified_seisms, form=form)
+    return render_template('/derived/unverified-seisms/main.html',
+                            unverified_seisms=unverified_seisms,
+                            dynamic_form=dynamic_form)
+
 
 @user.route('/unverified-seisms/edit/<int:id>', methods=["POST", "GET"])
 @login_required
 def edit_useism(id):
     url = current_app.config["API_URL"] + "/unverified-seism/" + str(id)
-    form = SeismForm()
+    form = f.SeismForm()
     
     query = makeRequest("GET", url, authenticated_user=True)
     u_seism = query.json()

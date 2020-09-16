@@ -103,29 +103,6 @@
 {% endmacro %}
 
 
-{% macro showFButtons(field, cancel_url) %}
-<div class="form-inline justify-content-center mb-5">
-	{{ field(class="btn btn-primary mx-3")|safe }}
-	<a name="" id="" class="btn btn-danger mx-3" href="{{url_for(cancel_url)}}" role="button">Remove parameters</a>
-</div>
-{% endmacro %}
-
-{% macro showFSelectField(field) %}
-<div class="form-group row py-1">
-	<label for="fselfield">{{ field.label }}</label>
-	{{ field(class="custom-select", id="fselfield")|safe }}
-</div>
-{% endmacro %}
-
-{% macro showFStringField(field) %}
-<div class="form-group row py-1">
-	<label for="fstrfield">{{ field.label }}</label>
-	{{ field(class="form-control", id="fstrfield")|safe }}
-	{{ showErrors(field.errors) }}
-</div>
-{% endmacro %}
-
-
 {% macro showLoginForm(form) %}
 {{ form.csrf_token }}
 <img class="py-2" src="../../../static/svg/only-vector.svg" alt="" width="" height="">
