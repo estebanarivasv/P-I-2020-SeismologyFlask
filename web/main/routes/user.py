@@ -277,7 +277,6 @@ def view_sensor(id):
 def send_emails():
     url = current_app.config["API_URL"] + "/sensors/status"
     query = makeRequest("GET", url, authenticated_user=True)
-    print(query.status_code)
     if query.status_code == 200:
         flash("Email sent to administrators", "success")
     return redirect(url_for('user.main_sensors'))
@@ -309,63 +308,111 @@ def view_vseism(id):
 """
 @user.route('/unverified-seisms/', methods=["POST", "GET"])
 @login_required
-def main_useisms():
+def main_useisms(page_num=None, total_pages=None, elem_per_page=None, items_num=None):
     url = current_app.config["API_URL"] + "/unverified-seisms"
-    dynamic_form = f.USeismsSearchForm(request.args)
-    pag = f.TablePagination()
+    data = {}
 
+    dynamic_form = f.USeismsSearchForm(request.args)
+    # Sorting choices
     dynamic_form.sort_by.choices = [
         ("", "None"),
         ("datetime[asc]", "Older to newer"),
         ("datetime[desc]", "Newer to older")
     ]
-
-    data = {}
-        
+    pag = f.TablePagination()
+    
+    """
+    FILTERING AND SORTING - If filters are applied, we load them in the get request...
+    """
     if 'sensor_id' in request.args:
         if dynamic_form.sensor_id.data != "": 
             data["sensor_id"] = dynamic_form.sensor_id.data
-
     if 'sort_by' in request.args:
-        data["sort_by"] = dynamic_form.sort_by.data
+        data["sort_by"] = dynamic_form.sort_by.data   
 
-    if pag.is_submitted():
-        if pag.first_page:
-            data["page_num"] = pag.first_page_num.data
-        if pag.prev_page:
-            data["page_num"] = pag.prev_page_num.data
-        if pag.next_page:
-            data["page_num"] = pag.next_page_num.data
-        if pag.last_page:
-            data["page_num"] = pag.last_page_num.data
+    if not pag.is_submitted():
+        """
+        PAGINATION:
+        - First, we test if the page parameters are parsed in the POST method
+        - If the parameters are empty, we make a request in order to show the principal page
+        """
+        if page_num != None and total_pages != None and elem_per_page != None and items_num != None:
+            pag.actual_page.data = int(page_num)
+            pag.last_page_num.data = int(total_pages)
+            pag.elem_per_page.data = int(elem_per_page)
+            pag.items_num.data = int(items_num)
 
-    data = json.dumps(data)
+            print("\n\nLOS TRAJO DE PARAMETROS")
 
-    query = makeRequest("GET", url, authenticated_user=True, data=data)
+        else:
+            data = json.dumps(data)
+            print(url, data)
+            query = makeRequest("GET", url, authenticated_user=True, data=data)
+            print("\n\n\n", json.loads(query.text))
+            pag_data = json.loads(query.text)
+            print("\n\nHIZO LA CONSULTA DE LA PAG PRINCIPAL")
 
-    print("\n\n\n\n","total_pages:", json.loads(query.text)["total_pages"])
-    unverified_seisms = json.loads(query.text)["unverified_seisms"]
+            pag.actual_page.data = pag_data["page_num"]
+            pag.last_page_num.data = pag_data["total_pages"]
+            pag.elem_per_page.data = pag_data["elem_per_page"]
+            pag.items_num.data = pag_data["items_num"]
 
-    actual_page = json.loads(query.text)["page_num"]
-    elem_per_page = json.loads(query.text)["elem_per_page"]
-    items_num = json.loads(query.text)["elem_per_page"]
-    total_pages = json.loads(query.text)["total_pages"]
+    """
+    PAGINATION:
+    - We complete the other paginations's values
+    """
 
     pag.first_page_num.data = 1
-    pag.prev_page_num.data = int(actual_page) - 1
-    pag.next_page_num.data = int(actual_page) + 1
-    pag.last_page_num.data = total_pages
+    pag.prev_page_num.data = pag.actual_page.data - 1
+    pag.next_page_num.data = pag.actual_page.data + 1
 
     
+    if pag.is_submitted():
+        """
+        POST METHOD:
+        - We set the page the user wants by pressing the pagination bar
+        """
+        if pag.first_page.data:
+            data["page_num"] = pag.first_page_num.data
+            print("entro en first_page", pag.first_page_num.data)
+        if pag.prev_page.data:
+            data["page_num"] = pag.prev_page_num.data
+            print("entro en prev_page", pag.prev_page_num.data)
+        if pag.next_page.data:
+            data["page_num"] = pag.next_page_num.data
+            print("entro en next_page", pag.next_page_num.data)
+        if pag.last_page.data:
+            data["page_num"] = pag.last_page_num.data
+            print("entro en last_page", pag.last_page_num.data)
+
+        data = json.dumps(data)
+
+        print("\n\n\n\n", "data:", data)
+        
+        query = makeRequest("GET", url, authenticated_user=True, data=data)
+
+        unverified_seisms = json.loads(query.text)["unverified_seisms"]
+
+        print("\n\nENTRO EN EL METODO POST")
+
+        return render_template('/derived/unverified-seisms/main.html',
+                            unverified_seisms=unverified_seisms,
+                            dynamic_form=dynamic_form,
+                            pag=pag)
+    """
+    PRINCIPAL GET METHOD:
+    - We render the template if there are filters applied, pagination applied.
+    """
+ 
+    query = makeRequest("GET", url, authenticated_user=True, data=data)
+    unverified_seisms = json.loads(query.text)["unverified_seisms"]
+
+    print("\n\nENTRO EN EL METODO GET PRINCIPAL")
 
     return render_template('/derived/unverified-seisms/main.html',
                             unverified_seisms=unverified_seisms,
                             dynamic_form=dynamic_form,
-                            actual_page=actual_page,
-                            elem_per_page=elem_per_page,
-                            items_num=items_num,
                             pag=pag)
-
 
 @user.route('/unverified-seisms/edit/<int:id>', methods=["POST", "GET"])
 @login_required
