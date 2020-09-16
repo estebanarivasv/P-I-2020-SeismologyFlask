@@ -63,6 +63,11 @@ class VerifiedSeisms(Resource):
                 elem_per_page = int(value)
 
             # Filters: datetime, magnitude, sensor.name
+            if filters["from_datetime"] and filters["to_datetime"]:
+                from_datetime = filters["from_datetime"]
+                to_datetime = filters["to_datetime"]
+                print(from_datetime, to_datetime)
+                verified_seisms = verified_seisms.filter(SeismModel.datetime.between(from_datetime, to_datetime))
             if key == "datetime":
                 verified_seisms = verified_seisms.filter(SeismModel.datetime.like("%" + str(value) + "%"))
             if key == "magnitude":
@@ -85,8 +90,14 @@ class VerifiedSeisms(Resource):
         # Paginates the filtered result and returns a Paginate object
         verified_seisms = verified_seisms.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
 
-        return jsonify(
-            {'verified_seisms': [verified_seism.to_json_public() for verified_seism in verified_seisms.items]})
+
+        return jsonify({
+                'verified_seisms': [verified_seism.to_json_public() for verified_seism in verified_seisms.items],
+                'page_num': page_num,
+                'elem_per_page': elem_per_page,
+                'total_pages': verified_seisms.pages,
+                'items_num': len(verified_seisms.items)
+                })
 
     @admin_login_required
     def post(self):
@@ -197,9 +208,15 @@ class UnverifiedSeisms(Resource):
                     unverified_seisms = unverified_seisms.order_by(SeismModel.datetime.asc())
 
         unverified_seisms = unverified_seisms.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
+        print("number of items", len(unverified_seisms.items))
 
-        return jsonify({'unverified_seisms': [unverified_seism.to_json() for unverified_seism in
-                                              unverified_seisms.items]})
+        return jsonify({'unverified_seisms': [unverified_seism.to_json() for unverified_seism in unverified_seisms.items],
+                        'page_num': page_num,
+                        'elem_per_page': elem_per_page,
+                        'total_pages': unverified_seisms.pages,
+                        'items_num': unverified_seisms.total
+                        })
+
 
     @admin_login_required
     def post(self):

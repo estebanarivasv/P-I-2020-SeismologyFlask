@@ -16,14 +16,14 @@ class Seism(db.Model):
                              single_parent=True)
 
     def __repr__(self):
-        return '<Seism %r %r %r>' % (self.magnitude, self.latitude, self.longitude)
+        return f'<Seism {self.id_num}>'
 
     def to_json(self):
         self.sensor = db.session.query(Sensor).get_or_404(self.sensor_id)
         # Verifies if the sensor does exist in the database chart
         seism_json = {
             'id_num': self.id_num,
-            'datetime': self.datetime.isoformat(),
+            'datetime': self.datetime.strftime('%Y-%m-%d %H:%M:%S'),
             'depth': self.depth,
             'magnitude': self.magnitude,
             'latitude': str(self.latitude),
@@ -38,7 +38,7 @@ class Seism(db.Model):
         # Verifies if the sensor does exist in the database chart
         seism_json = {
             'id_num': self.id_num,
-            'datetime': self.datetime.isoformat(' '),
+            'datetime': self.datetime.strftime('%Y-%m-%d %H:%M:%S'),
             'depth': self.depth,
             'magnitude': self.magnitude,
             'latitude': str(self.latitude),
@@ -50,7 +50,7 @@ class Seism(db.Model):
 
     @staticmethod
     def from_json(seism_json):
-        new_datetime = dt.datetime.strptime(seism_json.get('datetime'), "%Y-%m-%d %H:%M:%S"),
+        new_datetime = dt.datetime.strptime(seism_json.get('datetime'), '%Y-%m-%d %H:%M:%S'),
         new_depth = seism_json.get('depth')
         new_magnitude = seism_json.get('magnitude')
         new_latitude = seism_json.get('latitude')

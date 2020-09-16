@@ -32,7 +32,7 @@ class Sensor(Resource):
         filters = request.get_json().items()
         for key, value in filters:
             if key == 'user_id':
-                i = db.session.query(UserModel).get_or_404(value)
+                _i = db.session.query(UserModel).get_or_404(value)
                 setattr(sensor, key, value)
             else:
                 setattr(sensor, key, value)
@@ -105,7 +105,13 @@ class Sensors(Resource):
                     sensors = sensors.join(SensorModel.user).order_by(UserModel.email.asc())
 
         sensors = sensors.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
-        return jsonify({'sensors': [sensor.to_json() for sensor in sensors.items]})
+        pagination = {
+            "page_num": page_num,
+            "elem_per_page": elem_per_page,
+            "total_pages": sensors.pages,
+            "total_elem": sensors.total
+        }
+        return jsonify({'sensors': [sensor.to_json() for sensor in sensors.items]}, pagination)
 
     @admin_login_required
     def post(self):
