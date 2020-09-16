@@ -39,7 +39,7 @@
                 <div class="row py-3">
                     <div class="container-fluid py-2">
                         <!-- FILTERS COLLAPSIBLE BUTTON -->
-                        <button class="btn btn btn-dark" type="button" data-toggle="collapse"
+                        <button class="btn btn btn-outline-dark" type="button" data-toggle="collapse"
                             data-target=".multi-collapse" aria-expanded="false" aria-controls="associated">
                             Table layout
                         </button>
@@ -48,10 +48,12 @@
                             <div class="container-fluid py-2">
                                 {{ USeismsSearchForm(dynamic_form) }}
                             </div>
+                           
                         </div>
                     </div>
                 </div>
-
+                <div class="row py-2">Displaying {{ elem_per_page }} records in total {{ items_num }}</div>
+                
                 <!-- DINAMIC TABLE -->
                 <table class="table table-responsive-md table-hover">
                     <thead>
