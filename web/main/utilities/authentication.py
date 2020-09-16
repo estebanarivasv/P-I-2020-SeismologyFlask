@@ -16,7 +16,8 @@ class LoggedUser(UserMixin):
 def load_user(request):
     if 'access_token' in request.cookies:
         try:
-            decoded_token = decode(request.cookies['access_token'], verify=False)  # Api and web don't have the same password that's why we won't verify
+            decoded_token = decode(request.cookies['access_token'], verify=False)
+            # Api and web don't have the same password that's why we won't verify
             user_data = decoded_token['user_claims']
             user = LoggedUser(
                 id=user_data['id_num'],

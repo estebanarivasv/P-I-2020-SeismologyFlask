@@ -40,7 +40,6 @@ def makeRequest(method, url, authenticated_user=False, data="{}"):
         r = requests.delete(
             url=url,
             headers=headers)
-        print(r.status_code)
         if r.status_code == 204:
             flash("Deletion succesfully completed.", 'success')
     

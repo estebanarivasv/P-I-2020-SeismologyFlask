@@ -16,9 +16,7 @@ def create_app():
     load_dotenv()
 
     webpage.config['API_URL'] = os.getenv('API_URL')
-    webpage.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-    webpage.config['JWT_ACCESS_TOKEN_EXPIRES'] = os.getenv('JWT_ACCESS_TOKEN_EXPIRES')
-    
+    webpage.config['SECRET_KEY'] = os.getenv('SECRET_KEY')    
 
     # Importing blueprints
     webpage.register_blueprint(auth)

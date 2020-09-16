@@ -22,7 +22,7 @@ class NewUser(FlaskForm):
     admin_choices = [(1, 'True'), (0, 'False')]
     admin = wtf.RadioField(
         label="Administrator",
-        validators=[wtf.validators.DataRequired(message="This field is required")],
+        validators=[wtf.validators.InputRequired(message="This field is required")],
         choices=admin_choices,
         coerce=int)
     submit_button = wtf.SubmitField(label="Save")

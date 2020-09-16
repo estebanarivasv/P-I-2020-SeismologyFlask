@@ -17,6 +17,7 @@ user = Blueprint('user', __name__, url_prefix='/')
 @admin_required
 def admin_index():
     return render_template('derived/admin-home.html')
+
 # Seismologist's home
 @user.route('/')
 @login_required
@@ -44,7 +45,11 @@ def main_users():
 def add_user():
     url = current_app.config["API_URL"] + "/users"
     form = f.NewUserForm()
+
     if form.validate_on_submit():
+        """
+        If form is validated and submitted, we make a POST request to add an user.
+        """
         if form.admin.data == "false":
             form.admin.data = False
         else:
@@ -56,6 +61,7 @@ def add_user():
         }
         user_json = json.dumps(user)
         makeRequest("POST", url, authenticated_user=True, data=user_json)
+        
         return redirect(url_for('user.main_users'))
         
     return render_template('/derived/users/add-user.html', form=form)
@@ -68,7 +74,9 @@ def edit_user(id):
     url = current_app.config["API_URL"] + "/user/" + str(id)
     query = makeRequest("GET", url, authenticated_user=True)
     if not form.is_submitted():
-
+        """
+        If form is not submitted, we store the query.text data from the GET request inside the form's parameters.
+        """
         if query.status_code == 404:
             flash("User not found", "warning")
             return redirect(url_for('user.main_users'))
@@ -85,6 +93,9 @@ def edit_user(id):
     
     
     if form.validate_on_submit():
+        """
+        Once it is validated and submitted, we store the form's parameters data inside the json for the GET request.
+        """
         if form.admin.data == 0:
             form.admin.data = False
         else:
@@ -105,7 +116,10 @@ def edit_user(id):
 @admin_required
 def delete_user(id):
     url = current_app.config["API_URL"] + "/user/" + str(id)
-    makeRequest("DELETE", url, authenticated_user=True)
+    data = makeRequest("DELETE", url, authenticated_user=True)
+    if data.status_code == 409:
+        flash("User not found", "warning")
+        return redirect(url_for('user.main_users'))
     return redirect(url_for('user.main_users'))
 
 """
@@ -119,8 +133,7 @@ def delete_user(id):
 def main_sensors():
     url = current_app.config["API_URL"] + "/sensors"
     query = makeRequest("GET", url, authenticated_user=True)
-    sensors = json.loads(query.text)[0]["sensors"]
-    _pag_items = json.loads(query.text)[1]
+    sensors = json.loads(query.text)["sensors"]
     return render_template('/derived/sensors/main.html', sensors=sensors)
 
 @user.route('/sensors/add/', methods=["POST", "GET"])
@@ -128,9 +141,13 @@ def main_sensors():
 @admin_required
 def add_sensor():
     url = current_app.config["API_URL"] + "/sensors"
-    users_url = current_app.config["API_URL"] + "/users"
     form = f.NewSensorForm()
-    
+
+
+    """
+    We make a GET request to achieve the user emails and append them to the user_id.choices of the form
+    """
+    users_url = current_app.config["API_URL"] + "/users"
     u_data = makeRequest("GET", users_url, authenticated_user=True)
     user_json = json.loads(u_data.text)
 
@@ -139,8 +156,11 @@ def add_sensor():
         email_list.append((user["id_num"], user["email"]))    
     form.user_id.choices = email_list
 
+
     if form.validate_on_submit():
-        
+        """
+        Once it is validated and submitted, we store the form's parameters data inside the json for the POST request.
+        """        
         if form.status.data == 0:
             form.status.data = False
         else:
@@ -173,9 +193,12 @@ def add_sensor():
 @admin_required
 def edit_sensor(id):
     url = current_app.config["API_URL"] + "/sensor/" + str(id)
-    users_url = current_app.config["API_URL"] + "/users"
     form = f.NewSensorForm()
 
+    """
+    We make a GET request to achieve the user emails and append them to the user_id.choices of the form
+    """
+    users_url = current_app.config["API_URL"] + "/users"
     u_data = makeRequest("GET", users_url, authenticated_user=True)
     user_json = json.loads(u_data.text)
     email_list = [(0, "Select one seismologist email")]
@@ -184,7 +207,9 @@ def edit_sensor(id):
     form.user_id.choices = email_list
 
     if not form.is_submitted():
-        # If the form is not sent, makes a request
+        """
+        If form is not submitted, we store the data.json() from the GET request inside the form's parameters.
+        """
         data = makeRequest("GET", url, authenticated_user=True)
         
         if data.status_code == 404:
@@ -255,9 +280,8 @@ def edit_sensor(id):
 def delete_sensor(id):
     url = current_app.config["API_URL"] + "/sensor/" + str(id)
     query = makeRequest("DELETE", url, authenticated_user=True)
-
     if query.status_code == 409:
-        flash(query.text.replace('"', ''), "danger")
+        flash("Sensor not found", "warning")
         return redirect(url_for('user.main_sensors'))
     else:
         return redirect(url_for('user.main_sensors'))
@@ -267,7 +291,10 @@ def delete_sensor(id):
 @admin_required
 def view_sensor(id):
     url = current_app.config["API_URL"] + "/sensor/" + str(id)
-    query = makeRequest("GET", url, authenticated_user=True)         
+    query = makeRequest("GET", url, authenticated_user=True)
+    if query.status_code == 404:
+        flash("Sensor not found", "warning")
+        return redirect(url_for('user.main_sensors'))      
     sensor = query.json()
     return render_template('/derived/sensors/view-sensor.html', sensor=sensor)
 
@@ -277,7 +304,6 @@ def view_sensor(id):
 def send_emails():
     url = current_app.config["API_URL"] + "/sensors/status"
     query = makeRequest("GET", url, authenticated_user=True)
-    print(query.status_code)
     if query.status_code == 200:
         flash("Email sent to administrators", "success")
     return redirect(url_for('user.main_sensors'))
@@ -298,6 +324,9 @@ def main_vseisms():
 def view_vseism(id):
     url = current_app.config["API_URL"] + "/verified-seism/" + str(id)
     query = makeRequest("GET", url)
+    if query.status_code == 404:
+        flash("Seism not found", "warning")
+        return redirect(url_for('user.main_vseisms'))  
     v_seism = json.loads(query.text)
     return render_template('/derived/verified-seisms/view-vseism.html', v_seism=v_seism)
 
@@ -402,7 +431,10 @@ def edit_useism(id):
 @login_required
 def delete_useism(id):
     url = current_app.config["API_URL"] + "/unverified-seism/" + str(id)
-    makeRequest("DELETE", url, authenticated_user=True)
+    query = makeRequest("DELETE", url, authenticated_user=True)
+    if query.status_code == 409:
+            flash("Seism not found", "warning")
+            return redirect(url_for('user.main_useisms'))
     return redirect(url_for('user.main_useisms'))
 
 @user.route('/unverified-seisms/view/<int:id>')
@@ -410,6 +442,9 @@ def delete_useism(id):
 def view_useism(id):
     url = current_app.config["API_URL"] + "/unverified-seism/" + str(id)
     query = makeRequest("GET", url, authenticated_user=True)
+    if query.status_code == 404:    
+        flash("Seism not found", "warning")
+        return redirect(url_for('user.main_useisms'))
     u_seism = query.json()
     return render_template('/derived/unverified-seisms/view-useism.html', u_seism=u_seism)
 
@@ -417,10 +452,16 @@ def view_useism(id):
 @login_required
 def verify_useism(id):
     url = current_app.config["API_URL"] + "/unverified-seism/" + str(id)
+    query = makeRequest("GET", url, authenticated_user=True)
+    if query.status_code == 404:
+        flash("Seism not found", "warning")
+        return redirect(url_for('user.main_useisms'))
+
     verification = {
         "verified": True
     }
     data_json = json.dumps(verification)
-    makeRequest("PUT", url, authenticated_user=True, data=data_json)
+    query = makeRequest("PUT", url, authenticated_user=True, data=data_json)
+    
     return redirect(url_for('user.main_useisms'))
 
