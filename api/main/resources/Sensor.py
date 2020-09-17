@@ -105,13 +105,14 @@ class Sensors(Resource):
                     sensors = sensors.join(SensorModel.user).order_by(UserModel.email.asc())
 
         sensors = sensors.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
-        pagination = {
-            "page_num": page_num,
-            "elem_per_page": elem_per_page,
-            "total_pages": sensors.pages,
-            "total_elem": sensors.total
-        }
-        return jsonify({'sensors': [sensor.to_json() for sensor in sensors.items]}, pagination)
+
+        return jsonify({
+            'sensors': [sensor.to_json() for sensor in sensors.items],
+            'page_num': page_num,
+            'elem_per_page': elem_per_page,
+            'total_pages': sensors.pages,
+            'total_elem': sensors.total
+            })
 
     @admin_login_required
     def post(self):

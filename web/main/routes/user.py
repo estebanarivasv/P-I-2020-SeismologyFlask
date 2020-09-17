@@ -281,7 +281,7 @@ def delete_sensor(id):
     url = current_app.config["API_URL"] + "/sensor/" + str(id)
     query = makeRequest("DELETE", url, authenticated_user=True)
     if query.status_code == 409:
-        flash("Sensor not found", "warning")
+        flash(query.text.replace('"', ''), "danger")
         return redirect(url_for('user.main_sensors'))
     else:
         return redirect(url_for('user.main_sensors'))
@@ -294,7 +294,7 @@ def view_sensor(id):
     query = makeRequest("GET", url, authenticated_user=True)
     if query.status_code == 404:
         flash("Sensor not found", "warning")
-        return redirect(url_for('user.main_sensors'))      
+        return redirect(url_for('user.main_sensors'))    
     sensor = query.json()
     return render_template('/derived/sensors/view-sensor.html', sensor=sensor)
 

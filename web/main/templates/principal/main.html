@@ -9,8 +9,9 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="{{url_for('static', filename='css/body.css')}}" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+  <!-- CSS only -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
   <link
     href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
     rel="stylesheet" />
@@ -106,33 +107,33 @@
     </div>
   </header>
 
-  <div class="container-fluid d-flex justify-content-end mt-3" style="position: absolute;">
-    <div class="col-7"></div>
-    <div class="col-5">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-      {% for category, message in messages %}
-      <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      {% endfor %}
-      {% endif %}
-      {% endwith %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  
+  <div class="toast fade show" style="position: absolute; top: 130px; right: 20px;">
+    <div class="toast-header">
+      <strong class="mr-auto">Seismology Institute</strong>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
     </div>
+    <div class="toast-body text-{{ category }}">{{ message }}</div>
   </div>
-  {% endblock %} 
-  
-  
-  {% block content %} 
-  {% endblock %} 
-  
+    
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+
+  {% endblock %}
+
+
+  {% block content %}
+  {% endblock %}
+
   {% block footer%}
+
   <footer>
-    <div class="container-fluid">
-      <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #ffca85">
+    <div class="d-flex flex-column mt-5 pt-5">
+      <nav class="navbar navbar-light" style="background-color: #ffca85;">
         <div class="container-fluid justify-content-center">
           <div class="row">
             {% if current_user.is_authenticated %}
@@ -196,7 +197,6 @@
                 </ul>
               </div>
             </div>
-
             {% endif %}
           </div>
         </div>
@@ -205,21 +205,23 @@
   </footer>
 
   <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+  <!-- JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
     crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
     crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
     crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/feather-icons"></script>
   <script>
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()
     })
+  </script>
+  <script>
+    $('.toast').toast()
   </script>
 
   {% endblock %}
