@@ -336,64 +336,59 @@ def view_vseism(id):
                     U N V E R I F I E D   S E I S M S
 -----------------------------------------------------------------------------
 """
-@user.route('/unverified-seisms/', methods=["POST", "GET"])
+@user.route('/unverified-seisms/')
 @login_required
 def main_useisms():
     url = current_app.config["API_URL"] + "/unverified-seisms"
-    dynamic_form = f.USeismsSearchForm(request.args)
-    pag = f.TablePagination()
+    sensors_url = current_app.config["API_URL"] + "/sensors"
 
-    dynamic_form.sort_by.choices = [
-        ("", "None"),
-        ("datetime[asc]", "Older to newer"),
-        ("datetime[desc]", "Newer to older")
-    ]
+    filters = f.USeismsFilterForm(request.args, meta={'csrf': False})
+    
+    query = makeRequest("GET", sensors_url, authenticated_user=True)
+    sensors = json.loads(query.text)["sensors"]
+
+    filters.sensor_id.choices = [(int(sensor['id_num']), sensor['name']) for sensor in sensors]
+    filters.sensor_id.choices.insert(0, [0, "-"])
 
     data = {}
-        
-    if 'sensor_id' in request.args:
-        if dynamic_form.sensor_id.data != "": 
-            data["sensor_id"] = dynamic_form.sensor_id.data
+    
+    print("\n\nfrom_datetime", filters.from_datetime.data)
+
+    if filters.validate():
+        if filters.sensor_id.data != None and filters.sensor_id.data != 0:
+            data["sensor_id"] = filters.sensor_id.data
+        if filters.from_datetime.data != None:
+            data["from_date"] = filters.from_datetime.data.strftime('%Y-%m-%d %H:%M:%S')
+        if filters.to_datetime.data != None:
+            data["to_date"] = filters.to_datetime.data.strftime('%Y-%m-%d %H:%M:%S')
+        print("validate", data)
+
+    if 'page_num' in request.args:
+        data["page_num"] = request.args.get('page_num','')
 
     if 'sort_by' in request.args:
-        data["sort_by"] = dynamic_form.sort_by.data
-
-    if pag.is_submitted():
-        if pag.first_page:
-            data["page_num"] = pag.first_page_num.data
-        if pag.prev_page:
-            data["page_num"] = pag.prev_page_num.data
-        if pag.next_page:
-            data["page_num"] = pag.next_page_num.data
-        if pag.last_page:
-            data["page_num"] = pag.last_page_num.data
+        data["sort_by"] = request.args.get('sort_by','')
 
     data = json.dumps(data)
-
+    print(data)
     query = makeRequest("GET", url, authenticated_user=True, data=data)
 
-    print("\n\n\n\n","total_pages:", json.loads(query.text)["total_pages"])
-    unverified_seisms = json.loads(query.text)["unverified_seisms"]
 
-    actual_page = json.loads(query.text)["page_num"]
-    elem_per_page = json.loads(query.text)["elem_per_page"]
-    items_num = json.loads(query.text)["elem_per_page"]
-    total_pages = json.loads(query.text)["total_pages"]
+    if query.status_code == 200:
+        
+        unverified_seisms = json.loads(query.text)["unverified_seisms"]
+       
+        pagination = {}
+        pagination["items_num"] = json.loads(query.text)["items_num"]
+        pagination["total_pages"] = json.loads(query.text)["total_pages"]
+        pagination["page_num"] = json.loads(query.text)["page_num"]
 
-    pag.first_page_num.data = 1
-    pag.prev_page_num.data = int(actual_page) - 1
-    pag.next_page_num.data = int(actual_page) + 1
-    pag.last_page_num.data = total_pages
-
-    
-
-    return render_template('/derived/unverified-seisms/main.html',
-                            unverified_seisms=unverified_seisms,
-                            dynamic_form=dynamic_form,
-                            actual_page=actual_page,
-                            elem_per_page=elem_per_page,
-                            items_num=items_num,
-                            pag=pag)
+        return render_template('/derived/unverified-seisms/main.html',
+                                unverified_seisms=unverified_seisms,
+                                filters=filters,
+                                pagination=pagination)
+    else:
+        return redirect(url_for('user.main_useisms'))
 
 
 @user.route('/unverified-seisms/edit/<int:id>', methods=["POST", "GET"])

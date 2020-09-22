@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 import wtforms as wtf
-
+from wtforms.fields.html5 import DateTimeLocalField as DatetimeField
 
 class Seism(FlaskForm):
         
@@ -15,11 +15,21 @@ class Seism(FlaskForm):
     submit_button = wtf.SubmitField(label="Save")
 
 
-class USeismsSearchForm(FlaskForm):
-    sensor_id = wtf.StringField(label="Sensor id")
-    sort_by = wtf.RadioField(
-        label="Sort by",
-        coerce=str)
+class USeismsFilterForm(FlaskForm):
+    sensor_id = wtf.SelectField(
+        label="Sensor name",
+        validators=[wtf.validators.optional()],
+        coerce=int)
+    from_datetime = DatetimeField(
+        label="From date",
+        validators=[wtf.validators.optional()],
+        format='%Y-%m-%dT%H:%M'
+        )
+    to_datetime = DatetimeField(
+        label="To date",
+        validators=[wtf.validators.optional()],
+        format='%Y-%m-%dT%H:%M'
+        )
     submit_button = wtf.SubmitField(label="Apply")
 
 

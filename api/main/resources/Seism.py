@@ -184,7 +184,8 @@ class UnverifiedSeisms(Resource):
         
         if not claims['admin']:
             # Filters the left associated seisms with the seismologist
-            unverified_seisms = unverified_seisms.filter(SensorModel.user_id == user_id)
+            unverified_seisms = unverified_seisms.join(SeismModel.sensor).filter(SensorModel.user_id == user_id)
+        
 
         for key, value in filters:
 
@@ -196,19 +197,31 @@ class UnverifiedSeisms(Resource):
 
             # Filters: sensor_id
             if key == "sensor_id":
-                unverified_seisms = unverified_seisms.filter(SeismModel.sensor_id.like("%" + str(value) + "%"))
+                unverified_seisms = unverified_seisms.filter(SeismModel.sensor_id == value)
+            if key == "from_date":
+                unverified_seisms = unverified_seisms.filter(SeismModel.datetime >= value)
+            if key == "to_date":
+                unverified_seisms = unverified_seisms.filter(SeismModel.datetime <= value)
 
             # Sorting: datetime (descendant, ascendant)
             if key == "sort_by":
 
                 # Sort by datetime
+                if value == "sensor_name[desc]":
+                    unverified_seisms = unverified_seisms.join(SeismModel.sensor).order_by(SensorModel.name.desc())
+                if value == "sensor_name[asc]":
+                    unverified_seisms = unverified_seisms.join(SeismModel.sensor).order_by(SensorModel.name.asc())
                 if value == "datetime[desc]":
                     unverified_seisms = unverified_seisms.order_by(SeismModel.datetime.desc())
                 if value == "datetime[asc]":
                     unverified_seisms = unverified_seisms.order_by(SeismModel.datetime.asc())
+                if value == "magnitude[desc]":
+                    unverified_seisms = unverified_seisms.order_by(SeismModel.magnitude.desc())
+                if value == "magnitude[asc]":
+                    unverified_seisms = unverified_seisms.order_by(SeismModel.magnitude.asc())
+
 
         unverified_seisms = unverified_seisms.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
-        print("number of items", len(unverified_seisms.items))
 
         return jsonify({'unverified_seisms': [unverified_seism.to_json() for unverified_seism in unverified_seisms.items],
                         'page_num': page_num,

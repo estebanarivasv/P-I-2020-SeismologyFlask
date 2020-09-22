@@ -1,7 +1,7 @@
 {% extends 'principal/main.html' %}
 
 {% from '/macros/utilities.html' import listUSeisms %}
-{% from '/macros/forms.html' import USeismsSearchForm %}
+{% from '/macros/forms.html' import USeismsFiltersForm %}
 
 {% block head %}
 
@@ -46,22 +46,71 @@
 
                         <div class="collapse multi-collapse pt-3" id="associated">
                             <div class="container-fluid py-2">
-                                {{ USeismsSearchForm(dynamic_form) }}
+                                {{ USeismsFiltersForm(filters) }}
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row py-2">Displaying {{ elem_per_page }} records in total {{ items_num }}</div>
-                
+
                 <!-- DINAMIC TABLE -->
                 <table class="table table-responsive-md table-hover">
                     <thead>
                         <tr>
                             <th scope="col" class="text-center">ID</th>
-                            <th scope="col" class="text-center">Date and time</th>
+                            <th scope="col" class="text-center">
+                                {% if request.args.sort_by == "datetime[asc]"  %}
+                                <a href="{{ url_for('user.main_useisms', sort_by = 'datetime[desc]',
+                                                                        sensor_id = request.args.sensor_id,
+                                                                        from_datetime =request.args.from_datetime,
+                                                                        to_datetime = request.args.to_datetime) }}">Date
+                                    and time</a>
+                                {% else %}
+                                <a href="{{ url_for('user.main_useisms', sort_by = 'datetime[asc]',
+                                                                        sensor_id = request.args.sensor_id,
+                                                                        from_datetime =request.args.from_datetime,
+                                                                        to_datetime = request.args.to_datetime) }}">Date
+                                    and time</a>
+                                {% endif %}
+
+                            </th>
+
+
                             <th scope="col" class="text-center">Depth</th>
-                            <th scope="col" class="text-center">Magnitude</th>
-                            <th scope="col" class="text-center">Associated sensor</th>
+                            <th scope="col" class="text-center">
+                                {% if request.args.sort_by == "magnitude[asc]"  %}
+                                <a
+                                    href="{{ url_for('user.main_useisms', sort_by = 'magnitude[desc]',
+                                                                        sensor_id = request.args.sensor_id,
+                                                                        from_datetime =request.args.from_datetime,
+                                                                        to_datetime = request.args.to_datetime) }}">Magnitude</a>
+                                {% else %}
+                                <a
+                                    href="{{ url_for('user.main_useisms', sort_by = 'magnitude[asc]',
+                                                                        sensor_id = request.args.sensor_id,
+                                                                        from_datetime =request.args.from_datetime,
+                                                                        to_datetime = request.args.to_datetime) }}">Magnitude</a>
+                                {% endif %}
+                            </th>
+
+
+                            <th scope="col" class="text-center">
+                                {% if request.args.sort_by == "sensor_name[asc]"  %}
+                                <a href="{{ url_for('user.main_useisms', sort_by = 'sensor_name[desc]',
+                                                                        sensor_id = request.args.sensor_id,
+                                                                        from_datetime =request.args.from_datetime,
+                                                                        to_datetime = request.args.to_datetime) }}">Associated
+                                    sensor</a>
+                                {% else %}
+                                <a href="{{ url_for('user.main_useisms', sort_by = 'sensor_name[asc]',
+                                                                        sensor_id = request.args.sensor_id,
+                                                                        from_datetime =request.args.from_datetime,
+                                                                        to_datetime = request.args.to_datetime) }}">Associated
+                                    sensor</a>
+                                {% endif %}
+                            </th>
+
+
                             <th scope="col" class="text-center">Action</th>
                         </tr>
                     </thead>
@@ -74,24 +123,67 @@
                 <!-- TABLE PAGINATION -->
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
+                        {% if pagination.page_num > 1 %}
                         <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
+                            <a class="page-link" href="{{ url_for('user.main_useisms', page_num = (pagination.page_num - 1),
+                                                                sort_by = request.args.sort_by,
+                                                                sensor_id = request.args.sensor_id,
+                                                                from_datetime =request.args.from_datetime,
+                                                                to_datetime = request.args.to_datetime) }}">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" tabindex="-1" aria-disabled="true">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+
+
+                        {% for n in range(1, pagination.total_pages + 1) %}
+                            {% if n != pagination.page_num %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('user.main_useisms',
+                                                                            page_num = n,
+                                                                            sort_by = request.args.sort_by,
+                                                                            sensor_id = request.args.sensor_id,
+                                                                            from_datetime =request.args.from_datetime,
+                                                                            to_datetime = request.args.to_datetime) }}">
+                                    {{n}}
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="#">{{n}}<span class="sr-only">(current)</span></a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if pagination.page_num < pagination.total_pages %}
                         <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
+                            <a class="page-link" href="{{ url_for('user.main_useisms',
+                                                                        page_num = (pagination.page_num + 1),
+                                                                        sort_by = request.args.sort_by,
+                                                                        sensor_id = request.args.sensor_id,
+                                                                        from_datetime =request.args.from_datetime,
+                                                                        to_datetime = request.args.to_datetime) }}">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </nav>
             </div>
         </div>
-        
+
         <div class="col-md-12 col-lg-2">
         </div>
     </div>

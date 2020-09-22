@@ -1,5 +1,6 @@
 from flask_restful import Resource
 from flask import request, jsonify
+from flask_jwt_extended import jwt_required
 import json
 
 from main import db
@@ -49,7 +50,7 @@ class Sensor(Resource):
 
 class Sensors(Resource):
 
-    @admin_login_required
+    @jwt_required
     def get(self):
         page_num = 1
         elem_per_page = 25
