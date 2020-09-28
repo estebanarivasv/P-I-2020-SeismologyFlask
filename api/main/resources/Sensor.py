@@ -1,12 +1,36 @@
-from flask_restful import Resource
+import socket
+
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required
-import json
+from flask_restful import Resource
 
 from main import db
-from main.models import SensorModel, SeismModel
-from main.models.User import User as UserModel
 from main.authentication import admin_login_required
+from main.models import SensorModel
+from main.models.User import User as UserModel
+from main.utilities import create_socket
+
+
+class Check(Resource):
+    @admin_login_required
+    def get(self, id_num):
+        sensor = db.session.query(SensorModel).get_or_404(id_num)
+        client = create_socket()
+        if client:
+            client.sendto(b"", (sensor.ip, sensor.port))
+            try:
+                # If sensor sends something, the systems sets it to status working
+                _d, _addr = client.recvfrom(1024)
+                sensor.status = True
+                db.session.add(sensor)
+                try:
+                    db.session.commit()
+                    return "Sensor is working (STATUS -> TRUE)", 201
+                except Exception:
+                    db.session.rollback()
+                    return '', 409
+            except socket.timeout:
+                return f"Sensor {sensor.name} not responding.", 409
 
 
 class Sensor(Resource):
@@ -113,7 +137,7 @@ class Sensors(Resource):
             'elem_per_page': elem_per_page,
             'total_pages': sensors.pages,
             'total_elem': sensors.total
-            })
+        })
 
     @admin_login_required
     def post(self):

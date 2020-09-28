@@ -5,6 +5,7 @@ from .Seism import VerifiedSeisms as VerifiedSeismsResource
 
 from .Sensor import Sensor as SensorResource
 from .Sensor import Sensors as SensorsResource
+from .Sensor import Check as CheckSensorResource
 
 from .User import User as UserResource
 from .User import Users as UsersResource

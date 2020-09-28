@@ -76,6 +76,7 @@ def create_app():
 
     # Defining urls for each resource
     api.add_resource(resources.SensorResource, '/sensor/<id_num>')
+    api.add_resource(resources.CheckSensorResource, '/sensor/check/<id_num>')
     api.add_resource(resources.SensorsResource, '/sensors')
     api.add_resource(resources.UnverifiedSeismResource, '/unverified-seism/<id_num>')
     api.add_resource(resources.UnverifiedSeismsResource, '/unverified-seisms')
