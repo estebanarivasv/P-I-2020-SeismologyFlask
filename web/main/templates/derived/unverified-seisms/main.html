@@ -41,7 +41,7 @@
                         <!-- FILTERS COLLAPSIBLE BUTTON -->
                         <button class="btn btn btn-outline-dark" type="button" data-toggle="collapse"
                             data-target=".multi-collapse" aria-expanded="false" aria-controls="associated">
-                            Table layout
+                            Table parameters
                         </button>
 
                         <div class="collapse multi-collapse pt-3" id="associated">
@@ -51,62 +51,96 @@
                         </div>
                     </div>
                 </div>
-                <div class="row py-2">Displaying {{ elem_per_page }} records in total {{ items_num }}</div>
-
                 <!-- DINAMIC TABLE -->
                 <table class="table table-responsive-md table-hover">
                     <thead>
                         <tr>
                             <th scope="col" class="text-center">ID</th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center">Date and time
                                 {% if request.args.sort_by == "datetime[asc]"  %}
                                 <a href="{{ url_for('user.main_useisms', sort_by = 'datetime[desc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
-                                                                        to_datetime = request.args.to_datetime) }}">Date
-                                    and time</a>
+                                                                        to_datetime = request.args.to_datetime) }}">
+
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down"
+                                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
+                                    </svg>
+                                </a>
                                 {% else %}
                                 <a href="{{ url_for('user.main_useisms', sort_by = 'datetime[asc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
-                                                                        to_datetime = request.args.to_datetime) }}">Date
-                                    and time</a>
+                                                                        to_datetime = request.args.to_datetime) }}">
+
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up"
+                                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+                                    </svg>
+                                </a>
                                 {% endif %}
 
                             </th>
 
 
                             <th scope="col" class="text-center">Depth</th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center">Magnitude
                                 {% if request.args.sort_by == "magnitude[asc]"  %}
-                                <a
-                                    href="{{ url_for('user.main_useisms', sort_by = 'magnitude[desc]',
+                                <a href="{{ url_for('user.main_useisms', sort_by = 'magnitude[desc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
-                                                                        to_datetime = request.args.to_datetime) }}">Magnitude</a>
+                                                                        to_datetime = request.args.to_datetime) }}">
+
+
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down"
+                                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
+                                    </svg>
+                                </a>
                                 {% else %}
-                                <a
-                                    href="{{ url_for('user.main_useisms', sort_by = 'magnitude[asc]',
+                                <a href="{{ url_for('user.main_useisms', sort_by = 'magnitude[asc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
-                                                                        to_datetime = request.args.to_datetime) }}">Magnitude</a>
+                                                                        to_datetime = request.args.to_datetime) }}">
+
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up"
+                                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+                                    </svg>
+
+                                </a>
                                 {% endif %}
                             </th>
 
 
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center">Associated sensor
                                 {% if request.args.sort_by == "sensor_name[asc]"  %}
                                 <a href="{{ url_for('user.main_useisms', sort_by = 'sensor_name[desc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
-                                                                        to_datetime = request.args.to_datetime) }}">Associated
-                                    sensor</a>
+                                                                        to_datetime = request.args.to_datetime) }}">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down"
+                                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
+                                    </svg>
+                                </a>
                                 {% else %}
                                 <a href="{{ url_for('user.main_useisms', sort_by = 'sensor_name[asc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
-                                                                        to_datetime = request.args.to_datetime) }}">Associated
-                                    sensor</a>
+                                                                        to_datetime = request.args.to_datetime) }}">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up"
+                                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+                                    </svg>
+                                </a>
                                 {% endif %}
                             </th>
 
@@ -143,22 +177,23 @@
 
 
                         {% for n in range(1, pagination.total_pages + 1) %}
-                            {% if n != pagination.page_num %}
-                            <li class="page-item">
-                                <a class="page-link" href="{{ url_for('user.main_useisms',
+                        {% if n != pagination.page_num %}
+                        <li class="page-item">
+                            <a class="page-link"
+                                href="{{ url_for('user.main_useisms',
                                                                             page_num = n,
                                                                             sort_by = request.args.sort_by,
                                                                             sensor_id = request.args.sensor_id,
                                                                             from_datetime =request.args.from_datetime,
                                                                             to_datetime = request.args.to_datetime) }}">
-                                    {{n}}
-                                </a>
-                            </li>
-                            {% else %}
-                            <li class="page-item active" aria-current="page">
-                                <a class="page-link" href="#">{{n}}<span class="sr-only">(current)</span></a>
-                            </li>
-                            {% endif %}
+                                {{n}}
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="#">{{n}}<span class="sr-only">(current)</span></a>
+                        </li>
+                        {% endif %}
                         {% endfor %}
 
                         {% if pagination.page_num < pagination.total_pages %}
@@ -167,7 +202,7 @@
                                                                         page_num = (pagination.page_num + 1),
                                                                         sort_by = request.args.sort_by,
                                                                         sensor_id = request.args.sensor_id,
-                                                                        from_datetime =request.args.from_datetime,
+                                                                        from_datetime = request.args.from_datetime,
                                                                         to_datetime = request.args.to_datetime) }}">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>

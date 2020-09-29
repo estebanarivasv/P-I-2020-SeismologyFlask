@@ -6,6 +6,14 @@
 </div>
 {% endmacro %}
 
+{% macro showVSeismFButtons(submit, cancel_url) %}
+<div class="form-inline justify-content-center">
+	{{ submit(class="btn btn-outline-success mx-3")|safe }}
+	<a name="" id="" class="btn btn-outline-danger mx-3" href="{{ url_for(cancel_url) }}" role="button">Remove
+		parameters</a>
+</div>
+{% endmacro %}
+
 {% macro showFSelectField(field) %}
 <div class="form-group row py-1">
 	<label for="fselfield">{{ field.label }}</label>
