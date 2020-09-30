@@ -50,6 +50,7 @@ class VerifiedSeisms(Resource):
 
         # Obtains items from json
         filters = request.get_json().items()
+        print(filters)
 
         # Filters in verified seisms
         verified_seisms = db.session.query(SeismModel).filter(SeismModel.verified == True)
@@ -63,15 +64,20 @@ class VerifiedSeisms(Resource):
                 elem_per_page = int(value)
 
             # Filters: datetime, magnitude, sensor.name
-            if filters["from_datetime"] and filters["to_datetime"]:
-                from_datetime = filters["from_datetime"]
-                to_datetime = filters["to_datetime"]
-                print(from_datetime, to_datetime)
-                verified_seisms = verified_seisms.filter(SeismModel.datetime.between(from_datetime, to_datetime))
-            if key == "datetime":
-                verified_seisms = verified_seisms.filter(SeismModel.datetime.like("%" + str(value) + "%"))
-            if key == "magnitude":
-                verified_seisms = verified_seisms.filter(SeismModel.magnitude.like("%" + str(value) + "%"))
+            if key == "from_date":
+                value = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
+                verified_seisms = verified_seisms.filter(SeismModel.datetime >= value)
+            if key == "to_date":
+                value = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
+                verified_seisms = verified_seisms.filter(SeismModel.datetime <= value)
+            if key == "mag_min":
+                verified_seisms = verified_seisms.filter(SeismModel.magnitude >= value)
+            if key == "mag_max":
+                verified_seisms = verified_seisms.filter(SeismModel.magnitude <= value)
+            if key == "depth_min":
+                verified_seisms = verified_seisms.filter(SeismModel.depth >= value)
+            if key == "depth_max":
+                verified_seisms = verified_seisms.filter(SeismModel.depth <= value)
             if key == "sensor_name":
                 verified_seisms = verified_seisms.join(SeismModel.sensor).filter(
                     SensorModel.name.like("%" + str(value) + "%"))
@@ -82,10 +88,19 @@ class VerifiedSeisms(Resource):
                     verified_seisms = verified_seisms.order_by(SeismModel.datetime.desc())
                 if value == "datetime[asc]":
                     verified_seisms = verified_seisms.order_by(SeismModel.datetime.asc())
-                if value == "sensor.name[desc]":
+                if value == "sensor_name[desc]":
+                    print("entra")
                     verified_seisms = verified_seisms.join(SeismModel.sensor).order_by(SensorModel.name.desc())
-                if value == "sensor.name[asc]":
+                if value == "sensor_name[asc]":
                     verified_seisms = verified_seisms.join(SeismModel.sensor).order_by(SensorModel.name.asc())
+                if value == "magnitude[desc]":
+                    verified_seisms = verified_seisms.order_by(SeismModel.magnitude.desc())
+                if value == "magnitude[asc]":
+                    verified_seisms = verified_seisms.order_by(SeismModel.magnitude.asc())
+                if value == "depth[desc]":
+                    verified_seisms = verified_seisms.order_by(SeismModel.depth.desc())
+                if value == "depth[asc]":
+                    verified_seisms = verified_seisms.order_by(SeismModel.depth.asc())
 
         # Paginates the filtered result and returns a Paginate object
         verified_seisms = verified_seisms.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
@@ -98,28 +113,6 @@ class VerifiedSeisms(Resource):
                 'total_pages': verified_seisms.pages,
                 'items_num': len(verified_seisms.items)
                 })
-
-    @admin_login_required
-    def post(self):
-        new_seism = SeismModel(
-            datetime=datetime(
-                randint(2000, 2020),
-                randint(1, 12),
-                randint(1, 28),
-                randint(00, 23),
-                randint(0, 59),
-                randint(0, 59)
-            ),
-            depth=randint(5, 250),
-            magnitude=round(uniform(2.0, 5.5), 1),
-            latitude=uniform(-90, 90),
-            longitude=uniform(-180, 180),
-            verified=True,
-            sensor_id=2
-        )
-        db.session.add(new_seism)
-        db.session.commit()
-        return new_seism.to_json(), 201
 
 
 class UnverifiedSeism(Resource):
@@ -197,7 +190,7 @@ class UnverifiedSeisms(Resource):
 
             # Filters: sensor_id
             if key == "sensor_id":
-                unverified_seisms = unverified_seisms.filter(SeismModel.sensor_id == value)
+                unverified_seisms = unverified_seisms
             if key == "from_date":
                 unverified_seisms = unverified_seisms.filter(SeismModel.datetime >= value)
             if key == "to_date":
@@ -229,26 +222,3 @@ class UnverifiedSeisms(Resource):
                         'total_pages': unverified_seisms.pages,
                         'items_num': unverified_seisms.total
                         })
-
-
-    @admin_login_required
-    def post(self):
-        new_seism = SeismModel(
-            datetime=datetime(
-                randint(2000, 2020),
-                randint(1, 12),
-                randint(1, 28),
-                randint(00, 23),
-                randint(0, 59),
-                randint(0, 59)
-            ),
-            depth=randint(5, 250),
-            magnitude=round(uniform(2.0, 5.5), 1),
-            latitude=uniform(-90, 90),
-            longitude=uniform(-180, 180),
-            verified=False,
-            sensor_id=2
-        )
-        db.session.add(new_seism)
-        db.session.commit()
-        return new_seism.to_json(), 201

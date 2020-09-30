@@ -25,7 +25,7 @@ class Check(Resource):
                 db.session.add(sensor)
                 try:
                     db.session.commit()
-                    return "Sensor is working (STATUS -> TRUE)", 201
+                    return f"Sensor {sensor.name} working.", 201
                 except Exception:
                     db.session.rollback()
                     return '', 409
@@ -94,13 +94,12 @@ class Sensors(Resource):
                 elem_per_page = int(value)
 
             # Filters: user_id (null/not-null), active, status (sending / not-sending data), user.email
-
+            if key == "name":
+                sensors = sensors.filter(SensorModel.name.like("%" + value + "%"))
             if key == "status":
                 sensors = sensors.filter(SensorModel.status == value)
             if key == "active":
                 sensors = sensors.filter(SensorModel.active == value)
-            if key == "user_id":
-                sensors = sensors.filter(SensorModel.user_id.like(value))
             if key == "user.email":
                 sensors = sensors.join(SensorModel.user).filter(UserModel.email.like("%" + value + "%"))
 
@@ -112,10 +111,6 @@ class Sensors(Resource):
                     sensors = sensors.order_by(SensorModel.name.desc())
                 if value == "name[asc]":
                     sensors = sensors.order_by(SensorModel.name.asc())
-                if value == "user_id[desc]":
-                    sensors = sensors.order_by(SensorModel.user_id.desc())
-                if value == "user_id[asc]":
-                    sensors = sensors.order_by(SensorModel.user_id.asc())
                 if value == "active[desc]":
                     sensors = sensors.order_by(SensorModel.active.desc())
                 if value == "active[asc]":
@@ -124,10 +119,6 @@ class Sensors(Resource):
                     sensors = sensors.order_by(SensorModel.status.desc())
                 if value == "status[asc]":
                     sensors = sensors.order_by(SensorModel.status.asc())
-                if value == "user.email[desc]":
-                    sensors = sensors.join(SensorModel.user).order_by(UserModel.email.desc())
-                if value == "user.email[asc]":
-                    sensors = sensors.join(SensorModel.user).order_by(UserModel.email.asc())
 
         sensors = sensors.paginate(page_num, elem_per_page, raise_error, max_elem_per_page)
 
