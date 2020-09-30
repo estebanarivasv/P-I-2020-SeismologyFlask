@@ -3,7 +3,7 @@ from flask import Flask, flash, redirect, url_for
 from dotenv import load_dotenv
 
 from main.extensions import login_manager, csrf
-from main.routes import auth, main, user
+from main.routes import auth, main, u_seism_blueprint, v_seism_blueprint, sensors_blueprint, user_blueprint
 
 @login_manager.unauthorized_handler
 def unauthorized_callback():
@@ -21,7 +21,10 @@ def create_app():
     # Importing blueprints
     webpage.register_blueprint(auth)
     webpage.register_blueprint(main)
-    webpage.register_blueprint(user)
+    webpage.register_blueprint(u_seism_blueprint)
+    webpage.register_blueprint(v_seism_blueprint)
+    webpage.register_blueprint(sensors_blueprint)
+    webpage.register_blueprint(user_blueprint)
 
     csrf.init_app(webpage)
     login_manager.init_app(webpage)

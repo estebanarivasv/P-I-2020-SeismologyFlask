@@ -13,8 +13,8 @@
         <div class="col-lg-auto col-sm-auto col-md-auto">
             <nav aria-label="breadcrumb mr-n5">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{url_for('user.admin_index')}}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{url_for('user.main_sensors')}}">Sensors</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('main.admin_index')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('sensors.main')}}">Sensors</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ sensor.id_num }}</li>
                 </ol>
             </nav>
@@ -63,7 +63,7 @@
 
             <div class="form-inline justify-content-center">
 
-                <a name="" id="" class="btn btn-dark mx-5" href="{{url_for('user.edit_sensor', id=sensor.id_num)}}"
+                <a name="" id="" class="btn btn-dark mx-5" href="{{url_for('sensors.edit_sensor', id=sensor.id_num)}}"
                     role="button">
                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor"
                         xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +75,7 @@
                     Edit
                 </a>
                 <a name="" id="" class="btn btn-danger mx-5 my-5"
-                    href="{{url_for('user.delete_sensor', id=sensor.id_num)}}" role="button" data-toggle="modal"
+                    href="{{url_for('sensors.delete_sensor', id=sensor.id_num)}}" role="button" data-toggle="modal"
                     data-target="#deleteModal">
                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor"
                         xmlns="http://www.w3.org/2000/svg">
@@ -102,7 +102,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Go back</button>
-                                <a class="btn btn-danger" href="{{url_for('user.delete_sensor', id=sensor.id_num)}}"
+                                <a class="btn btn-danger" href="{{url_for('sensors.delete_sensor', id=sensor.id_num)}}"
                                     role="button">Delete sensor</a>
                             </div>
                         </div>

@@ -5,7 +5,7 @@
 
 {% block head %} {{ super() }}
 
-<title>Verified Seism no. {{ v_seism.id_num }} · Seismology Institute</title>
+<title>Verified Seism no. {{ verified_seism.id_num }} · Seismology Institute</title>
 {% endblock %}
 
 {% block content %}
@@ -20,7 +20,7 @@
                     <div class="col-lg-auto col-sm-auto col-md-auto">
                         <nav aria-label="breadcrumb mr-n5">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{url_for('user.admin_index')}}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{{url_for('main.admin_index')}}">Home</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Verified seisms</li>
                             </ol>
                         </nav>
@@ -32,8 +32,8 @@
                     <div class="col-lg-auto col-sm-auto col-md-auto">
                         <nav aria-label="breadcrumb mr-n5">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{url_for('user.main_vseisms')}}">Verified seisms</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">{{ v_seism.id_num }}</li>
+                                <li class="breadcrumb-item"><a href="{{url_for('v_seism.main')}}">Verified seisms</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">{{ verified_seism.id_num }}</li>
                             </ol>
                         </nav>
                     </div>
@@ -45,8 +45,8 @@
                 <div class="col-lg-auto col-sm-auto col-md-auto">
                     <nav aria-label="breadcrumb mr-n5">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{url_for('user.main_vseisms')}}">Verified seisms</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ v_seism.id_num }}</li>
+                            <li class="breadcrumb-item"><a href="{{url_for('v_seism.main')}}">Verified seisms</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ verified_seism.id_num }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -72,27 +72,27 @@
                     <tbody>
                         <tr>
                             <th scope="row">Date and time</th>
-                            <td class="text-center">{{ v_seism.datetime }}</td>
+                            <td class="text-center">{{ verified_seism.datetime }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Depth</th>
-                            <td class="text-center">{{ v_seism.depth }} mts</td>
+                            <td class="text-center">{{ verified_seism.depth }} mts</td>
                         </tr>
                         <tr>
                             <th scope="row">Magnitude</th>
-                            <td class="text-center">{{ v_seism.magnitude }}</td>
+                            <td class="text-center">{{ verified_seism.magnitude }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Associated sensor</th>
-                            <td class="text-center">{{ v_seism.sensor.name }}</td>
+                            <td class="text-center">{{ verified_seism.sensor.name }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Longitude</th>
-                            <td class="text-center">{{ v_seism.longitude }}</td>
+                            <td class="text-center">{{ verified_seism.longitude }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Latitude</th>
-                            <td class="text-center">{{ v_seism.latitude }}</td>
+                            <td class="text-center">{{ verified_seism.latitude }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -103,7 +103,7 @@
         <div class="col-sm-12 col-lg-6">
             <div class="container py-2">
                 <h5 class="pb-3">Satelital view</h5>
-                {{ showVSeismMap(v_seism) }}
+                {{ showVSeismMap(verified_seism) }}
             </div>
         </div>
     </div>

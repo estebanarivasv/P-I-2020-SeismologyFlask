@@ -4,7 +4,7 @@
 
 {% block head %} {{ super() }}
 
-<title>Unverified seism no.{{ u_seism.id_num }} · Seismology Institute</title>
+<title>Unverified seism no.{{ unverified_seism.id_num }} · Seismology Institute</title>
 
 {% endblock %}
 
@@ -16,10 +16,10 @@
         <div class="col-lg-auto col-sm-auto col-md-auto">
             <nav aria-label="breadcrumb mr-n5">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{url_for('user.seismologist_index')}}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{url_for('user.main_useisms')}}">Unverified seisms</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('main.seismologist_index')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('u_seism.main')}}">Unverified seisms</a></li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        {{ u_seism.id_num }}
+                        {{ unverified_seism.id_num }}
                     </li>
                 </ol>
             </nav>
@@ -40,8 +40,8 @@
             <div class="container py-2 justify-content-center">
 
                 <h5 class="py-3">Complete the following form</h5>
-                <form method="POST" action="{{ url_for('user.edit_useism', id=id) }}">
-                    {{ editUSeismMap(form, u_seism) }}
+                <form method="POST" action="{{ url_for('u_seism.edit_useism', id=id) }}">
+                    {{ editUSeismMap(form, unverified_seism) }}
                 </form>
             </div>
         </div>

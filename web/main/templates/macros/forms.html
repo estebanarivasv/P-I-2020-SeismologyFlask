@@ -7,14 +7,14 @@
 {{ m.showPasswordField(form.password) }}
 {{ m.showPasswordField(form.re_password) }}
 {{ m.showRadioField(form.admin) }}
-{{ m.showButtons(form.submit_button, 'user.main_users') }}
+{{ m.showButtons(form.submit_button, 'user.main') }}
 {% endmacro %}
 
 {% macro generateEditUserForm(form, id_num) %}
 {{ form.csrf_token }}
 {{ m.showEmailField(form.email) }}
 {{ m.showRadioField(form.admin) }}
-{{ m.showButtons(form.submit_button, 'user.main_users') }}
+{{ m.showButtons(form.submit_button, 'user.main') }}
 {% endmacro %}
 
 
@@ -27,7 +27,7 @@
 {{ m.showRadioField(form.status) }}
 {{ m.showRadioField(form.active) }}
 {{ m.showSelectField(form.user_id) }}
-{{ m.showButtons(form.submit_button, 'user.main_sensors') }}
+{{ m.showButtons(form.submit_button, 'sensors.main') }}
 {% endmacro %}
 
 
@@ -40,13 +40,13 @@
 {{ m.showStaticData("Longitude", seism.longitude) }}
 {{ m.showStaticData("Verified", seism.verified) }}
 {{ m.showStaticData("Associated sensor", seism.sensor.name) }}
-{{ m.showButtons(form.submit_button, "user.main_useisms") }}
+{{ m.showButtons(form.submit_button, "u_seism.main") }}
 {% endmacro %}
 
 
 
 {% macro USeismsFiltersForm(filters) %}
-<form method="GET" action="{{ url_for('user.main_useisms') }}">
+<form method="GET" action="{{ url_for('u_seism.main') }}">
 	<div class="card">
 		<div class="card-header"><strong>Filters and pagination</strong></div>
 		<div class="card-body">
@@ -83,7 +83,7 @@
 			</div>
 		</div>
 		<div class="card-footer text-muted">
-			{{ d.showFButtons(filters.submit_button, "user.main_useisms") }}
+			{{ d.showFButtons(filters.submit_button, "u_seism.main") }}
 		</div>
 	</div>
 </form>
@@ -91,86 +91,108 @@
 
 
 {% macro VSeismsFiltersForm(filters) %}
-<form method="GET" action="{{ url_for('user.main_vseisms') }}">
-	{{ filters.sort_by }}
-	<div class="card">
-		<div class="card-header"><strong>Table's parameters</strong></div>
-		<div class="card-body">
-			<h5 class="card-title ml-n2 text-center"><strong>Filters</strong></h5>
-			<div class="card my-2 py-2 px-4 align-items-center">
-				{# datetime #}
-				<div class="form-row my-2">
-					<div class="col-auto">
-						<div class="form-group">
-							<label class="mb-n2" for="FormControlInput1">{{ filters.from_datetime.label }}</label>
-							{{ filters.from_datetime(class="form-control", id="FormControlInput1")|safe }}
-						</div>
-					</div>
-					<div class="col-auto">
-						<div class="form-group">
-							<label class="mb-n2" for="FormControlInput2">{{ filters.to_datetime.label }}</label>
-							{{ filters.to_datetime(class="form-control", id="FormControlInput2")|safe }}
-						</div>
-					</div>
-				</div>
-				{# depth #}
-				<div class="form-row my-2">
-					<div class="col-auto">
-						<div class="form-group">
-							<label class="mb-n2" for="FormControlInput3">{{ filters.depth_min.label }}</label>
-							{{ filters.depth_min(class="form-control", id="FormControlInput3")|safe }}
-						</div>
-					</div>
-					<div class="col-auto">
-						<div class="form-group">
-							<label class="mb-n2" for="FormControlInput4">{{ filters.depth_max.label }}</label>
-							{{ filters.depth_max(class="form-control", id="FormControlInput4")|safe }}
-						</div>
-					</div>
-				</div>
-				{# magnitude #}
-				<div class="form-row my-2">
-					<div class="col-auto">
-						<div class="form-group">
-							<label class="mb-n2" for="FormControlInput5">{{ filters.mag_min.label }}</label>
-							{{ filters.mag_min(class="form-control", id="FormControlInput5")|safe }}
-						</div>
-					</div>
-					<div class="col-auto">
-						<div class="form-group">
-							<label class="mb-n2" for="FormControlInput6">{{ filters.mag_max.label }}</label>
-							{{ filters.mag_max(class="form-control", id="FormControlInput6")|safe }}
-						</div>
-					</div>
-				</div>
-				{# sensor_name #}
-				<div class="form-row my-2">
-					<div class="col-auto">
-						<div class="form-group">
-							<label class="mb-n2" for="FormControlInput7">{{ filters.sensor_name.label }}</label>
-							{{ filters.sensor_name(class="form-control", id="FormControlInput7")|safe }}
-						</div>
-					</div>
-				</div>
-			</div>
-			<h5 class="card-title ml-n2 mt-4 text-center"><strong>Custom pagination</strong></h5>
-			<div class="card my-2 py-2 px-4">
-				<div class="container-fluid pl-3 py-3">
-					{# Pagination #}
-					<form>
-						<div class="form-row align-items-center">
-							<div class="col-auto">Show</div>
-							<div class="col-auto">
-								{{ filters.elem_per_page(class="form-control", style="width: 60px;")|safe }}</div>
-							<div class="col-auto">elements per page.</div>
-						</div>
-					</form>
-				</div>
-			</div>
+<form method="GET" action="{{ url_for('v_seism.main') }}">
+	<div class="form-row align-items-center">
+		<div class="col-auto">
+			<!-- FILTERS COLLAPSIBLE BUTTON -->
+			<button class="btn btn btn-outline-dark" type="button" data-toggle="collapse" data-target=".multi-collapse"
+				aria-expanded="false" aria-controls="associated">
+				Advanced search
+			</button>
 		</div>
-		<div class="card-footer text-muted">
-			{{ d.showVSeismFButtons(filters.submit_button, "user.main_vseisms") }}
+		<div class="col-auto">
+			{{ filters.download(class="btn btn-outline-primary mx-3")|safe }}
+		</div>
+	</div>
+
+	<div class="collapse multi-collapse pt-3" id="associated">
+		<div class="container-fluid py-2">
+			{{ filters.sort_by }}
+			<div class="card">
+				<div class="card-header"><strong>Table's parameters</strong></div>
+				<div class="card-body">
+					<h5 class="card-title ml-n2 text-center"><strong>Filters</strong></h5>
+					<div class="card my-2 py-2 px-4 align-items-center">
+						{# datetime #}
+						<div class="form-row my-2">
+							<div class="col-auto">
+								<div class="form-group">
+									<label class="mb-n2"
+										for="FormControlInput1">{{ filters.from_datetime.label }}</label>
+									{{ filters.from_datetime(class="form-control", id="FormControlInput1")|safe }}
+								</div>
+							</div>
+							<div class="col-auto">
+								<div class="form-group">
+									<label class="mb-n2" for="FormControlInput2">{{ filters.to_datetime.label }}</label>
+									{{ filters.to_datetime(class="form-control", id="FormControlInput2")|safe }}
+								</div>
+							</div>
+						</div>
+						{# depth #}
+						<div class="form-row my-2">
+							<div class="col-auto">
+								<div class="form-group">
+									<label class="mb-n2" for="FormControlInput3">{{ filters.depth_min.label }}</label>
+									{{ filters.depth_min(class="form-control", id="FormControlInput3")|safe }}
+								</div>
+							</div>
+							<div class="col-auto">
+								<div class="form-group">
+									<label class="mb-n2" for="FormControlInput4">{{ filters.depth_max.label }}</label>
+									{{ filters.depth_max(class="form-control", id="FormControlInput4")|safe }}
+								</div>
+							</div>
+						</div>
+						{# magnitude #}
+						<div class="form-row my-2">
+							<div class="col-auto">
+								<div class="form-group">
+									<label class="mb-n2" for="FormControlInput5">{{ filters.mag_min.label }}</label>
+									{{ filters.mag_min(class="form-control", id="FormControlInput5")|safe }}
+								</div>
+							</div>
+							<div class="col-auto">
+								<div class="form-group">
+									<label class="mb-n2" for="FormControlInput6">{{ filters.mag_max.label }}</label>
+									{{ filters.mag_max(class="form-control", id="FormControlInput6")|safe }}
+								</div>
+							</div>
+						</div>
+						{# sensor_name #}
+						<div class="form-row my-2">
+							<div class="col-auto">
+								<div class="form-group">
+									<label class="mb-n2" for="FormControlInput7">{{ filters.sensor_name.label }}</label>
+									{{ filters.sensor_name(class="form-control", id="FormControlInput7")|safe }}
+								</div>
+							</div>
+						</div>
+					</div>
+					<h5 class="card-title ml-n2 mt-4 text-center"><strong>Custom pagination</strong></h5>
+					<div class="card my-2 py-2 px-4">
+						<div class="container-fluid pl-3 py-3">
+							{# Pagination #}
+							<form>
+								<div class="form-row align-items-center">
+									<div class="col-auto">Show</div>
+									<div class="col-auto">
+										{{ filters.elem_per_page(class="form-control", style="width: 60px;")|safe }}
+									</div>
+									<div class="col-auto">elements per page.</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="card-footer text-muted">
+					{{ d.showVSeismFButtons(filters.submit_button, "v_seism.main") }}
+				</div>
+			</div>
+
 		</div>
 	</div>
 </form>
+
+
 {% endmacro %}

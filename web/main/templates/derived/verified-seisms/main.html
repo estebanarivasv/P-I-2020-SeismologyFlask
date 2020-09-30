@@ -23,7 +23,7 @@
         <div class="col-lg-auto col-sm-auto col-md-auto">
             <nav aria-label="breadcrumb mr-n5">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{url_for('user.admin_index')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('main.admin_index')}}">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Verified seisms</li>
                 </ol>
             </nav>
@@ -42,28 +42,7 @@
                 <h3>Verified seisms</h3>
                 <div class="row py-3">
                     <div class="container-fluid py-2">
-
-                        <form method="GET" action="{{ url_for('user.main_vseisms') }}">
-                            <div class="form-row align-items-center">
-                                <div class="col-auto">
-                                    <!-- FILTERS COLLAPSIBLE BUTTON -->
-                                    <button class="btn btn btn-outline-dark" type="button" data-toggle="collapse"
-                                        data-target=".multi-collapse" aria-expanded="false" aria-controls="associated">
-                                        Advanced search
-                                    </button>
-                                </div>
-                                <div class="col-auto">
-                                    {{ filters.download(class="btn btn-outline-primary mx-3")|safe }}
-                                </div>  
-                            </div>
-
-                            
-                        </form>
-                        <div class="collapse multi-collapse pt-3" id="associated">
-                            <div class="container-fluid py-2">
-                                {{ VSeismsFiltersForm(filters) }}
-                            </div>
-                        </div>
+                        {{ VSeismsFiltersForm(filters) }}
                     </div>
                 </div>
                 <!-- DINAMIC TABLE -->
@@ -73,7 +52,7 @@
                             <th scope="col" class="text-center">ID</th>
                             <th scope="col" class="text-center">Date and time
                                 {% if request.args.sort_by == "datetime[asc]"  %}
-                                <a href="{{ url_for('user.main_vseisms', sort_by = 'datetime[desc]',
+                                <a href="{{ url_for('v_seism.main', sort_by = 'datetime[desc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
                                                                         to_datetime = request.args.to_datetime,
@@ -90,7 +69,7 @@
                                     </svg>
                                 </a>
                                 {% else %}
-                                <a href="{{ url_for('user.main_vseisms', sort_by = 'datetime[asc]',
+                                <a href="{{ url_for('v_seism.main', sort_by = 'datetime[asc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
                                                                         to_datetime = request.args.to_datetime,
@@ -113,7 +92,7 @@
 
                             <th scope="col" class="text-center">Depth
                                 {% if request.args.sort_by == "depth[asc]"  %}
-                                <a href="{{ url_for('user.main_vseisms', sort_by = 'depth[desc]',
+                                <a href="{{ url_for('v_seism.main', sort_by = 'depth[desc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
                                                                         to_datetime = request.args.to_datetime,
@@ -130,7 +109,7 @@
                                 </a>
                                 {% else %}
                                 <a
-                                    href="{{ url_for('user.main_vseisms', sort_by = 'depth[asc]',
+                                    href="{{ url_for('v_seism.main', sort_by = 'depth[asc]',
                                                                             sensor_id = request.args.sensor_id,
                                                                             from_datetime =request.args.from_datetime,
                                                                             to_datetime = request.args.to_datetime,
@@ -149,7 +128,7 @@
                             </th>
                             <th scope="col" class="text-center">Magnitude
                                 {% if request.args.sort_by == "magnitude[asc]"  %}
-                                <a href="{{ url_for('user.main_vseisms', sort_by = 'magnitude[desc]',
+                                <a href="{{ url_for('v_seism.main', sort_by = 'magnitude[desc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
                                                                         to_datetime = request.args.to_datetime,
@@ -167,7 +146,7 @@
                                     </svg>
                                 </a>
                                 {% else %}
-                                <a href="{{ url_for('user.main_vseisms', sort_by = 'magnitude[asc]',
+                                <a href="{{ url_for('v_seism.main', sort_by = 'magnitude[asc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
                                                                         to_datetime = request.args.to_datetime,
@@ -190,7 +169,7 @@
 
                             <th scope="col" class="text-center">Associated sensor
                                 {% if request.args.sort_by == "sensor_name[asc]"  %}
-                                <a href="{{ url_for('user.main_vseisms', sort_by = 'sensor_name[desc]',
+                                <a href="{{ url_for('v_seism.main', sort_by = 'sensor_name[desc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
                                                                         to_datetime = request.args.to_datetime,
@@ -207,7 +186,7 @@
                                 </a>
                                 {% else %}
                                 <a
-                                    href="{{ url_for('user.main_vseisms', sort_by = 'sensor_name[asc]',
+                                    href="{{ url_for('v_seism.main', sort_by = 'sensor_name[asc]',
                                                                             sensor_id = request.args.sensor_id,
                                                                             from_datetime =request.args.from_datetime,
                                                                             to_datetime = request.args.to_datetime,
@@ -240,7 +219,7 @@
                     <ul class="pagination justify-content-center">
                         {% if pagination.page_num > 1 %}
                         <li class="page-item">
-                            <a class="page-link" href="{{ url_for('user.main_vseisms', page_num = 1,
+                            <a class="page-link" href="{{ url_for('v_seism.main', page_num = 1,
                                                                 sort_by = request.args.sort_by,
                                                                 sensor_id = request.args.sensor_id,
                                                                 from_datetime =request.args.from_datetime,
@@ -263,7 +242,7 @@
                         {% if n < pagination.page_num + 3 and n > pagination.page_num - 3%}
                         <li class="page-item">
                             <a class="page-link"
-                                href="{{ url_for('user.main_vseisms',
+                                href="{{ url_for('v_seism.main',
                                                                                     page_num = n,
                                                                                     sort_by = request.args.sort_by,
                                                                                     sensor_id = request.args.sensor_id,
@@ -284,7 +263,7 @@
                         {% if pagination.page_num < pagination.total_pages %}
                         <li class="page-item">
                             <a class="page-link"
-                                href="{{ url_for('user.main_vseisms',
+                                href="{{ url_for('v_seism.main',
                                                                         page_num = (pagination.total_pages),
                                                                         sort_by = request.args.sort_by,
                                                                         sensor_id = request.args.sensor_id,

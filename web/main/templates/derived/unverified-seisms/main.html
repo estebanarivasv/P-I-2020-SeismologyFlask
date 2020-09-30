@@ -20,7 +20,7 @@
         <div class="col-lg-auto col-sm-auto col-md-auto">
             <nav aria-label="breadcrumb mr-n5">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{url_for('user.seismologist_index')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('main.seismologist_index')}}">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Unverified seisms</li>
                 </ol>
             </nav>
@@ -58,7 +58,7 @@
                             <th scope="col" class="text-center">ID</th>
                             <th scope="col" class="text-center">Date and time
                                 {% if request.args.sort_by == "datetime[asc]"  %}
-                                <a href="{{ url_for('user.main_useisms', sort_by = 'datetime[desc]',
+                                <a href="{{ url_for('u_seism.main', sort_by = 'datetime[desc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
                                                                         to_datetime = request.args.to_datetime) }}">
@@ -70,7 +70,7 @@
                                     </svg>
                                 </a>
                                 {% else %}
-                                <a href="{{ url_for('user.main_useisms', sort_by = 'datetime[asc]',
+                                <a href="{{ url_for('u_seism.main', sort_by = 'datetime[asc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
                                                                         to_datetime = request.args.to_datetime) }}">
@@ -89,7 +89,7 @@
                             <th scope="col" class="text-center">Depth</th>
                             <th scope="col" class="text-center">Magnitude
                                 {% if request.args.sort_by == "magnitude[asc]"  %}
-                                <a href="{{ url_for('user.main_useisms', sort_by = 'magnitude[desc]',
+                                <a href="{{ url_for('u_seism.main', sort_by = 'magnitude[desc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
                                                                         to_datetime = request.args.to_datetime) }}">
@@ -102,7 +102,7 @@
                                     </svg>
                                 </a>
                                 {% else %}
-                                <a href="{{ url_for('user.main_useisms', sort_by = 'magnitude[asc]',
+                                <a href="{{ url_for('u_seism.main', sort_by = 'magnitude[asc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
                                                                         to_datetime = request.args.to_datetime) }}">
@@ -120,7 +120,7 @@
 
                             <th scope="col" class="text-center">Associated sensor
                                 {% if request.args.sort_by == "sensor_name[asc]"  %}
-                                <a href="{{ url_for('user.main_useisms', sort_by = 'sensor_name[desc]',
+                                <a href="{{ url_for('u_seism.main', sort_by = 'sensor_name[desc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
                                                                         to_datetime = request.args.to_datetime) }}">
@@ -131,7 +131,7 @@
                                     </svg>
                                 </a>
                                 {% else %}
-                                <a href="{{ url_for('user.main_useisms', sort_by = 'sensor_name[asc]',
+                                <a href="{{ url_for('u_seism.main', sort_by = 'sensor_name[asc]',
                                                                         sensor_id = request.args.sensor_id,
                                                                         from_datetime =request.args.from_datetime,
                                                                         to_datetime = request.args.to_datetime) }}">
@@ -159,7 +159,7 @@
                     <ul class="pagination justify-content-center">
                         {% if pagination.page_num > 1 %}
                         <li class="page-item">
-                            <a class="page-link" href="{{ url_for('user.main_useisms', page_num = (pagination.page_num - 1),
+                            <a class="page-link" href="{{ url_for('u_seism.main', page_num = (pagination.page_num - 1),
                                                                 sort_by = request.args.sort_by,
                                                                 sensor_id = request.args.sensor_id,
                                                                 from_datetime =request.args.from_datetime,
@@ -180,7 +180,7 @@
                         {% if n != pagination.page_num %}
                         <li class="page-item">
                             <a class="page-link"
-                                href="{{ url_for('user.main_useisms',
+                                href="{{ url_for('u_seism.main',
                                                                             page_num = n,
                                                                             sort_by = request.args.sort_by,
                                                                             sensor_id = request.args.sensor_id,
@@ -198,7 +198,7 @@
 
                         {% if pagination.page_num < pagination.total_pages %}
                         <li class="page-item">
-                            <a class="page-link" href="{{ url_for('user.main_useisms',
+                            <a class="page-link" href="{{ url_for('u_seism.main',
                                                                         page_num = (pagination.page_num + 1),
                                                                         sort_by = request.args.sort_by,
                                                                         sensor_id = request.args.sensor_id,

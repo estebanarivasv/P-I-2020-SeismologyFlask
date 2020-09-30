@@ -32,11 +32,11 @@ def login():
             )
             login_user(logged_user)  # Logs in the user
             if user_json['admin'] == True:
-                req = make_response(redirect(url_for('user.admin_index')))  # Redirection request
+                req = make_response(redirect(url_for('main.admin_index')))  # Redirection request
                 req.set_cookie('access_token', user_json['token'], httponly=True)
                 return req
             if user_json['admin'] == False:
-                req = make_response(redirect(url_for('user.seismologist_index')))  # Redirection request
+                req = make_response(redirect(url_for('main.seismologist_index')))  # Redirection request
                 req.set_cookie('access_token', user_json['token'], httponly=True)
                 return req
         else:

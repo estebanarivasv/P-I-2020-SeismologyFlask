@@ -5,7 +5,7 @@
 
 {{ super() }}
 
-<title>Unverified seism no.{{ u_seism.id_num }} · Seismology Institute</title>
+<title>Unverified seism no.{{ unverified_seism.id_num }} · Seismology Institute</title>
 
 {% endblock %}
 
@@ -17,9 +17,9 @@
         <div class="col-lg-auto col-sm-auto col-md-auto">
             <nav aria-label="breadcrumb mr-n5">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{url_for('user.seismologist_index')}}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{url_for('user.main_useisms')}}">Unverified seisms</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ u_seism.id_num }}</li>
+                    <li class="breadcrumb-item"><a href="{{url_for('main.seismologist_index')}}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{url_for('u_seism.main')}}">Unverified seisms</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ unverified_seism.id_num }}</li>
                 </ol>
             </nav>
         </div>
@@ -43,27 +43,27 @@
                     <tbody>
                         <tr>
                             <th scope="row">Date and time</th>
-                            <td class="text-center">{{ u_seism.datetime }}</td>
+                            <td class="text-center">{{ unverified_seism.datetime }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Depth</th>
-                            <td class="text-center">{{ u_seism.depth }} mts</td>
+                            <td class="text-center">{{ unverified_seism.depth }} mts</td>
                         </tr>
                         <tr>
                             <th scope="row">Magnitude</th>
-                            <td class="text-center">{{ u_seism.magnitude }}</td>
+                            <td class="text-center">{{ unverified_seism.magnitude }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Associated sensor</th>
-                            <td class="text-center">{{ u_seism.sensor.name }}</td>
+                            <td class="text-center">{{ unverified_seism.sensor.name }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Longitude</th>
-                            <td class="text-center">{{ u_seism.longitude }}</td>
+                            <td class="text-center">{{ unverified_seism.longitude }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Latitude</th>
-                            <td class="text-center">{{ u_seism.latitude }}</td>
+                            <td class="text-center">{{ unverified_seism.latitude }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -72,7 +72,7 @@
         <div class="col-sm-12 col-lg-6">
             <div class="container py-2">
                 <h5 class="pb-3">Satelital view</h5>
-                {{ showUSeismMap(u_seism) }}
+                {{ showUSeismMap(unverified_seism) }}
             </div>
         </div>
     </div>
@@ -81,9 +81,9 @@
         </div>
         <div class="col-lg-6 col-md-12 d-flex justify-content-center">
             <div class="btn-toolbar py-2">
-                <a name="" id="" class="btn btn-success mx-3" href="{{url_for('user.verify_useism', id=u_seism.id_num)}}" role="button">Mark as verified</a>
-                <a name="" id="" class="btn btn-dark mx-3" href="{{url_for('user.edit_useism', id=u_seism.id_num)}}" role="button">Edit</a>
-                <a name="" id="" class="btn btn-danger mx-3" href="{{url_for('user.delete_useism', id=u_seism.id_num)}}" role="button">Delete</a>
+                <a name="" id="" class="btn btn-success mx-3" href="{{url_for('u_seism.verify_useism', id=unverified_seism.id_num)}}" role="button">Mark as verified</a>
+                <a name="" id="" class="btn btn-dark mx-3" href="{{url_for('u_seism.edit_useism', id=unverified_seism.id_num)}}" role="button">Edit</a>
+                <a name="" id="" class="btn btn-danger mx-3" href="{{url_for('u_seism.delete_useism', id=unverified_seism.id_num)}}" role="button">Delete</a>
             </div>
         </div>
         <div class="col-lg-3">
