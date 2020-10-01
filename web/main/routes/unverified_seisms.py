@@ -5,6 +5,7 @@
 """
 
 import json
+import datetime
 
 from flask import Blueprint, render_template, current_app, redirect, url_for, request, flash
 from flask_login import login_required
@@ -30,21 +31,26 @@ def main():
     filters.sensor_id.choices.insert(0, [0, "-"])
 
     data = {}
+            
+    if 'sensor_id' in request.args:
+        data["sensor_id"] = request.args.get('sensor_id', '')        
+            
+    if "from_datetime" in request.args and request.args["from_datetime"] != "":
+        date = datetime.datetime.strptime(request.args.get("from_datetime", ""), "%Y-%m-%dT%H:%M")
+        data["from_date"] = datetime.datetime.strftime(date, "%Y-%m-%d %H:%M:%S")
 
-    print(filters.from_datetime.data, filters.to_datetime.data)
-    if filters.validate():
-        if filters.sensor_id.data is not None and filters.sensor_id.data != 0:
-            data["sensor_id"] = filters.sensor_id.data
-        if filters.from_datetime.data is not None:
-            data["from_date"] = filters.from_datetime.data.strftime('%Y-%m-%d %H:%M:%S')
-        if filters.to_datetime.data is not None:
-            data["to_date"] = filters.to_datetime.data.strftime('%Y-%m-%d %H:%M:%S')
+    if "to_datetime" in request.args and request.args["to_datetime"] != "":
+        date = datetime.datetime.strptime(request.args.get("to_datetime", ""), "%Y-%m-%dT%H:%M")
+        data["to_date"] = datetime.datetime.strftime(date, "%Y-%m-%d %H:%M:%S")
 
-    if 'page_num' in request.args:
+    if 'sort_by' in request.args and request.args['sort_by'] != "":
+        data["sort_by"] = request.args.get('sort_by', '')
+
+    if 'page_num' in request.args and request.args['page_num'] != "":
         data["page_num"] = request.args.get('page_num', '')
 
-    if 'sort_by' in request.args:
-        data["sort_by"] = request.args.get('sort_by', '')
+    if 'elem_per_page' in request.args and request.args['elem_per_page'] != "":
+        data["elem_per_page"] = request.args.get('elem_per_page', '')
 
     data = json.dumps(data)
     query = makeRequest("GET", url, authenticated_user=True, data=data)

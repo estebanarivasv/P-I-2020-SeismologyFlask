@@ -3,105 +3,38 @@
 <html lang="en">
 
 <head>
-    <title>Verified Seisms</title>
+    <title>Not working sensors</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
-    <link rel="stylesheet" type="text/css" href="../static/css/body.css" />
-
 </head>
 
 <body>
-
-    <div class="container-fluid">
-
-        <div class="row">
-
-            <!--     HEADER     -->
-            <div class="container-fluid order-1" style="margin-bottom: 60px;">
-                <div class="row">
-                    <div class="col-md-12 col-lg-12">
-                        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style=" height: 50px;">
-                    </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
+    <div style="padding: 20px">
+        <h2>Unavailable sensors</h2>
+        <p>Greetings. The following active sensors are not currently working:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th style="border: 1px solid black; padding: 10px">ID</th>
+                    <th style="border: 1px solid black; padding: 10px">Name</th>
+                    <th style="border: 1px solid black; padding: 10px">IP</th>
+                    <th style="border: 1px solid black; padding: 10px">Port</th>
+                </tr>
+            </thead>
+            <tbody style="margin-bottom: 300px;">
+                {% for sensor in sensors %}
+                <tr>
+                    <td style="border: 1px solid black; padding: 10px">{{sensor.id_num}}</td>
+                    <td style="border: 1px solid black; padding: 10px">{{sensor.name}}</td>
+                    <td style="border: 1px solid black; padding: 10px">{{sensor.ip}}</td>
+                    <td style="border: 1px solid black; padding: 10px">{{sensor.port}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-    </div>
-
-    <div class="container">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-12 col-sm-12">
-
-                    <h4>Greetings. The following sensors are not currently working:</h4>
-
-                    <!--    TABLE    -->
-
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">IP</th>
-                                <th scope="col">Port</th>
-                            </tr>
-                        </thead>
-                        <tbody>{% for sensor in sensors %}
-                            <tr>
-                                <td>{{sensor.id_num}}</td>
-                                <td>{{sensor.name}}</td>
-                                <td>{{sensor.ip}}</td>
-                                <td>{{sensor.port}}</td>
-                            </tr>{% endfor %}
-                        </tbody>
-                    </table>
-
-
-                    <!--                  AÑADIR PAGINACIÓN                 -->
-
-
-
-
-
-
-                </div>
-
-                <!--     FOOTER     -->
-
-                <div class="container ">
-                    <nav class="navbar fixed-bottom navbar-dark bg-dark " style=" margin-top: 200px; ">
-                        <ul class="navbar-nav mr-aut ">
-                            <li class="nav-item ">
-                                <a class="nav-link " href="# ">Verified seisms</a>
-                            </li>
-                            <li class="nav-item ">
-                                <a class="nav-link " href="# ">Sensors</a>
-                            </li>
-                            <li class="nav-item ">
-                                <a class="nav-link " href="# ">Users</a>
-                            </li>
-
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-
-
-
-
-
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js " integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo " crossorigin="anonymous "></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js " integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 " crossorigin="anonymous "></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js " integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM " crossorigin="anonymous "></script>
 </body>
 
 </html>

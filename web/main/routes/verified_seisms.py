@@ -29,23 +29,26 @@ def main():
 
     file_name = "total_vseisms"
 
-    if filters.validate():
-        if filters.depth_min.data is not None:
-            data["depth_min"] = filters.depth_min.data
-            file_name = file_name + "-" + str(filters.depth_min.data)
-        if filters.depth_max.data is not None:
-            data["depth_max"] = filters.depth_max.data
-            file_name = file_name + "-" + str(filters.depth_max.data)
-        if filters.mag_min.data is not None:
-            data["mag_min"] = filters.mag_min.data
-            file_name = file_name + "-" + str(filters.mag_min.data)
-        if filters.mag_max.data is not None:
-            data["mag_max"] = filters.mag_max.data
-            file_name = file_name + "-" + str(filters.mag_max.data)
-        if filters.sensor_name.data is not None and filters.sensor_name.data != "":
-            data["sensor_name"] = filters.sensor_name.data
-            file_name = file_name + "-" + str(filters.sensor_name.data)
+    if 'depth_min' in request.args and request.args['depth_min'] != "":
+        data["depth_min"] = request.args.get('depth_min', '')
+        file_name = file_name + "-" + str(data["depth_min"])
 
+    if 'depth_max' in request.args and request.args['depth_max'] != "":
+        data["depth_max"] = request.args.get('depth_max', '')
+        file_name = file_name + "-" + str(data["depth_max"])
+
+    if 'mag_min' in request.args and request.args['mag_min'] != "":
+        data["mag_min"] = request.args.get('mag_min', '')
+        file_name = file_name + "-" + str(data["mag_min"])
+
+    if 'mag_max' in request.args and request.args['mag_max'] != "":
+        data["mag_max"] = request.args.get('mag_max', '')
+        file_name = file_name + "-" + str(data["mag_max"])
+
+    if 'sensor_name' in request.args and request.args['sensor_name'] != "":
+        data["sensor_name"] = request.args.get('sensor_name', '')
+        file_name = file_name + "-" + str(data["sensor_name"])
+        
     if "from_datetime" in request.args and request.args["from_datetime"] != "":
         date = datetime.datetime.strptime(request.args.get("from_datetime", ""), "%Y-%m-%dT%H:%M")
         data["from_date"] = datetime.datetime.strftime(date, "%Y-%m-%d %H:%M:%S")
@@ -56,13 +59,14 @@ def main():
         data["to_date"] = datetime.datetime.strftime(date, "%Y-%m-%d %H:%M:%S")
         file_name = file_name + "-" + str(datetime.datetime.strftime(date, "%Y%m%dT%H%M%S"))
 
-    if 'page_num' in request.args:
-        data["page_num"] = request.args.get('page_num', '')
-
     if 'sort_by' in request.args and request.args['sort_by'] != "":
         data["sort_by"] = request.args.get('sort_by', '')
         filters.sort_by.data = data["sort_by"]
+        file_name = file_name + "-" + str(data["sort_by"])
 
+    if 'page_num' in request.args:
+        data["page_num"] = request.args.get('page_num', '')
+        
     if 'elem_per_page' in request.args and request.args['elem_per_page'] != "":
         data["elem_per_page"] = request.args.get('elem_per_page', '')
 
@@ -76,7 +80,6 @@ def main():
             while code == 200:
                 data['page_num'] = page_num
 
-                print(json.dumps(data))
                 query = makeRequest("GET", url, data=json.dumps(data))
                 code = query.status_code
 

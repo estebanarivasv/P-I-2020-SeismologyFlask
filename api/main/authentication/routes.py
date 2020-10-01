@@ -13,7 +13,6 @@ auth = Blueprint('auth', __name__, url_prefix='/auth')
 def login():
     entered_email = str(request.get_json().get('email'))
     entered_password = str(request.get_json().get('password'))
-    print(request.get_json())
     user = db.session.query(UserModel).filter(UserModel.email == entered_email).first_or_404()
 
     passwords_match = user.validate_password(entered_password)

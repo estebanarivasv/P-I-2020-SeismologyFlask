@@ -50,7 +50,6 @@ class VerifiedSeisms(Resource):
 
         # Obtains items from json
         filters = request.get_json().items()
-        print(filters)
 
         # Filters in verified seisms
         verified_seisms = db.session.query(SeismModel).filter(SeismModel.verified == True)
@@ -89,7 +88,6 @@ class VerifiedSeisms(Resource):
                 if value == "datetime[asc]":
                     verified_seisms = verified_seisms.order_by(SeismModel.datetime.asc())
                 if value == "sensor_name[desc]":
-                    print("entra")
                     verified_seisms = verified_seisms.join(SeismModel.sensor).order_by(SensorModel.name.desc())
                 if value == "sensor_name[asc]":
                     verified_seisms = verified_seisms.join(SeismModel.sensor).order_by(SensorModel.name.asc())
@@ -174,7 +172,6 @@ class UnverifiedSeisms(Resource):
         # Filters in unverified_seisms
         unverified_seisms = db.session.query(SeismModel).filter(SeismModel.verified == False)
 
-        
         if not claims['admin']:
             # Filters the left associated seisms with the seismologist
             unverified_seisms = unverified_seisms.join(SeismModel.sensor).filter(SensorModel.user_id == user_id)
@@ -190,7 +187,7 @@ class UnverifiedSeisms(Resource):
 
             # Filters: sensor_id
             if key == "sensor_id":
-                unverified_seisms = unverified_seisms
+                unverified_seisms = unverified_seisms.join(SeismModel.sensor).filter(SensorModel.id_num == value)
             if key == "from_date":
                 unverified_seisms = unverified_seisms.filter(SeismModel.datetime >= value)
             if key == "to_date":

@@ -36,7 +36,7 @@ def add_user():
         """
         If form is validated and submitted, we make a POST request to add an user.
         """
-        if form.admin.data == "false":
+        if form.admin.data == 0:
             form.admin.data = False
         else:
             form.admin.data = True
@@ -48,7 +48,7 @@ def add_user():
         user_json = json.dumps(user)
         makeRequest("POST", url, authenticated_user=True, data=user_json)
 
-        return redirect(url_for('user_.main'))
+        return redirect(url_for('user.main'))
 
     return render_template('/derived/users/add-user.html', form=form)
 
@@ -66,7 +66,7 @@ def edit_user(id):
         """
         if query.status_code == 404:
             flash("User not found", "warning")
-            return redirect(url_for('user_.main'))
+            return redirect(url_for('user.main'))
 
         # Saving the json to a Python dict in order to show it for editing
         user = query.json()
@@ -93,7 +93,7 @@ def edit_user(id):
         user_data = json.dumps(user)
 
         makeRequest("PUT", url, authenticated_user=True, data=user_data)
-        return redirect(url_for('user_.main'))
+        return redirect(url_for('user.main'))
 
     return render_template('/derived/users/edit-user.html', id=id, form=form, user=query.json())
 
@@ -106,5 +106,5 @@ def delete_user(id):
     data = makeRequest("DELETE", url, authenticated_user=True)
     if data.status_code == 409:
         flash("User not found", "warning")
-        return redirect(url_for('user_.main'))
-    return redirect(url_for('user_.main'))
+        return redirect(url_for('user.main'))
+    return redirect(url_for('user.main'))

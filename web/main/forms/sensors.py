@@ -59,4 +59,9 @@ class SensorsFilterForm(FlaskForm):
         label="User email",
         validators=[wtf.validators.optional()]
     )
+
+    sort_by = wtf.HiddenField()
+    elem_per_page = wtf.IntegerField(
+        validators=[wtf.validators.optional()]
+        )
     submit_button = wtf.SubmitField(label="Apply filters")

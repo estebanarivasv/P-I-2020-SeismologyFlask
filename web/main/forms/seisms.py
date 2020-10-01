@@ -22,13 +22,16 @@ class USeismsFilterForm(FlaskForm):
         coerce=int)
     from_datetime = DatetimeField(
         label="From date",
-        validators=[wtf.validators.optional()],
-        format='%Y-%m-%d %H:%M:%S'
+        validators=[wtf.validators.optional()]
         )
     to_datetime = DatetimeField(
         label="To date",
-        validators=[wtf.validators.optional()],
-        format='%Y-%m-%d %H:%M:%S'
+        validators=[wtf.validators.optional()]
+        )
+        
+    sort_by = wtf.HiddenField()
+    elem_per_page = wtf.IntegerField(
+        validators=[wtf.validators.optional()]
         )
     submit_button = wtf.SubmitField(label="Apply")
 

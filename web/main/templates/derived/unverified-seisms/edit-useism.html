@@ -1,6 +1,6 @@
 {% extends 'principal/main.html' %} 
 
-{% from '/macros/forms.html' import editUSeismMap %}
+{% from '/macros/forms.html' import generateEditSeismForm %}
 
 {% block head %} {{ super() }}
 
@@ -41,7 +41,7 @@
 
                 <h5 class="py-3">Complete the following form</h5>
                 <form method="POST" action="{{ url_for('u_seism.edit_useism', id=id) }}">
-                    {{ editUSeismMap(form, unverified_seism) }}
+                    {{ generateEditSeismForm(form, unverified_seism) }}
                 </form>
             </div>
         </div>

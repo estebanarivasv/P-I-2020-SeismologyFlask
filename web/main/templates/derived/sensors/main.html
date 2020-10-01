@@ -1,6 +1,7 @@
 {% extends 'principal/main.html' %}
 
-{% from '/macros/utilities.html' import listSensors %}
+{% from '/macros/utilities.html' import listSensors, showSensorsPagination %}
+{% from '/macros/forms.html' import SensorsFiltersForm %}
 
 {% block head %}
 
@@ -29,7 +30,7 @@
         </div>
     </div>
 
-    
+
     <div class="row">
         <div class="col-md-12 col-lg-2">
         </div>
@@ -38,217 +39,17 @@
             <div class="container py-2">
                 <!-- TITLE -->
                 <h3>Sensors</h3>
-                <div class="row py-3">
-                    <div class="container-fluid py-2">
-                        <!-- FILTERS BUTTON -->
-                        <button class="btn btn btn-outline-dark" type="button" data-toggle="collapse"
-                            data-target=".multi-collapse" aria-expanded="false" aria-controls="associated">
-                            Table parameters
-                        </button>
 
-                        <!-- COLLAPSABLE MENU -->
-                        <div class="collapse multi-collapse pt-3" id="associated">
-                            <div class="container-fluid py-2">
-                                {# SensorsFiltersForm(filters) #}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- FILTERS -->
+                {{ SensorsFiltersForm(filters) }}
 
-                <!-- BUTTONS -->
-                <div class="row">
-                    <div class="form-inline py-2 pr-3">
-                        <a class="btn btn-success" href="{{url_for('sensors.add_sensor')}}" role="button">New
-                            sensor</a>
-                    </div>
-                    <div class="form-inline pt-2 pr-3 pb-2">
-                        <a name="" id="" class="btn btn-primary" href="{{url_for('sensors.send_emails')}}"
-                            role="button" data-toggle="tooltip" data-placement="top"
-                            title="Notifies to administrators about not-working & active sensors">Email admins</a>
-                    </div>
-                </div>
-
-                <!-- PREV TABLE -->
-                <table class="table table-responsive-md table-hover mt-3">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="text-center">ID</th>
-                            <th scope="col" class="text-center">Name</th>
-                            <th scope="col" class="text-center">Status</th>
-                            <th scope="col" class="text-center">Active</th>
-                            <th scope="col" class="text-center">Associated seismologist</th>
-                            <th scope="col" class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{ listSensors(sensors) }}
-                    </tbody>
-                </table>
-
-                <!-- DINAMIC TABLE -->
-                <table class="table table-responsive-md table-hover mt-3">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="text-center">ID</th>
-                            <th scope="col" class="text-center">Date and time
-                                {% if request.args.sort_by == "datetime[asc]"  %}
-                                <a href="{{ url_for('sensors.main', sort_by = 'datetime[desc]',
-                                                                        sensorsid = request.args.sensorsid,
-                                                                        from_datetime =request.args.from_datetime,
-                                                                        to_datetime = request.args.to_datetime) }}">
-
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down"
-                                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
-                                    </svg>
-                                </a>
-                                {% else %}
-                                <a href="{{ url_for('sensors.main', sort_by = 'datetime[asc]',
-                                                                        sensorsid = request.args.sensorsid,
-                                                                        from_datetime =request.args.from_datetime,
-                                                                        to_datetime = request.args.to_datetime) }}">
-
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up"
-                                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
-                                    </svg>
-                                </a>
-                                {% endif %}
-
-                            </th>
-
-
-                            <th scope="col" class="text-center">Depth</th>
-                            <th scope="col" class="text-center">Magnitude
-                                {% if request.args.sort_by == "magnitude[asc]"  %}
-                                <a href="{{ url_for('sensors.main', sort_by = 'magnitude[desc]',
-                                                                        sensorsid = request.args.sensorsid,
-                                                                        from_datetime =request.args.from_datetime,
-                                                                        to_datetime = request.args.to_datetime) }}">
-
-
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down"
-                                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
-                                    </svg>
-                                </a>
-                                {% else %}
-                                <a href="{{ url_for('sensors.main', sort_by = 'magnitude[asc]',
-                                                                        sensorsid = request.args.sensorsid,
-                                                                        from_datetime =request.args.from_datetime,
-                                                                        to_datetime = request.args.to_datetime) }}">
-
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up"
-                                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
-                                    </svg>
-
-                                </a>
-                                {% endif %}
-                            </th>
-
-
-                            <th scope="col" class="text-center">Associated sensor
-                                {% if request.args.sort_by == "sensorsname[asc]"  %}
-                                <a href="{{ url_for('sensors.main', sort_by = 'sensorsname[desc]',
-                                                                        sensorsid = request.args.sensorsid,
-                                                                        from_datetime =request.args.from_datetime,
-                                                                        to_datetime = request.args.to_datetime) }}">
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down"
-                                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
-                                    </svg>
-                                </a>
-                                {% else %}
-                                <a href="{{ url_for('sensors.main', sort_by = 'sensorsname[asc]',
-                                                                        sensorsid = request.args.sensorsid,
-                                                                        from_datetime =request.args.from_datetime,
-                                                                        to_datetime = request.args.to_datetime) }}">
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up"
-                                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
-                                    </svg>
-                                </a>
-                                {% endif %}
-                            </th>
-
-
-                            <th scope="col" class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-
-                </table>
-
-                <!-- TABLE PAGINATION -->
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                        {% if pagination.page_num > 1 %}
-                        <li class="page-item">
-                            <a class="page-link" href="{{ url_for('sensors.main', page_num = (pagination.page_num - 1),
-                                                                sort_by = request.args.sort_by,
-                                                                sensorsid = request.args.sensorsid,
-                                                                from_datetime =request.args.from_datetime,
-                                                                to_datetime = request.args.to_datetime) }}">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        {% else %}
-                        <li class="page-item disabled">
-                            <a class="page-link" tabindex="-1" aria-disabled="true">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        {% endif %}
-
-
-                        {% for n in range(1, pagination.total_pages + 1) %}
-                        {% if n != pagination.page_num %}
-                        <li class="page-item">
-                            <a class="page-link"
-                                href="{{ url_for('sensors.main',
-                                                                            page_num = n,
-                                                                            sort_by = request.args.sort_by,
-                                                                            sensorsid = request.args.sensorsid,
-                                                                            from_datetime =request.args.from_datetime,
-                                                                            to_datetime = request.args.to_datetime) }}">
-                                {{n}}
-                            </a>
-                        </li>
-                        {% else %}
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="#">{{n}}<span class="sr-only">(current)</span></a>
-                        </li>
-                        {% endif %}
-                        {% endfor %}
-
-                        {% if pagination.page_num < pagination.total_pages %}
-                        <li class="page-item">
-                            <a class="page-link" href="{{ url_for('sensors.main',
-                                                                        page_num = (pagination.page_num + 1),
-                                                                        sort_by = request.args.sort_by,
-                                                                        sensorsid = request.args.sensorsid,
-                                                                        from_datetime = request.args.from_datetime,
-                                                                        to_datetime = request.args.to_datetime) }}">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                        {% else %}
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </nav>
+                <!-- TABLE -->
+                {{ listSensors(sensors) }}
+                
+                {% if sensors|length > 0 %}
+                    <!-- PAGINATION -->
+                    {{ showSensorsPagination(pagination) }}
+                {% endif %}
             </div>
         </div>
 

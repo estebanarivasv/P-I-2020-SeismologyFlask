@@ -19,31 +19,37 @@ sensors_ = Blueprint('sensors', __name__, url_prefix='/sensors/')
 @admin_required
 def main():
     url = current_app.config["API_URL"] + "/sensors"
+    filters = f.SensorsFilterForm(request.args, meta={'csrf': False})
+
     query = makeRequest("GET", url, authenticated_user=True)
     sensors = json.loads(query.text)["sensors"]
 
-    filters = f.SensorsFilterForm(request.args, meta={'csrf': False})
-
     data = {}
 
-    if filters.validate():
-        if filters.name.data is not None:
-            data["name"] = filters.name.data
-        if filters.status.data is not None:
-            data["status"] = filters.status.data
-        if filters.active.data is not None:
-            data["active"] = filters.active.data
-        if filters.user_email.data is not None:
-            data["user_email"] = filters.user_email.data
+    if 'name' in request.args and request.args['name'] != "":
+        data["name"] = request.args.get('name', '')
 
-    if 'page_num' in request.args:
-        data["page_num"] = request.args.get('page_num', '')
+    if 'status' in request.args and request.args['status'] != "":
+        data["status"] = request.args.get('status', '')
 
-    if 'sort_by' in request.args:
+    if 'active' in request.args and request.args['active'] != "":
+        data["active"] = request.args.get('active', '')
+
+    if 'user_email' in request.args and request.args['user_email'] != "":
+        data["user_email"] = request.args.get('user_email', '')
+
+    if 'sort_by' in request.args and request.args['sort_by'] != "":
         data["sort_by"] = request.args.get('sort_by', '')
 
+    if 'page_num' in request.args and request.args['page_num'] != "":
+        data["page_num"] = request.args.get('page_num', '')
+        
+    if 'elem_per_page' in request.args and request.args['elem_per_page'] != "":
+        data["elem_per_page"] = request.args.get('elem_per_page', '')
+
+
     data = json.dumps(data)
-    query = makeRequest("GET", url, data=data)
+    query = makeRequest("GET", url, authenticated_user=True, data=data)
 
     if query.status_code == 200:
         sensors = json.loads(query.text)["sensors"]
@@ -58,7 +64,7 @@ def main():
                                pagination=pagination)
 
     else:
-        return render_template('/derived/sensors/main.html', sensors=sensors)
+        return redirect(url_for('sensors.main'))
 
 
 @sensors_.route('/add/', methods=["POST", "GET"])

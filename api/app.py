@@ -9,6 +9,7 @@ import time
 import threading
 import socket
 import json
+import sys
 
 
 def create_admins_in_db():
@@ -34,6 +35,8 @@ def call_sensors():
             print("\n--------------------------------------------------------\n"
                   "There are not available sensors.\nPlease run sensors checking in order to get them working."
                   "\n--------------------------------------------------------\n")
+            sys.exit(0)
+
         else:
             client = create_socket()
             while client:

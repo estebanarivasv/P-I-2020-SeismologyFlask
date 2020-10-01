@@ -127,7 +127,7 @@ class Sensors(Resource):
             'page_num': page_num,
             'elem_per_page': elem_per_page,
             'total_pages': sensors.pages,
-            'total_elem': sensors.total
+            'items_num': sensors.total
         })
 
     @admin_login_required
