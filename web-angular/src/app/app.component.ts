@@ -8,3 +8,5 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'main-seismology';
 }
+
+// TODO: Comment api, both webs, environment variables
