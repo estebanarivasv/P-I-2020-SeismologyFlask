@@ -60,10 +60,10 @@ Flask framework natively works with routing, debugguing and WSGI (Web Server Gat
 Flask and API Rest introduction
 #### (API) Phase 2: Data storage
 SQLAlchemy (ORM: Object-Relational Mapping), modelos
-#### (API) Phase 3: Authentication and email sending
-Flask Mail, Flask JWT
+#### (API) Phase 3: Authentication with JWT and email sending
+Flask Mail (MTA: Mail Transport Agent), Flask JWT
 #### (WEB) Phase 4: Routes and templates
-Blueprints, Jinja2, Bootstrap library
+Blueprints, Jinja2, Bootstrap library, macros, stylesheets
 #### (WEB) Phase 5: Forms
 Flask-WTF, form models
 #### (WEB) Phase 6: Sessions and routes permissions
