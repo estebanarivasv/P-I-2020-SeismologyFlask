@@ -1,8 +1,20 @@
-# Seismology
+# :clipboard: Seismology Proyect
+### Subject: Programación I
+<br>
+In 2020, I made a project for a subject called "Programación I" (Programming) at Universidad de Mendoza. 
 
-"Programacion I" Repository
+We worked with the Flask framework (including extensions) and we also learned about how do RESTFUL APIs work with WEB clients.
+<br>
+<br>
 
-In 2020, I made a project for a subject called Programación I at university. 
+## Description
+<br>
 
-We worked with the framework Flask and learned about how to work with
-APIs, web pages and mobile apps.
+## Table of Contents
+<br>
+
+## Installation
+<br>
+
+## Usage
+<br>
