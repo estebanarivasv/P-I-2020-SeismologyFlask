@@ -55,6 +55,9 @@ Here there are the system classes depicted. We have three main tables: users, se
 # :computer: Developing stages
 
 Flask framework natively works with routing, debugguing and WSGI (Web Server Gateway Interface). To make other things work, like for example: auth, you will need to include some extensions.
+<br><br>
+Basic components layout:
+<img src="https://docs.microsoft.com/es-es/dotnet/architecture/microservices/architect-microservice-container-applications/media/direct-client-to-microservice-communication-versus-the-api-gateway-pattern/custom-service-api-gateway.png"  width="800">
 
 #### (API) Phase 1: Client–server model
 Flask and API Rest introduction
@@ -77,10 +80,10 @@ You can rename the .env-example file to .env
 
 :exclamation: Remember you need to declare all the variables including the database path. You can know where you are standing and declare them as the database path with these sentences:
 
-#### 2- Install dependencies
+#### 2 - Install dependencies
 To begin the instalation of libraries and the frameworks needed: `./install.sh`
 
-#### 3- Launch Flask application
+#### 3 - Launch Flask application
 To get the app running: `./boot.sh`
 
 #### 4 - Import requests file for the api in Insomnia or simply launch the web client
