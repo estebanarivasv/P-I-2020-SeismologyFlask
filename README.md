@@ -14,25 +14,31 @@ We worked with the Flask framework (including extensions) and we also learned ab
 The aim of this project is simulating a Seismology Institute center where the main actors of the system are seisms, seismologists and the sensors.
 <br><br>
 @andrea.navarro, my teacher, came up with this idea. She learnt us how do the main system structure works and our job was adapt the project to the requirements.
+<br><br>
+The project incluides the following items:
+- Make requests to sensos.
+- Save/modify seisms data (basic CRUD methods) with HTTP requests
+- Send emails to administrators of sensors that are not working
+- Web and api integration
 
-## User-case diagram
+#### User-case diagram
 Here in this scheme, I described the general behaviour of the system. 
 Basically we've desplayed the system and three different user types: the administrators, the seismologists and the analists or all the rest of the organization.
 
-Every one of them has specific tasks:
-The administrators is able to:
+Every one of them has specific tasks:<br>
+**Administrators** are able to:
 - Assign sensors to seismologists.
 - Have access to existent sensors: modify, activate or deactivate.
 - Register new users.
 
-The seismologists can:
+**Seismologists** can:
 - List left seisms to validate.
 - List assigned sensors.
 - Modify unverified seisms data. 
   - If it is an excessive amount of data to verify, they can download it. 
   - If there are not mistakes left, the users can validate the seism.
 
-The analists (or any other institute member) is be able to:
+**Analists** (or any other institute member) are be able to:
 - Access verified seisms.
 - Filter and download the sensors data in a CSV or ZIP file.
   
@@ -41,8 +47,8 @@ The system must:
 
 <img src="https://i.ibb.co/VLqc45n/usecase-diag.png"  width="800">
 
-## UML Classes diagram
-Here there are the system classes depicted.
+#### UML Classes diagram
+Here there are the system classes depicted. We have three main tables: users, seisms and sensors
 
 <img src="https://i.ibb.co/PrvMvqY/uml.png"  width="800">
 
