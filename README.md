@@ -42,7 +42,7 @@ Every one of them has specific tasks:<br>
 - Access verified seisms.
 - Filter and download the sensors data in a CSV or ZIP file.
   
-The system must:
+The **system** must:
 - Send notifications to administrators whenever any active sensor stops working.
 
 <img src="https://i.ibb.co/VLqc45n/usecase-diag.png"  width="800">
