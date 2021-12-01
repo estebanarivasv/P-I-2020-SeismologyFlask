@@ -8,7 +8,22 @@ We worked with the Flask framework (including extensions) and we also learned ab
 <br><br>
 
 # :clipboard: Table of Contents
-[[_TOC_]]
+- [:pencil: Description](#-pencil--description)
+      - [User-case diagram](#user-case-diagram)
+      - [UML Classes diagram](#uml-classes-diagram)
+- [:computer: Developing stages](#-computer--developing-stages)
+      - [(API) Phase 1: Client–server model](#-api--phase-1--client-server-model)
+      - [(API) Phase 2: Data storage](#-api--phase-2--data-storage)
+      - [(API) Phase 3: Authentication with JWT and email sending](#-api--phase-3--authentication-with-jwt-and-email-sending)
+      - [(WEB) Phase 4: Routes and templates](#-web--phase-4--routes-and-templates)
+      - [(WEB) Phase 5: Forms](#-web--phase-5--forms)
+      - [(WEB) Phase 6: Sessions and routes permissions](#-web--phase-6--sessions-and-routes-permissions)
+- [:information_source: Installation and usage for both API and Web client](#-information-source--installation-and-usage-for-both-api-and-web-client)
+      - [1 - Define the environment variables in the .env file](#1---define-the-environment-variables-in-the-env-file)
+      - [2 - Install dependencies](#2---install-dependencies)
+      - [3 - Launch Flask application](#3---launch-flask-application)
+      - [4 - Import requests file for the api in Insomnia or simply launch the web client](#4---import-requests-file-for-the-api-in-insomnia-or-simply-launch-the-web-client)
+
 
 # :pencil: Description
 The aim of this project is simulating a Seismology Institute center where the main actors of the system are seisms, seismologists and the sensors.
